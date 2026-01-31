@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prakhar Bhatnagar | Game Developer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  * { box-sizing: border-box; }
+  
+  html, body {
+  height: 100%;
+  margin: 0;
+  overflow: auto; /* allow scrolling if needed, screens handle internal scrolling */
+  -webkit-overflow-scrolling: touch;
+  background: #020617 !important;
+}
+.nav-links {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Custom Scrollbar */
+.screen::-webkit-scrollbar {
+  width: 8px;
+}
+
+.screen::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.screen::-webkit-scrollbar-thumb {
+  background: rgba(129,140,248,0.35);
+  border-radius: 999px;
+}
+
+.screen::-webkit-scrollbar-thumb:hover {
+  background: rgba(167,139,250,0.55);
+}
+
+/* Project Video Thumbnails */
+.project-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* 🔥 KEY LINE */
+  height: auto;
+  object-fit: contain;   /* prevents cropping */
+  border-radius: 14px;
+  margin-bottom: 16px;
+  background: #020617;
+}
+.project-card:hover .project-video {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+/* Make cards clickable */
+.project-card {
+  cursor: pointer;
+}
+
+.project-card:hover h3 {
+  text-decoration: underline;
+}
+
+/* Detail Page Video Wrapper */
+.project-media {
+  /* Layout & Position */
+  width: 100%;
+  max-width: 800px;
+  margin: 40px auto;
+  position: relative; /* Essential for the inner video to lock onto */
+  
+  /* 🔥 THE FIX: Force 16:9 Aspect Ratio using Padding */
+  height: 0;
+  padding-bottom: 35%; /* (9/16 = 0.5625) creates the aspect ratio */
+  
+  /* Visuals */
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  box-shadow:
+    0 30px 80px rgba(56,189,248,0.25),
+    0 0 60px rgba(167,139,250,0.2);
+}
+
+
+.project-detail-video {
+  position: absolute; /* Pins the video to the corners of .project-media */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  object-fit: contain;
+  background: black;
+  border-radius: 12px;
+}
+
+
+
+/* Resume Button */
+.resume-btn {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa);
+  color: #020617;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(129,140,248,0.35);
+  transition: all 0.25s ease;
+}
+
+.resume-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(167,139,250,0.45);
+}
+
+/* Social Icons */
+.social-icon img {
+  width: 20px;
+  height: 20px;
+  filter: invert(1) brightness(0.9);
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.social-icon:hover img {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+  body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background-color: #020617;
+  color: #e6e9ef;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+  nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  background: rgba(2,6,23,0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(99,102,241,0.25);
+
+  z-index: 9999;   /* FORCE ON TOP */
+}
+
+
+  nav strong {
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  nav button {
+    background: none;
+    border: none;
+    color: #cbd5f5;
+    margin-left: 22px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    position: relative;
+  }
+
+  nav button::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 0%;
+    height: 2px;
+    background: linear-gradient(90deg, #38bdf8, #a78bfa);
+    transition: width 0.25s ease;
+  }
+
+  nav button:hover::after {
+    width: 100%;
+  }
+
+  .screen {
+  position: absolute;
+  inset: 0;
+  padding: 120px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  overflow-y: auto;      /* ONLY scroll owner */
+  overflow-x: hidden;
+
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+  
+  .screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(600px circle at 50% 20%, rgba(255,255,255,0.03), transparent 60%);
+  pointer-events: none;
+}
+
+
+  .hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(35px) scale(0.98);
+  }
+
+  h1 {
+  font-size: 3.4rem;
+  margin-bottom: 12px;
+  font-weight: 800;
+
+  background: linear-gradient(90deg, #ffffff, #c7d2fe);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 2px 20px rgba(129,140,248,0.25);
+  }
+
+
+  h2 {
+    font-weight: 400;
+    color: #a5b4fc;
+    margin-bottom: 26px;
+  }
+
+  .hero-text {
+  max-width: 760px;
+  color: #e2e8f0;
+  margin-bottom: 48px;
+  font-size: 1.1rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+
+
+  .primary-btn {
+    padding: 14px 32px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa);
+    color: #020617;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow:
+      0 10px 30px rgba(56,189,248,0.35),
+      0 0 40px rgba(167,139,250,0.25);
+    transition: all 0.25s ease;
+  }
+
+  .primary-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow:
+      0 18px 50px rgba(129,140,248,0.45),
+      0 0 60px rgba(167,139,250,0.35);
+  }
+
+  .projects-grid {
+    width: 100%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+  }
+
+  .project-card {
+    background:
+      linear-gradient(180deg, rgba(15,23,42,0.9), rgba(2,6,23,0.9));
+    border: 1px solid rgba(129,140,248,0.25);
+    border-radius: 18px;
+    padding: 30px;
+    text-align: left;
+    position: relative;
+    overflow-x: hidden;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(400px circle at top left, rgba(56,189,248,0.08), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .project-card:hover::before {
+    opacity: 1;
+  }
+
+  .project-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow:
+      0 30px 80px rgba(56,189,248,0.2),
+      0 0 60px rgba(167,139,250,0.25);
+  }
+
+  .project-card h3 {
+    margin-top: 0;
+    color: #93c5fd;
+    font-size: 1.3rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: rgba(56,189,248,0.12);
+    color: #a5b4fc;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    margin-top: 12px;
+    margin-right: 8px;
+    border: 1px solid rgba(56,189,248,0.25);
+  }
+</style>
+
+</head>
+<body>
+
+<nav>
+  <strong class="logo">Prakhar Bhatnagar</strong>
+
+  <div class="nav-links">
+    <button onclick="showScreen('home')">Home</button>
+    <button onclick="showScreen('projects')">Games</button>
+    <button onclick="showScreen('about')">About</button>
+    <button onclick="showScreen('contact')">Contact</button>
+
+    <!-- Resume Button -->
+    <a class="resume-btn" href="resume.pdf" target="_blank" download>
+      Download Resume
+    </a>
+
+    <!-- Social Icons -->
+    <a class="social-icon" href="https://github.com/Dullestdear" target="_blank" title="GitHub">
+      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
+    </a>
+
+    <a class="social-icon" href="https://dullestdear.itch.io/" target="_blank" title="Itch.io">
+      <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
+    </a>
+
+    <a class="social-icon" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank" title="Instagram">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
+    </a>
+    <a class="social-icon" href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" title="LinkedIn">
+      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
+    </a>
+  </div>
+</nav>
+
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <h1>Hi, I’m Prakhar</h1>
+  <h2>Game Developer | Unity & C#</h2>
+  <p class="hero-text">
+    Passionate Student Pursuing Dreams in Game Design:
+    I build complete, playable games focused on gameplay systems, polish,
+    and player experience.
+  </p>
+  <button class="primary-btn" onclick="showScreen('projects')">
+    View My Games
+  </button>
+</div>
+
+<!-- PROJECTS -->
+<div id="projects" class="screen hidden">
+  <h1>Games</h1>
+  <div class="projects-grid">
+
+  <!-- Ghostly Rides -->
+  <div class="project-card" onclick="openProject('ghostly')">
+    <video class="project-video" muted loop playsinline preload="metadata">
+      <source src="videos/ghostly-rides.mp4" type="video/mp4">
+    </video>
+
+    <h3>Ghostly Rides</h3>
+    <p>Arcade survival driving game featuring power-ups and polished UI.</p>
+
+    <div class="tag">Unity</div>
+    <div class="tag">C#</div>
+    <div class="tag">Personal Project</div>
+  </div>
+
+  <!-- Astro Blitz -->
+  <div class="project-card" onclick="openProject('astro')">
+    <video class="project-video" muted loop playsinline preload="metadata">
+      <source src="videos/astro-blitz.mp4" type="video/mp4">
+    </video>
+
+    <h3>Astro Blitz</h3>
+    <p>2D side-scrolling space shooter with custom enemy behaviors.</p>
+
+    <div class="tag">Unity</div>
+    <div class="tag">C#</div>
+    <div class="tag">2D</div>
+  </div>
+
+</div>
+
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="screen hidden">
+  <h1>About Me</h1>
+  <p class="hero-text">
+    I’m a 21-year-old game developer with experience building complete games
+    in Unity using C#. I enjoy working on gameplay systems, UI, and polish.
+    I’m passionate about improving player experience and learning industry
+    best practices through real projects.
+  </p>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="screen hidden">
+  <h1>Contact</h1>
+  <p class="hero-text">
+    Let’s connect! Feel free to reach out for collaborations, internships, or opportunities.
+  </p>
+  <p>Email: Prakharbhatnagar619@gmail.com</p>
+  
+</div>
+
+<!-- GHOSTLY RIDES DETAIL -->
+<div id="project-ghostly" class="screen hidden">
+  <button class="primary-btn" onclick="showScreen('projects')">← Back</button>
+
+  <h1>Ghostly Rides</h1>
+  <h2>Arcade Survival Driving Game</h2>
+
+  <div class="project-media">
+    <video class="project-detail-video" controls muted loop playsinline preload="auto">
+      <source src="videos/ghostly-rides.mp4" type="video/mp4">
+    </video>
+  </div>
+
+
+  <p class="hero-text">
+    Ghostly Rides is an arcade survival driving game focused on speed,
+    power-ups, and player survival. Designed and developed solo in Unity.
+  </p>
+
+  <ul class="detail-list">
+    <li>Custom power-up systems</li>
+    <li>Score multipliers & progression</li>
+    <li>Polished UI & menus</li>
+    <li>Solo-developed project</li>
+  </ul>
+</div>
+
+<!-- ASTRO BLITZ DETAIL -->
+<div id="project-astro" class="screen hidden">
+  <button class="primary-btn" onclick="showScreen('projects')">← Back</button>
+
+  <h1>Astro Blitz</h1>
+  <h2>2D Side-Scrolling Space Shooter</h2>
+
+  <div class="project-media">
+    <video class="project-detail-video" controls muted loop playsinline preload="auto">
+      <source src="videos/astro-blitz.mp4" type="video/mp4">
+    </video>
+  </div>
+  
+  <p class="hero-text">
+    Astro Blitz is a 2D space shooter featuring pixel art visuals,
+    enemy patterns, and scoring systems.
+  </p>
+
+  <ul class="detail-list">
+    <li>Enemy AI & bullet patterns</li>
+    <li>Pixel art created in LibreSprite</li>
+    <li>Score & combo systems</li>
+  </ul>
+</div>
+
+<script>
+  const screens = document.querySelectorAll('.screen');
+
+  function showScreen(id) {
+    screens.forEach(screen => {
+      screen.classList.add('hidden');
+    });
+    document.getElementById(id).classList.remove('hidden');
+  }
+
+  function openProject(projectId) {
+  // 1. Hide all screens
+  screens.forEach(screen => {
+    screen.classList.add('hidden');
+    
+    // Stop other videos so they don't play in background
+    const vid = screen.querySelector('video');
+    if(vid) vid.pause();
+  });
+
+  // 2. Show the specific project screen
+  const targetScreen = document.getElementById('project-' + projectId);
+  targetScreen.classList.remove('hidden');
+
+  // 3. 🔥 FORCE PLAY THE VIDEO
+  const video = targetScreen.querySelector('video');
+  if (video) {
+    video.currentTime = 0; // Restart from beginning
+    video.play().catch(e => console.log("Autoplay prevented:", e));
+  }
+}
+
+  // Initialize: hide all screens except home
+  screens.forEach(screen => {
+    screen.classList.add('hidden');
+  });
+  document.getElementById('home').classList.remove('hidden');
+</script>
+
+<style>
+.detail-list {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.detail-list li {
+  margin-bottom: 10px;
+  color: #cbd5f5;
+}
+</style>
+
+<!-- Video expand styles -->
+<style>
+.project-media.expanded {
+  position: fixed;
+  inset: 28px;
+  z-index: 10000;
+  max-width: none;
+  width: auto;
+  
+  /* 🔥 RESET THE HACK so it can be full screen */
+  height: auto; 
+  padding-bottom: 0; 
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2,6,23,0.95);
+  padding: 18px; /* Restore the border padding you like */
+  border-radius: 12px;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.6);
+}
+
+.project-media.expanded .project-detail-video {
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: zoom-out;
+}
+
+/* small tweak so when expanded we avoid page scroll behind it */
+body.expanded-video {
+  overflow: hidden;
+}
+</style>
+
+<script>
+// Toggle click-to-expand for detail videos
+document.addEventListener('click', (e) => {
+  const video = e.target.closest('.project-detail-video');
+  if (video) {
+    const media = video.closest('.project-media');
+    if (!media) return;
+    const expanded = media.classList.toggle('expanded');
+    document.body.classList.toggle('expanded-video', expanded);
+    // If expanded, ensure video plays and controls are visible; otherwise pause optionally
+    try {
+      if (expanded) {
+        video.play();
+      } else {
+        // keep playing if user wants; optional: pause when closing
+        // video.pause();
+      }
+    } catch (err) {
+      // ignore autoplay/security errors
+    }
+    e.stopPropagation();
+  } else {
+    // click outside any video closes expanded media
+    const open = document.querySelector('.project-media.expanded');
+    if (open && !e.target.closest('.project-media')) {
+      open.classList.remove('expanded');
+      document.body.classList.remove('expanded-video');
+    }
+  }
+});
+</script>
+
+</body>
+</html>
