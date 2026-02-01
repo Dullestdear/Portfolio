@@ -21,6 +21,73 @@
   gap: 20px;
 }
 
+.tag {
+  display: inline-block;
+  background: rgba(56,189,248,0.12);
+  color: #a5b4fc;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  margin: 6px 6px 0 0;
+  border: 1px solid rgba(56,189,248,0.25);
+  transition: all 0.25s ease;
+}
+
+.tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(129,140,248,0.4);
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in:nth-child(1){animation-delay:.1s}
+.fade-in:nth-child(2){animation-delay:.2s}
+.fade-in:nth-child(3){animation-delay:.3s}
+.fade-in:nth-child(4){animation-delay:.4s}
+.fade-in:nth-child(5){animation-delay:.5s}
+
+.detail-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+.detail-container h2 {
+  margin-top: 20px;
+}
+
+.detail-list {
+  max-width: 700px;
+  text-align: left;
+  line-height: 1.6;
+}
+
+.detail-list li {
+  margin-bottom: 10px;
+  color: #cbd5f5;
+}
+
+.section-title {
+  margin-top: 30px;
+  font-size: 1.6rem;
+  color: #93c5fd;
+}
+
 /* Custom Scrollbar */
 .screen::-webkit-scrollbar {
   width: 8px;
@@ -199,11 +266,14 @@
   align-items: center;
   text-align: center;
 
-  overflow-y: auto;      /* ONLY scroll owner */
+  overflow-y: auto;
   overflow-x: hidden;
 
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
+
 
   
   .screen::after {
@@ -217,10 +287,12 @@
 
 
   .hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(35px) scale(0.98);
-  }
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
 
   h1 {
   font-size: 3.4rem;
@@ -309,11 +381,12 @@
   }
 
   .project-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow:
-      0 30px 80px rgba(56,189,248,0.2),
-      0 0 60px rgba(167,139,250,0.25);
+  transform: translateY(-10px) scale(1.03);
+  box-shadow:
+    0 40px 100px rgba(56,189,248,0.3),
+    0 0 80px rgba(167,139,250,0.35);
   }
+
 
   .project-card h3 {
     margin-top: 0;
@@ -360,7 +433,7 @@
       <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
     </a>
 
-    <a class="social-icon" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank" title="Instagram">
+    <a class="social-icon" href="https://www.instagram.com/pixelblitz.studios?igsh=MTB2OGp0ZGNkaW1zaA==" target="_blank" title="Instagram">
       <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
     </a>
     <a class="social-icon" href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" title="LinkedIn">
@@ -412,8 +485,8 @@
     <h3>Astro Blitz</h3>
     <p>2D side-scrolling space shooter with custom enemy behaviors.</p>
 
-    <div class="tag">Unity</div>
-    <div class="tag">C#</div>
+    <div class="tag">Python</div>
+    <div class="tag">Pygame</div>
     <div class="tag">2D</div>
   </div>
 
@@ -430,6 +503,31 @@
     I’m passionate about improving player experience and learning industry
     best practices through real projects.
   </p>
+  
+  <h2 class="section-title">🎓 Education</h2>
+
+  <p class="hero-text">
+    <b>Bachelor’s in Technology Computer Science</b><br>
+    Specialised in AI<br>
+    Institute Of Advanced Research<br>
+    [2023 – Present]
+  </p>
+
+  <p class="hero-text">
+    Relevant Coursework:<br>
+    Game Design • Game Programming • Level Design • Computer Science Fundamentals
+  </p>
+
+  <h2 class="section-title">📜 Certifications</h2>
+
+  <p class="hero-text">
+    Complete Guide to Game Design (HP Gaming Garage , EDX)<br>
+    Complete C# Unity 2D Game Development (GameDev.tv , Udemy)<br>
+  </p>
+
+  <a class="primary-btn" href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing" target="_blank">
+    View Certificates
+  </a>
 </div>
 
 <!-- CONTACT -->
@@ -444,55 +542,161 @@
 
 <!-- GHOSTLY RIDES DETAIL -->
 <div id="project-ghostly" class="screen hidden">
-  <button class="primary-btn" onclick="showScreen('projects')">← Back</button>
 
-  <h1>Ghostly Rides</h1>
-  <h2>Arcade Survival Driving Game</h2>
+  <div class="detail-container">
 
-  <div class="project-media">
-    <video class="project-detail-video" controls muted loop playsinline preload="auto">
-      <source src="videos/ghostly-rides.mp4" type="video/mp4">
-    </video>
+    <button class="primary-btn" onclick="showScreen('projects')">← Back</button>
+
+    <h1 class="fade-in">Ghostly Rides</h1>
+    <h2 class="fade-in">Arcade Survival Driving Game | Unity</h2>
+    
+    <div class="fade-in" style="margin-bottom: 20px;">
+      <span class="tag">Unity</span>
+      <span class="tag">C#</span>
+      <span class="tag">3D</span>
+      <span class="tag">Arcade</span>
+    </div>
+
+    <div class="project-media fade-in">
+      <video class="project-detail-video" controls muted playsinline preload="auto">
+        <source src="videos/ghostly-rides.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <p class="hero-text">
+      Ghostly Rides is an arcade-style survival driving game where players
+      possess special vehicles mid-run, gain powerful (and sometimes cursed)
+      abilities, and push for high scores in an endless neon-lit night drive.
+    </p>
+
+    <p class="hero-text">
+      The core gameplay focuses on <b>risk vs reward</b> — choosing when to
+      possess special cars, managing temporary powers, and surviving
+      increasing traffic density as the game speeds up over time.
+    </p>
+
+    <h2 class="section-title fade-in">🔧 Key Features</h2>
+    <ul class="detail-list fade-in">
+      <li><b>Car Possession System</b> – Swap into special vehicles while preserving physics & controls</li>
+      <li><b>Powerup & Curse Mechanics</b> – Speed boosts, shields, score multipliers & negative effects</li>
+      <li><b>Lane-Based Traffic System</b> – Collision-safe lane spawning</li>
+      <li><b>Endless Survival Gameplay</b> – Progressive speed & traffic difficulty</li>
+      <li><b>High Score System</b> – Persistent tracking with UI/audio feedback</li>
+      <li><b>Atmospheric Presentation</b> – Neon-noir visuals & arcade sound design</li>
+    </ul>
+
+    <h2 class="section-title fade-in">⚙️ Technical Highlights</h2>
+    <ul class="detail-list fade-in">
+      <li>Built entirely in Unity (C#)</li>
+      <li>Modular spawner architecture</li>
+      <li>Physics-safe spawning via lane occupancy checks</li>
+      <li>Prefab-based modular design</li>
+      <li>Persistent data using PlayerPrefs</li>
+      <li>UI with TextMeshPro</li>
+    </ul>
+
+    <h2 class="section-title fade-in">📚 What I Learned</h2>
+    <ul class="detail-list fade-in">
+      <li>Designing scalable arcade systems</li>
+      <li>Managing prefab hierarchies for dynamic swapping</li>
+      <li>Preventing runtime physics issues</li>
+      <li>Persistent scoring & game-over flows</li>
+      <li>Shipping a commercial-ready build</li>
+    </ul>
+
+    <h2>🔗 Platform</h2>
+    <p class="hero-text">
+      PC (Windows)<br>
+      Distributed via itch.io
+    </p>
+    
+    <a href="https://dullestdear.itch.io/ghostly-rides" target="_blank" class="primary-btn">
+      🎮 Play on Itch.io
+    </a>
+
   </div>
-
-
-  <p class="hero-text">
-    Ghostly Rides is an arcade survival driving game focused on speed,
-    power-ups, and player survival. Designed and developed solo in Unity.
-  </p>
-
-  <ul class="detail-list">
-    <li>Custom power-up systems</li>
-    <li>Score multipliers & progression</li>
-    <li>Polished UI & menus</li>
-    <li>Solo-developed project</li>
-  </ul>
 </div>
+
 
 <!-- ASTRO BLITZ DETAIL -->
 <div id="project-astro" class="screen hidden">
-  <button class="primary-btn" onclick="showScreen('projects')">← Back</button>
 
-  <h1>Astro Blitz</h1>
-  <h2>2D Side-Scrolling Space Shooter</h2>
+  <div class="detail-container">
 
-  <div class="project-media">
-    <video class="project-detail-video" controls muted loop playsinline preload="auto">
-      <source src="videos/astro-blitz.mp4" type="video/mp4">
-    </video>
+    <button class="primary-btn fade-in" onclick="showScreen('projects')">
+      ← Back
+    </button>
+
+    <h1 class="fade-in">Astro Blitz</h1>
+
+    <h2 class="fade-in">
+      2D Space Shooter | Python (Pygame)
+    </h2>
+
+    <div class="fade-in" style="margin-bottom: 20px;">
+      <span class="tag">Python</span>
+      <span class="tag">Pygame</span>
+      <span class="tag">2D Shooter</span>
+      <span class="tag">Arcade</span>
+    </div>
+
+    <div class="project-media fade-in">
+      <video class="project-detail-video" controls muted loop playsinline preload="auto">
+        <source src="videos/astro-blitz.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <p class="hero-text fade-in">
+      Astro Blitz is a fast-paced 2D side-scrolling space shooter built
+      using Python and Pygame. Players battle waves of enemies, dodge
+      projectiles, and chase high scores in an arcade-style experience.
+    </p>
+
+    <p class="hero-text fade-in">
+      The game focuses on tight controls, readable enemy patterns,
+      and satisfying scoring systems inspired by classic arcade shooters.
+    </p>
+
+    <h2 class="section-title fade-in">🚀 Gameplay Features</h2>
+
+    <ul class="detail-list fade-in">
+      <li>Wave-based enemy encounters</li>
+      <li>Custom enemy bullet patterns</li>
+      <li>Score & combo system</li>
+      <li>Player shooting & movement mechanics</li>
+      <li>Arcade-inspired difficulty scaling</li>
+    </ul>
+
+    <h2 class="section-title fade-in">🛠️ Technical Highlights</h2>
+
+    <ul class="detail-list fade-in">
+      <li>Built with Python & Pygame</li>
+      <li>Object-oriented enemy system</li>
+      <li>Collision detection logic</li>
+      <li>Game loop & state management</li>
+      <li>Custom sprite handling</li>
+    </ul>
+
+    <h2 class="section-title fade-in">📚 What I Learned</h2>
+
+    <ul class="detail-list fade-in">
+      <li>Structuring larger Python game projects</li>
+      <li>Designing enemy AI behaviors</li>
+      <li>Optimizing sprite rendering</li>
+      <li>Balancing arcade difficulty curves</li>
+    </ul>
+
+    <h2 class="section-title fade-in">🔗 Platform</h2>
+
+    <p class="hero-text fade-in">
+      PC (Windows)<br>
+      Built with Python (Pygame)
+    </p>
+
   </div>
-  
-  <p class="hero-text">
-    Astro Blitz is a 2D space shooter featuring pixel art visuals,
-    enemy patterns, and scoring systems.
-  </p>
 
-  <ul class="detail-list">
-    <li>Enemy AI & bullet patterns</li>
-    <li>Pixel art created in LibreSprite</li>
-    <li>Score & combo systems</li>
-  </ul>
 </div>
+
 
 <script>
   const screens = document.querySelectorAll('.screen');
