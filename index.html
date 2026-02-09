@@ -21,6 +21,15 @@
   gap: 20px;
 }
 
+.tags-row {
+  align-self: center;
+  text-align: center;
+}
+
+.tags-row .tag {
+  margin: 6px;
+}
+
 .tag {
   display: inline-block;
   background: rgba(56,189,248,0.12);
@@ -57,33 +66,58 @@
 .fade-in:nth-child(4){animation-delay:.4s}
 .fade-in:nth-child(5){animation-delay:.5s}
 
-.detail-container {
+.section-title {
   width: 100%;
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px;
+  margin-top: 25px;
+  border-top: 1px solid rgba(129,140,248,0.2);
+  padding-top: 18px;
 }
 
+
+
+.detail-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;   /* ← KEY FIX */
+  text-align: left;          /* ← KEY FIX */
+
+  gap: 18px;
+}
+
+.detail-container > h1,
+.detail-container > h2:nth-of-type(1),
+.detail-container > .primary-btn {
+  align-self: center;
+  text-align: center;
+}
+
+
 .detail-container h2 {
-  margin-top: 20px;
+  margin-top: 0;
+  margin-bottom: 12px;
+  text-align: left;
 }
 
 .detail-list {
   max-width: 700px;
   text-align: left;
   line-height: 1.6;
+  margin-top: 0;
+  margin-bottom: 25px;
 }
 
 .detail-list li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: #cbd5f5;
 }
 
 .section-title {
-  margin-top: 30px;
+  margin-top: 15px;
+  margin-bottom: 12px;
   font-size: 1.6rem;
   color: #93c5fd;
 }
@@ -135,7 +169,7 @@
   /* Layout & Position */
   width: 100%;
   max-width: 800px;
-  margin: 40px auto;
+  margin: 20px auto;
   position: relative; /* Essential for the inner video to lock onto */
   
   /* 🔥 THE FIX: Force 16:9 Aspect Ratio using Padding */
@@ -162,6 +196,7 @@
   object-fit: contain;
   background: black;
   border-radius: 12px;
+  transition: opacity 0.5s ease;
 }
 
 
@@ -321,6 +356,14 @@
   text-shadow: 0 2px 12px rgba(0,0,0,0.6);
 }
 
+.detail-container .hero-text {
+  text-align: left;
+}
+
+.detail-container .section-title {
+  text-align: left;
+}
+
 
   .primary-btn {
     padding: 14px 32px;
@@ -469,11 +512,12 @@
     </video>
 
     <h3>Ghostly Rides</h3>
-    <p>Arcade survival driving game featuring power-ups and polished UI.</p>
+    <p>Arcade survival traffic dodging game featuring power-ups and polished UI.</p>
 
     <div class="tag">Unity</div>
     <div class="tag">C#</div>
-    <div class="tag">Personal Project</div>
+    <div class="tag">3D</div>
+    <div class="tag">Passion Project</div>
   </div>
 
   <!-- Astro Blitz -->
@@ -488,6 +532,7 @@
     <div class="tag">Python</div>
     <div class="tag">Pygame</div>
     <div class="tag">2D</div>
+    <div class="tag">Passion Project</div>
   </div>
 
 </div>
@@ -503,11 +548,27 @@
     I’m passionate about improving player experience and learning industry
     best practices through real projects.
   </p>
+
+  <h2 class="section-title">🧠 Skills</h2>
+
+  <div style="max-width:700px; text-align:left; margin-bottom:60px;">
+ 
+  <span class="tag">Unity</span>
+  <span class="tag">C#</span>
+  <span class="tag">Python</span>
+  <span class="tag">Pygame</span>
+  <span class="tag">Github</span>
+  <span class="tag">Notion</span>
+  <span class="tag">Vs Code</span>
+  <span class="tag">LibreSprite</span>
+
+  </div>
+
   
   <h2 class="section-title">🎓 Education</h2>
 
   <p class="hero-text">
-    <b>Bachelor’s in Technology Computer Science</b><br>
+    <b>Bachelor’s of Technology Computer Science</b><br>
     Specialised in AI<br>
     Institute Of Advanced Research<br>
     [2023 – Present]
@@ -550,7 +611,7 @@
     <h1 class="fade-in">Ghostly Rides</h1>
     <h2 class="fade-in">Arcade Survival Driving Game | Unity</h2>
     
-    <div class="fade-in" style="margin-bottom: 20px;">
+    <div class="fade-in tags-row">
       <span class="tag">Unity</span>
       <span class="tag">C#</span>
       <span class="tag">3D</span>
@@ -558,17 +619,19 @@
     </div>
 
     <div class="project-media fade-in">
-      <video class="project-detail-video" controls muted playsinline preload="auto">
+      <video class="project-detail-video" controls muted loop playsinline preload="auto">
         <source src="videos/ghostly-rides.mp4" type="video/mp4">
       </video>
     </div>
 
+    <h2 class="section-title fade-in">Introduction</h2>
     <p class="hero-text">
       Ghostly Rides is an arcade-style survival driving game where players
       possess special vehicles mid-run, gain powerful (and sometimes cursed)
-      abilities, and push for high scores in an endless neon-lit night drive.
+      abilities, and push for high scores in an endless night drive.
     </p>
 
+    <h2 class="section-title fade-in">Core Loop</h2>
     <p class="hero-text">
       The core gameplay focuses on <b>risk vs reward</b> — choosing when to
       possess special cars, managing temporary powers, and surviving
@@ -592,7 +655,7 @@
       <li>Physics-safe spawning via lane occupancy checks</li>
       <li>Prefab-based modular design</li>
       <li>Persistent data using PlayerPrefs</li>
-      <li>UI with TextMeshPro</li>
+      <li>UI with Unity's UI Toolkit</li>
     </ul>
 
     <h2 class="section-title fade-in">📚 What I Learned</h2>
@@ -633,7 +696,7 @@
       2D Space Shooter | Python (Pygame)
     </h2>
 
-    <div class="fade-in" style="margin-bottom: 20px;">
+    <div class="fade-in tags-row">
       <span class="tag">Python</span>
       <span class="tag">Pygame</span>
       <span class="tag">2D Shooter</span>
@@ -684,6 +747,7 @@
       <li>Designing enemy AI behaviors</li>
       <li>Optimizing sprite rendering</li>
       <li>Balancing arcade difficulty curves</li>
+      <li>Creating pixel art with Libresprite</li>
     </ul>
 
     <h2 class="section-title fade-in">🔗 Platform</h2>
@@ -814,6 +878,36 @@ document.addEventListener('click', (e) => {
       document.body.classList.remove('expanded-video');
     }
   }
+});
+</script>
+<script>
+
+// Hover preview for project cards
+document.querySelectorAll('.project-card').forEach(card => {
+  const video = card.querySelector('.project-video');
+  if (!video) return;
+
+  card.addEventListener('mouseenter', () => {
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  });
+
+  card.addEventListener('mouseleave', () => {
+    video.pause();
+    video.currentTime = 0;
+  });
+});
+
+// Add fade effect to detail section videos when they loop
+document.querySelectorAll('.project-detail-video').forEach(video => {
+  video.addEventListener('ended', () => {
+    video.style.opacity = '0';
+    setTimeout(() => {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+      video.style.opacity = '1';
+    }, 300);
+  });
 });
 </script>
 
