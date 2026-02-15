@@ -504,7 +504,23 @@
 <div id="projects" class="screen hidden">
   <h1>Games</h1>
   <div class="projects-grid">
+  
+  <!-- Snow Surfer -->
+  <div class="project-card" onclick="openProject('snow')">
+    <video class="project-video" muted loop playsinline preload="metadata">
+      <source src="videos/snow-surfer.mp4" type="video/mp4">
+    </video>
 
+    <h3>Snow Surfer</h3>
+    <p>Fast-paced downhill snowboarding arcade game with obstacle dodging and speed boosts.</p>
+
+    <div class="tag">Unity</div>
+    <div class="tag">C#</div>
+    <div class="tag">3D</div>
+    <div class="tag">Arcade</div>
+  </div>
+
+  
   <!-- Ghostly Rides -->
   <div class="project-card" onclick="openProject('ghostly')">
     <video class="project-video" muted loop playsinline preload="metadata">
@@ -759,6 +775,69 @@
 
   </div>
 
+</div>
+
+<!-- SNOW SURFER DETAIL -->
+<div id="project-snow" class="screen hidden">
+
+  <div class="detail-container">
+
+    <button class="primary-btn fade-in" onclick="showScreen('projects')">
+      ← Back
+    </button>
+
+    <h1 class="fade-in">Snow Surfer</h1>
+
+    <h2 class="fade-in">
+      Arcade Snowboarding Game | Unity
+    </h2>
+
+    <!-- TECH TAGS -->
+    <div class="fade-in" style="margin-bottom: 20px;">
+      <span class="tag">Unity</span>
+      <span class="tag">C#</span>
+      <span class="tag">3D</span>
+      <span class="tag">Arcade</span>
+    </div>
+
+    <!-- VIDEO -->
+    <div class="project-media fade-in">
+      <video class="project-detail-video" controls muted loop playsinline preload="auto">
+        <source src="videos/snow-surfer.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <h2 class="section-title fade-in">Introduction</h2>
+    <p class="hero-text fade-in">
+      Snow Surfer is a fast-paced downhill snowboarding arcade game
+      where players dodge obstacles, collect boosts, and push for
+      high scores while speeding down icy mountain slopes.
+    </p>
+
+    <h2 class="section-title fade-in">Gameplay Features</h2>
+    <ul class="detail-list fade-in">
+      <li>Endless downhill movement system</li>
+      <li>Obstacle avoidance mechanics</li>
+      <li>Speed boost & scoring system</li>
+      <li>Progressive difficulty scaling</li>
+      <li>Arcade-style high score tracking</li>
+    </ul>
+
+    <h2 class="section-title fade-in">Technical Highlights</h2>
+    <ul class="detail-list fade-in">
+      <li>Built using Unity (C#)</li>
+      <li>Procedural obstacle spawning</li>
+      <li>Player controller with smooth slope physics</li>
+      <li>Modular prefab system</li>
+    </ul>
+
+    <h2 class="section-title fade-in">Platform</h2>
+    <p class="hero-text fade-in">
+      PC (Windows)
+    </p>
+
+  </div>
 </div>
 
 
