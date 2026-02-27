@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="theme-color" content="#020617">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta charset="UTF-8">
   <title>Prakhar Bhatnagar | Game Developer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -937,6 +939,50 @@
 body.expanded-video {
   overflow: hidden;
 }
+
+@media (max-width: 768px) {
+
+  .screen {
+    position: relative;   /* stop absolute stacking */
+    inset: auto;
+    padding: 100px 20px 60px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .primary-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+}
+@media (max-width: 768px) {
+
+  nav {
+    padding: 14px 16px;
+  }
+
+  .nav-links {
+    gap: 10px;
+  }
+
+  nav button {
+    font-size: 0.8rem;
+    margin-left: 10px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+}
 </style>
 
 <script>
@@ -999,6 +1045,8 @@ document.querySelectorAll('.project-detail-video').forEach(video => {
     }, 300);
   });
 });
+
+
 </script>
 
 </body>
