@@ -1,758 +1,1297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="theme-color" content="#020617">
-  <meta name="mobile-web-app-capable" content="yes">
   <meta charset="UTF-8">
-  <title>Prakhar Bhatnagar | Game Developer</title>
+  <title>Prakhar Bhatnagar | Game Designer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
   <style>
-  * { box-sizing: border-box; }
-  
-  html, body {
-  height: 100%;
-  margin: 0;
-  overflow: auto; /* allow scrolling if needed, screens handle internal scrolling */
-  -webkit-overflow-scrolling: touch;
-  background: #020617 !important;
-}
-.nav-links {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.tags-row {
-  align-self: center;
-  text-align: center;
-}
-
-.tags-row .tag {
-  margin: 6px;
-}
-
-.tag {
-  display: inline-block;
-  background: rgba(56,189,248,0.12);
-  color: #a5b4fc;
-  padding: 6px 14px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  margin: 6px 6px 0 0;
-  border: 1px solid rgba(56,189,248,0.25);
-  transition: all 0.25s ease;
-}
-
-.tag:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(129,140,248,0.4);
-}
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeUp 0.6s ease forwards;
-}
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.fade-in:nth-child(1){animation-delay:.1s}
-.fade-in:nth-child(2){animation-delay:.2s}
-.fade-in:nth-child(3){animation-delay:.3s}
-.fade-in:nth-child(4){animation-delay:.4s}
-.fade-in:nth-child(5){animation-delay:.5s}
-
-.section-title {
-  width: 100%;
-  margin-top: 25px;
-  border-top: 1px solid rgba(129,140,248,0.2);
-  padding-top: 18px;
-}
-
-
-
-.detail-container {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;   /* ← KEY FIX */
-  text-align: left;          /* ← KEY FIX */
-
-  gap: 18px;
-}
-
-.detail-container > h1,
-.detail-container > h2:nth-of-type(1),
-.detail-container > .primary-btn {
-  align-self: center;
-  text-align: center;
-}
-
-
-.detail-container h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  text-align: left;
-}
-
-.detail-list {
-  max-width: 700px;
-  text-align: left;
-  line-height: 1.6;
-  margin-top: 0;
-  margin-bottom: 25px;
-}
-
-.detail-list li {
-  margin-bottom: 8px;
-  color: #cbd5f5;
-}
-
-.section-title {
-  margin-top: 15px;
-  margin-bottom: 12px;
-  font-size: 1.6rem;
-  color: #93c5fd;
-}
-
-/* Custom Scrollbar */
-.screen::-webkit-scrollbar {
-  width: 8px;
-}
-
-.screen::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.screen::-webkit-scrollbar-thumb {
-  background: rgba(129,140,248,0.35);
-  border-radius: 999px;
-}
-
-.screen::-webkit-scrollbar-thumb:hover {
-  background: rgba(167,139,250,0.55);
-}
-
-/* Project Video Thumbnails */
-.project-video {
-  width: 100%;
-  aspect-ratio: 16 / 9;   /* 🔥 KEY LINE */
-  height: auto;
-  object-fit: contain;   /* prevents cropping */
-  border-radius: 14px;
-  margin-bottom: 16px;
-  background: #020617;
-}
-.project-card:hover .project-video {
-  transform: scale(1.02);
-  transition: transform 0.3s ease;
-}
-
-/* Make cards clickable */
-.project-card {
-  cursor: pointer;
-}
-
-.project-card:hover h3 {
-  text-decoration: underline;
-}
-
-/* Detail Page Video Wrapper */
-.project-media {
-  /* Layout & Position */
-  width: 100%;
-  max-width: 800px;
-  margin: 20px auto;
-  position: relative; /* Essential for the inner video to lock onto */
-  
-  /* 🔥 THE FIX: Force 16:9 Aspect Ratio using Padding */
-  height: 0;
-  padding-bottom: 35%; /* (9/16 = 0.5625) creates the aspect ratio */
-  
-  /* Visuals */
-  border-radius: 18px;
-  overflow: hidden;
-  background: #000;
-  box-shadow:
-    0 30px 80px rgba(56,189,248,0.25),
-    0 0 60px rgba(167,139,250,0.2);
-}
-
-
-.project-detail-video {
-  position: absolute; /* Pins the video to the corners of .project-media */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  object-fit: contain;
-  background: black;
-  border-radius: 12px;
-  transition: opacity 0.5s ease;
-}
-
-
-
-/* Resume Button */
-.resume-btn {
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa);
-  color: #020617;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 6px 20px rgba(129,140,248,0.35);
-  transition: all 0.25s ease;
-}
-
-.resume-btn:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 10px 30px rgba(167,139,250,0.45);
-}
-
-/* Social Icons */
-.social-icon img {
-  width: 20px;
-  height: 20px;
-  filter: invert(1) brightness(0.9);
-  opacity: 0.8;
-  transition: all 0.2s ease;
-}
-
-.social-icon:hover img {
-  opacity: 1;
-  transform: scale(1.15);
-}
-
-  body {
-  margin: 0;
-  font-family: "Inter", "Segoe UI", Arial, sans-serif;
-  background-color: #020617;
-  color: #e6e9ef;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-  nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 16px 40px;
-  display: flex;
-  align-items: center;
-  background: rgba(2,6,23,0.85);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(99,102,241,0.25);
-
-  z-index: 9999;   /* FORCE ON TOP */
-}
-
-
-  nav strong {
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  nav button {
-    background: none;
-    border: none;
-    color: #cbd5f5;
-    margin-left: 22px;
-    cursor: pointer;
-    font-size: 0.95rem;
-    position: relative;
-  }
-
-  nav button::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    width: 0%;
-    height: 2px;
-    background: linear-gradient(90deg, #38bdf8, #a78bfa);
-    transition: width 0.25s ease;
-  }
-
-  nav button:hover::after {
-    width: 100%;
-  }
-
-  .screen {
-  position: absolute;
-  inset: 0;
-  padding: 120px 40px 80px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-
-  
-  .screen::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(600px circle at 50% 20%, rgba(255,255,255,0.03), transparent 60%);
-  pointer-events: none;
-}
-
-
-  .hidden {
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(30px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-
-  h1 {
-  font-size: 3.4rem;
-  margin-bottom: 12px;
-  font-weight: 800;
-
-  background: linear-gradient(90deg, #ffffff, #c7d2fe);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow: 0 2px 20px rgba(129,140,248,0.25);
-  }
-
-
-  h2 {
-    font-weight: 400;
-    color: #a5b4fc;
-    margin-bottom: 26px;
-  }
-
-  .hero-text {
-  max-width: 760px;
-  color: #e2e8f0;
-  margin-bottom: 48px;
-  font-size: 1.1rem;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
-}
-
-.detail-container .hero-text {
-  text-align: left;
-}
-
-.detail-container .section-title {
-  text-align: left;
-}
-
-
-  .primary-btn {
-    padding: 14px 32px;
-    border-radius: 999px;
-    border: none;
-    background: linear-gradient(90deg, #38bdf8, #818cf8, #a78bfa);
-    color: #020617;
-    cursor: pointer;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    box-shadow:
-      0 10px 30px rgba(56,189,248,0.35),
-      0 0 40px rgba(167,139,250,0.25);
-    transition: all 0.25s ease;
-  }
-
-  .primary-btn:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow:
-      0 18px 50px rgba(129,140,248,0.45),
-      0 0 60px rgba(167,139,250,0.35);
-  }
-
-  .projects-grid {
-    width: 100%;
-    max-width: 1200px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-    margin-top: 50px;
-  }
-
-  .project-card {
-    background:
-      linear-gradient(180deg, rgba(15,23,42,0.9), rgba(2,6,23,0.9));
-    border: 1px solid rgba(129,140,248,0.25);
-    border-radius: 18px;
-    padding: 30px;
-    text-align: left;
-    position: relative;
-    overflow-x: hidden;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-
-  .project-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(400px circle at top left, rgba(56,189,248,0.08), transparent 40%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .project-card:hover::before {
-    opacity: 1;
-  }
-
-  .project-card:hover {
-  transform: translateY(-10px) scale(1.03);
-  box-shadow:
-    0 40px 100px rgba(56,189,248,0.3),
-    0 0 80px rgba(167,139,250,0.35);
-  }
-
-
-  .project-card h3 {
-    margin-top: 0;
-    color: #93c5fd;
-    font-size: 1.3rem;
-  }
-
-  .tag {
-    display: inline-block;
-    background: rgba(56,189,248,0.12);
-    color: #a5b4fc;
-    padding: 6px 14px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    margin-top: 12px;
-    margin-right: 8px;
-    border: 1px solid rgba(56,189,248,0.25);
-  }
-
-/* CONTACT LAYOUT */
-.contact-wrapper {
-  width: 100%;
-  max-width: 1100px;
-  margin-top: 50px;
-
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 40px;
-}
-
-/* FORM SIDE */
-.contact-form {
-  text-align: left;
-}
-
-.contact-form h2 {
-  margin-bottom: 20px;
-  color: #93c5fd;
-}
-
-.contact-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.contact-form input,
-.contact-form textarea {
-  padding: 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(129,140,248,0.3);
-  background: rgba(15,23,42,0.6);
-  color: #e2e8f0;
-  font-size: 0.95rem;
-  outline: none;
-  transition: border 0.2s ease;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-  border-color: #818cf8;
-}
-
-/* RIGHT CARD */
-.contact-card {
-  background: linear-gradient(
-    180deg,
-    rgba(15,23,42,0.9),
-    rgba(2,6,23,0.9)
-  );
-  border: 1px solid rgba(129,140,248,0.3);
-  border-radius: 18px;
-  padding: 40px 30px;
-  text-align: center;
-
-  box-shadow:
-    0 20px 60px rgba(56,189,248,0.2),
-    0 0 40px rgba(167,139,250,0.15);
-}
-
-.contact-icon {
-  font-size: 48px;
-  margin-bottom: 20px;
-}
-
-.contact-card h3 {
-  color: #93c5fd;
-  margin-bottom: 15px;
-}
-
-.contact-card p {
-  color: #cbd5f5;
-  margin-bottom: 25px;
-}
-
-</style>
-
+    :root {
+      --bg: #080808;
+      --surface: #0f0f0f;
+      --surface2: #151515;
+      --border: rgba(255,255,255,0.07);
+      --accent: #ff4e1a;
+      --accent2: #ff8c42;
+      --accent-glow: rgba(255,78,26,0.18);
+      --text: #e8e8e8;
+      --muted: #666;
+      --muted2: #888;
+      --grid-color: rgba(255,255,255,0.025);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .nav-links button {
+      background: none;
+      border: none;
+      color: var(--muted2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links button:hover { color: var(--text); }
+
+    .nav-links button.active { color: var(--accent); }
+
+    .nav-resume {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 16px;
+      padding: 7px 18px;
+      border: 1px solid var(--accent);
+      border-radius: 2px;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .nav-resume:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .nav-socials {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: 16px;
+    }
+
+    .nav-socials a {
+      opacity: 0.5;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-socials a:hover { opacity: 1; }
+
+    .nav-socials img {
+      width: 16px;
+      height: 16px;
+      filter: invert(1);
+    }
+
+    /* ── SCREENS ── */
+    .screen {
+      position: fixed;
+      inset: 64px 0 0 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      z-index: 10;
+      padding: 80px 0 80px;
+      opacity: 1;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      transform: translateY(0);
+    }
+
+    .screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+    }
+
+    .screen::-webkit-scrollbar { width: 4px; }
+    .screen::-webkit-scrollbar-track { background: transparent; }
+    .screen::-webkit-scrollbar-thumb { background: rgba(255,78,26,0.3); border-radius: 2px; }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── HOME SCREEN ── */
+    #home {
+      display: flex;
+      align-items: center;
+      min-height: calc(100vh - 64px);
+      padding: 0;
+    }
+
+    #home .container {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .home-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .home-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .home-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+      color: var(--text);
+    }
+
+    .home-title .line-accent {
+      color: var(--accent);
+      display: block;
+    }
+
+    .home-bio {
+      max-width: 520px;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--muted2);
+      font-weight: 300;
+      margin-bottom: 48px;
+    }
+
+    .home-bio strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .home-cta {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 2px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px var(--accent-glow); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+    .home-stats {
+      position: absolute;
+      right: 48px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-items: flex-end;
+    }
+
+    .stat-item {
+      text-align: right;
+    }
+
+    .stat-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: var(--accent);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .home-scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      margin-bottom: 64px;
+    }
+
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-eyebrow::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .section-title-large {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    /* ── PROJECTS GRID ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.25s;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent);
+      z-index: 2;
+    }
+
+    .project-card:hover .card-overlay { opacity: 1; }
+    .project-card:hover .card-arrow { transform: translate(4px, -4px); }
+
+    .card-media {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      background: #000;
+      position: relative;
+    }
+
+    .project-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .project-card:hover .project-video {
+      transform: scale(1.04);
+    }
+
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(255,78,26,0.35), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    .card-meta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-arrow {
+      font-size: 0.9rem;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--muted2);
+      margin-bottom: 16px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      color: var(--muted2);
+      border-radius: 1px;
+    }
+
+    /* ── ABOUT SCREEN ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-text {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: var(--muted2);
+      font-weight: 300;
+    }
+
+    .about-text strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .about-text p + p { margin-top: 20px; }
+
+    .skills-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .skills-group-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .skill-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      padding: 6px 14px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .skill-pill:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      padding: 24px;
+      margin-top: 48px;
+    }
+
+    .edu-card h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .edu-card p {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--muted2);
+      letter-spacing: 0.04em;
+      line-height: 1.7;
+    }
+
+    .cert-list {
+      margin-top: 48px;
+    }
+
+    .cert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cert-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .cert-name {
+      font-size: 0.9rem;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    .cert-issuer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-top: 4px;
+    }
+
+    /* ── CONTACT SCREEN ── */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .contact-form-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-textarea {
+      height: 140px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .contact-info-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 36px;
+    }
+
+    .contact-info-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-item:last-child { border-bottom: none; }
+
+    .contact-item-icon {
+      font-size: 1rem;
+      margin-top: 2px;
+    }
+
+    .contact-item-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-item-value {
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .contact-item-value a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .contact-item-value a:hover { text-decoration: underline; }
+
+    /* ── PROJECT DETAIL ── */
+    .detail-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-bottom: 48px;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover { color: var(--accent); }
+
+    .detail-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+
+    .detail-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+
+    .project-media {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 48px;
+      position: relative;
+    }
+
+    .project-detail-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    .project-media.expanded {
+      position: fixed;
+      inset: 28px;
+      z-index: 10000;
+      width: auto;
+      aspect-ratio: unset;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.96);
+      border-color: var(--accent);
+    }
+
+    .project-media.expanded .project-detail-video {
+      cursor: zoom-out;
+      max-height: 100%;
+    }
+
+    body.expanded-video { overflow: hidden; }
+
+    .detail-section {
+      margin-bottom: 40px;
+    }
+
+    .detail-section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .detail-text {
+      font-size: 0.98rem;
+      line-height: 1.8;
+      color: var(--muted2);
+      font-weight: 300;
+    }
+
+    .detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .detail-list li {
+      font-size: 0.92rem;
+      color: var(--muted2);
+      line-height: 1.5;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .detail-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+    }
+
+    .detail-list li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .detail-platform {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted2);
+      line-height: 1.8;
+    }
+
+    /* ── DECORATIVE ACCENT CORNER ── */
+    .accent-corner {
+      position: fixed;
+      top: 64px;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle at top right, rgba(255,78,26,0.06), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 56px 0;
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in { animation: fadeUp 0.5s ease forwards; }
+    .delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .delay-4 { animation-delay: 0.4s; opacity: 0; }
+    .delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .container { padding: 0 20px; }
+      .detail-wrap { padding: 0 20px 60px; }
+
+      .home-stats { display: none; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+      .projects-grid { grid-template-columns: 1fr; }
+
+      .nav-links button { display: none; }
+      .nav-links button[data-mobile="true"] { display: inline-block; }
+
+      .home-title { font-size: 2.8rem; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-socials { display: none; }
+    }
+  </style>
 </head>
 <body>
 
+<div class="accent-corner"></div>
+
+<!-- ── NAV ── -->
 <nav>
-  <strong class="logo">Prakhar Bhatnagar</strong>
-
+  <div class="nav-logo">P.<span>B</span></div>
   <div class="nav-links">
-    <button onclick="showScreen('home')">Home</button>
-    <button onclick="showScreen('projects')">Games</button>
-    <button onclick="showScreen('about')">About</button>
-    <button onclick="showScreen('contact')">Contact</button>
-
-    <!-- Resume Button -->
-    <a class="resume-btn" href="resume.pdf" target="_blank" download>
-      Download Resume
-    </a>
-
-    <!-- Social Icons -->
-    <a class="social-icon" href="https://github.com/Dullestdear" target="_blank" title="GitHub">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
-    </a>
-
-    <a class="social-icon" href="https://dullestdear.itch.io/" target="_blank" title="Itch.io">
-      <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
-    </a>
-
-    <a class="social-icon" href="https://www.instagram.com/pixelblitz.studios?igsh=MTB2OGp0ZGNkaW1zaA==" target="_blank" title="Instagram">
-      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram">
-    </a>
-    <a class="social-icon" href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" title="LinkedIn">
-      <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
-    </a>
+    <button onclick="showScreen('home')" class="active" id="nav-home">Home</button>
+    <button onclick="showScreen('projects')" id="nav-projects">Games</button>
+    <button onclick="showScreen('about')" id="nav-about">About</button>
+    <button onclick="showScreen('contact')" id="nav-contact">Contact</button>
+    <a class="nav-resume" href="resume.pdf" target="_blank" download>↓ Resume</a>
+    <div class="nav-socials">
+      <a href="https://github.com/Dullestdear" target="_blank" title="GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
+      </a>
+      <a href="https://dullestdear.itch.io/" target="_blank" title="Itch.io">
+        <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
+      </a>
+      <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" title="LinkedIn">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
+      </a>
+    </div>
   </div>
 </nav>
 
-
-<!-- HOME -->
+<!-- ══════════════════════════════════════════
+     HOME
+══════════════════════════════════════════ -->
 <div id="home" class="screen">
-  <h1>Hi, I’m Prakhar</h1>
-  <h2>Game Developer | Unity & C#</h2>
-  <p class="hero-text">
-    Passionate Student Pursuing Dreams in Game Design:
-    I build complete, playable games focused on gameplay systems, polish,
-    and player experience.
-  </p>
-  <button class="primary-btn" onclick="showScreen('projects')">
-    View My Games
-  </button>
+  <div class="container" style="position:relative;">
+
+    <div class="home-eyebrow fade-in delay-1">Game Designer & Developer</div>
+
+    <h1 class="home-title fade-in delay-2">
+      PRAKHAR<br>
+      <span class="line-accent">BHATNAGAR</span>
+    </h1>
+
+    <p class="home-bio fade-in delay-3">
+      21-year-old game developer building <strong>complete, playable games</strong> focused
+      on tight gameplay systems, UI polish, and player experience.
+      Specialising in <strong>Unity / C#</strong> — currently seeking my first industry internship.
+    </p>
+
+    <div class="home-cta fade-in delay-4">
+      <button class="btn-primary" onclick="showScreen('projects')">View My Games ▸</button>
+      <a class="btn-ghost" href="https://dullestdear.itch.io/" target="_blank">Itch.io Profile</a>
+    </div>
+
+    <div class="home-stats fade-in delay-5">
+      <div class="stat-item">
+        <span class="stat-number">3</span>
+        <span class="stat-label">Games Shipped</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">2+</span>
+        <span class="stat-label">Years Building</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">2</span>
+        <span class="stat-label">Engines Used</span>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<!-- PROJECTS -->
+<!-- ══════════════════════════════════════════
+     PROJECTS
+══════════════════════════════════════════ -->
 <div id="projects" class="screen hidden">
-  <h1>Games</h1>
-  <div class="projects-grid">
-  
-  <!-- Ghostly Rides -->
-  <div class="project-card" onclick="openProject('ghostly')">
-    <video class="project-video" muted loop playsinline preload="metadata">
-      <source src="videos/ghostly-rides.mp4" type="video/mp4">
-    </video>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Portfolio</div>
+      <h2 class="section-title-large">Games</h2>
+    </div>
 
-    <h3>Ghostly Rides</h3>
-    <p>Arcade survival traffic dodging game featuring power-ups and polished UI.</p>
+    <div class="projects-grid">
 
-    <div class="tag">Unity</div>
-    <div class="tag">C#</div>
-    <div class="tag">3D</div>
-    <div class="tag">Passion Project</div>
+      <!-- Ghostly Rides -->
+      <div class="project-card fade-in delay-1" onclick="openProject('ghostly')">
+        <div class="card-media">
+          <video class="project-video" muted loop playsinline preload="metadata">
+            <source src="videos/ghostly-rides.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">Unity · C# · 3D · Passion Project</div>
+          <div class="card-title">
+            Ghostly Rides
+            <span class="card-arrow">↗</span>
+          </div>
+          <p class="card-desc">Arcade survival traffic-dodging game with a car possession mechanic, power-ups, and polished UI. Published on Itch.io.</p>
+          <div class="tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">3D</span>
+            <span class="tag">Arcade</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Astro Blitz -->
+      <div class="project-card fade-in delay-2" onclick="openProject('astro')">
+        <div class="card-media">
+          <video class="project-video" muted loop playsinline preload="metadata">
+            <source src="videos/astro-blitz.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">Python · Pygame · 2D</div>
+          <div class="card-title">
+            Astro Blitz
+            <span class="card-arrow">↗</span>
+          </div>
+          <p class="card-desc">2D side-scrolling space shooter with custom enemy bullet patterns, a combo system, and arcade-style difficulty scaling.</p>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Pygame</span>
+            <span class="tag">2D</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snow Surfer -->
+      <div class="project-card fade-in delay-3" onclick="openProject('snow')">
+        <div class="card-media">
+          <video class="project-video" muted loop playsinline preload="metadata">
+            <source src="videos/snow-surfer.mp4" type="video/mp4">
+          </video>
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">Unity · C# · 2D · Course Work</div>
+          <div class="card-title">
+            Snow Surfer
+            <span class="card-arrow">↗</span>
+          </div>
+          <p class="card-desc">Fast-paced downhill snowboarding prototype with slope physics, multiple playable characters, and particle-driven crash FX.</p>
+          <div class="tags">
+            <span class="tag">Unity</span>
+            <span class="tag">C#</span>
+            <span class="tag">Cinemachine</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
-
-  <!-- Astro Blitz -->
-  <div class="project-card" onclick="openProject('astro')">
-    <video class="project-video" muted loop playsinline preload="metadata">
-      <source src="videos/astro-blitz.mp4" type="video/mp4">
-    </video>
-
-    <h3>Astro Blitz</h3>
-    <p>2D side-scrolling space shooter with custom enemy behaviors.</p>
-
-    <div class="tag">Python</div>
-    <div class="tag">Pygame</div>
-    <div class="tag">2D</div>
-    <div class="tag">Passion Project</div>
-  </div>
-
-   <!-- Snow Surfer -->
-  <div class="project-card" onclick="openProject('snow')">
-    <video class="project-video" muted loop playsinline preload="metadata">
-      <source src="videos/snow-surfer.mp4" type="video/mp4">
-    </video>
-
-    <h3>Snow Surfer</h3>
-    <p>Fast-paced downhill snowboarding arcade game with obstacle dodging and speed boosts.</p>
-
-    <div class="tag">Unity</div>
-    <div class="tag">C#</div>
-    <div class="tag">3D</div>
-    <div class="tag">Course Work</div>
-  </div>
-
 </div>
 
-</div>
-
-<!-- ABOUT -->
+<!-- ══════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════ -->
 <div id="about" class="screen hidden">
-  <h1>About Me</h1>
-  <p class="hero-text">
-    I’m a 21-year-old game developer with experience building complete games
-    in Unity using C#. I enjoy working on gameplay systems, UI, and polish.
-    I’m passionate about improving player experience and learning industry
-    best practices through real projects.
-  </p>
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Background</div>
+      <h2 class="section-title-large">About Me</h2>
+    </div>
 
-  <h2 class="section-title">🧠 Skills</h2>
+    <div class="about-grid">
 
-  <div style="max-width:700px; text-align:left; margin-bottom:60px;">
- 
-  <span class="tag">Unity</span>
-  <span class="tag">C#</span>
-  <span class="tag">Python</span>
-  <span class="tag">Pygame</span>
-  <span class="tag">Github</span>
-  <span class="tag">Notion</span>
-  <span class="tag">Vs Code</span>
-  <span class="tag">LibreSprite</span>
+      <!-- LEFT: text + edu + certs -->
+      <div>
+        <div class="about-text">
+          <p>I'm a <strong>21-year-old game developer</strong> studying B.Tech Computer Science (AI specialisation) at the Institute of Advanced Research. I've been building games for over two years — starting with Python and Pygame, then moving to Unity and C#.</p>
+          <p>My focus is on <strong>gameplay feel</strong>: tight controls, readable systems, and polished feedback loops. Every project I ship starts with a core mechanic and builds outward from there.</p>
+          <p>I'm currently looking for my <strong>first game development internship</strong> where I can contribute to a real production pipeline, learn from senior developers, and grow as a game designer.</p>
+        </div>
 
+        <div class="edu-card" style="margin-top:40px;">
+          <h3>B.Tech Computer Science — AI Specialisation</h3>
+          <p>Institute Of Advanced Research · 2023 – Present<br>
+          Relevant: Game Design · Game Programming · Level Design · CS Fundamentals</p>
+        </div>
+
+        <div class="cert-list">
+          <div class="cert-item">
+            <div class="cert-dot"></div>
+            <div>
+              <div class="cert-name">Complete Guide to Game Design</div>
+              <div class="cert-issuer">HP Gaming Garage · EDX</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-dot"></div>
+            <div>
+              <div class="cert-name">Complete C# Unity 2D Game Development</div>
+              <div class="cert-issuer">GameDev.tv · Udemy</div>
+            </div>
+          </div>
+        </div>
+
+        <a class="btn-ghost" href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing" target="_blank" style="margin-top:32px; display:inline-flex;">
+          View Certificates ↗
+        </a>
+      </div>
+
+      <!-- RIGHT: skills -->
+      <div class="skills-panel">
+        <div>
+          <div class="skills-group-title">Game Dev</div>
+          <div class="skills-list">
+            <span class="skill-pill">Unity</span>
+            <span class="skill-pill">C#</span>
+            <span class="skill-pill">Pygame</span>
+            <span class="skill-pill">Python</span>
+            <span class="skill-pill">Cinemachine</span>
+            <span class="skill-pill">UI Toolkit</span>
+            <span class="skill-pill">Particle System</span>
+          </div>
+        </div>
+        <div>
+          <div class="skills-group-title">Design & Art</div>
+          <div class="skills-list">
+            <span class="skill-pill">LibreSprite</span>
+            <span class="skill-pill">Level Design</span>
+            <span class="skill-pill">Game Feel</span>
+            <span class="skill-pill">Pixel Art</span>
+          </div>
+        </div>
+        <div>
+          <div class="skills-group-title">Tools</div>
+          <div class="skills-list">
+            <span class="skill-pill">Git / GitHub</span>
+            <span class="skill-pill">VS Code</span>
+            <span class="skill-pill">Notion</span>
+            <span class="skill-pill">Itch.io</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
-
-  
-  <h2 class="section-title">🎓 Education</h2>
-
-  <p class="hero-text">
-    <b>Bachelor’s of Technology Computer Science</b><br>
-    Specialised in AI<br>
-    Institute Of Advanced Research<br>
-    [2023 – Present]
-  </p>
-
-  <p class="hero-text">
-    Relevant Coursework:<br>
-    Game Design • Game Programming • Level Design • Computer Science Fundamentals
-  </p>
-
-  <h2 class="section-title">📜 Certifications</h2>
-
-  <p class="hero-text">
-    Complete Guide to Game Design (HP Gaming Garage , EDX)<br>
-    Complete C# Unity 2D Game Development (GameDev.tv , Udemy)<br>
-  </p>
-
-  <a class="primary-btn" href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing" target="_blank">
-    View Certificates
-  </a>
 </div>
 
-<!-- CONTACT -->
+<!-- ══════════════════════════════════════════
+     CONTACT
+══════════════════════════════════════════ -->
 <div id="contact" class="screen hidden">
-
-  <h1>Contact</h1>
-
-  <div class="contact-wrapper">
-
-    <!-- LEFT SIDE: FORM -->
-    <div class="contact-form">
-
-      <h2>Leave a Message</h2>
-
-      <form action="https://formspree.io/f/mvzbnagp" method="POST">
-
-        <input type="hidden" name="_next" value="https://dullestdear.github.io/Portfolio/#contact">
-
-        <input type="text" name="name" placeholder="Your Name" required>
-
-        <input type="email" name="email" placeholder="Your Email" required>
-
-        <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
-
-        <button type="submit" class="primary-btn">
-          Send Message
-        </button>
-
-        <input type="hidden" name="_captcha" value="false">
-
-      </form>
-
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">Get In Touch</div>
+      <h2 class="section-title-large">Contact</h2>
     </div>
 
-    <!-- RIGHT SIDE: DIRECT EMAIL CARD -->
-    <div class="contact-card">
+    <div class="contact-layout">
 
-      <div class="contact-icon">📩</div>
+      <!-- FORM -->
+      <div>
+        <div class="contact-form-title">Send a Message</div>
+        <form action="https://formspree.io/f/mvzbnagp" method="POST">
+          <input type="hidden" name="_next" value="https://dullestdear.github.io/Portfolio/#contact">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-input" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea name="message" class="form-textarea" placeholder="What's on your mind?" required></textarea>
+          </div>
+          <input type="hidden" name="_captcha" value="false">
+          <button type="submit" class="btn-primary">Send Message ▸</button>
+        </form>
+      </div>
 
-      <h3>Or Contact Me Directly</h3>
+      <!-- INFO PANEL -->
+      <div class="contact-info-panel">
+        <div class="contact-info-title">Direct Contact</div>
 
-      <p>
-        Prefer email? Reach out directly and I’ll respond within 24 hours.
-      </p>
+        <div class="contact-item">
+          <div class="contact-item-icon">📧</div>
+          <div>
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-value">
+              <a href="mailto:Prakharbhatnagar619@gmail.com">Prakharbhatnagar619@gmail.com</a>
+            </div>
+          </div>
+        </div>
 
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=Prakharbhatnagar619@gmail.com" target="_blank" class="resume-btn">
-        Prakharbhatnagar619@gmail.com
-      </a>
+        <div class="contact-item">
+          <div class="contact-item-icon">🎮</div>
+          <div>
+            <div class="contact-item-label">Itch.io</div>
+            <div class="contact-item-value">
+              <a href="https://dullestdear.itch.io/" target="_blank">dullestdear.itch.io</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">💼</div>
+          <div>
+            <div class="contact-item-label">LinkedIn</div>
+            <div class="contact-item-value">
+              <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank">prakhar-bhatnagar</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">🐙</div>
+          <div>
+            <div class="contact-item-label">GitHub</div>
+            <div class="contact-item-value">
+              <a href="https://github.com/Dullestdear" target="_blank">Dullestdear</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:28px; padding-top:24px; border-top: 1px solid var(--border);">
+          <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing:0.06em; line-height:1.7;">
+            Open to internship opportunities in game development.<br>
+            Response within 24 hours.
+          </p>
+        </div>
+      </div>
 
     </div>
-
   </div>
-
 </div>
 
-<!-- GHOSTLY RIDES DETAIL -->
+<!-- ══════════════════════════════════════════
+     PROJECT DETAIL: GHOSTLY RIDES
+══════════════════════════════════════════ -->
 <div id="project-ghostly" class="screen hidden">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="showScreen('projects')">← Back to Games</button>
 
-  <div class="detail-container">
+    <div class="detail-subtitle fade-in">Unity · C# · 3D · Arcade · Passion Project</div>
+    <h1 class="detail-title fade-in">Ghostly Rides</h1>
 
-    <button class="primary-btn" onclick="showScreen('projects')">← Back</button>
-
-    <h1 class="fade-in">Ghostly Rides</h1>
-    <h2 class="fade-in">Arcade Survival Driving Game | Unity</h2>
-    
-    <div class="fade-in tags-row">
+    <div class="detail-tags fade-in">
       <span class="tag">Unity</span>
       <span class="tag">C#</span>
       <span class="tag">3D</span>
       <span class="tag">Arcade</span>
+      <span class="tag">Itch.io</span>
     </div>
 
     <div class="project-media fade-in">
@@ -761,82 +1300,69 @@
       </video>
     </div>
 
-    <h2 class="section-title fade-in">Introduction</h2>
-    <p class="hero-text">
-      Ghostly Rides is an arcade-style survival driving game where players
-      possess special vehicles mid-run, gain powerful (and sometimes cursed)
-      abilities, and push for high scores in an endless night drive.
-    </p>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Introduction</div>
+      <p class="detail-text">Ghostly Rides is an arcade-style survival driving game where players possess special vehicles mid-run, gain powerful (and sometimes cursed) abilities, and push for high scores in an endless night drive. The core design revolves around a <strong>risk vs reward</strong> loop — choosing when to possess special cars, managing temporary powers, and surviving increasing traffic density as the game speeds up.</p>
+    </div>
 
-    <h2 class="section-title fade-in">Core Loop</h2>
-    <p class="hero-text">
-      The core gameplay focuses on <b>risk vs reward</b> — choosing when to
-      possess special cars, managing temporary powers, and surviving
-      increasing traffic density as the game speeds up over time.
-    </p>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Key Features</div>
+      <ul class="detail-list">
+        <li><strong>Car Possession System</strong> — Swap into special vehicles mid-run while preserving physics & controls</li>
+        <li><strong>Power-up & Curse Mechanics</strong> — Speed boosts, shields, score multipliers & negative effects</li>
+        <li><strong>Lane-Based Traffic System</strong> — Collision-safe lane spawning for consistent challenge</li>
+        <li><strong>Endless Survival Loop</strong> — Progressive speed & traffic difficulty over time</li>
+        <li><strong>High Score System</strong> — Persistent tracking with UI & audio feedback</li>
+        <li><strong>Atmospheric Presentation</strong> — Neon-noir visuals with arcade sound design</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">🔧 Key Features</h2>
-    <ul class="detail-list fade-in">
-      <li><b>Car Possession System</b> – Swap into special vehicles while preserving physics & controls</li>
-      <li><b>Powerup & Curse Mechanics</b> – Speed boosts, shields, score multipliers & negative effects</li>
-      <li><b>Lane-Based Traffic System</b> – Collision-safe lane spawning</li>
-      <li><b>Endless Survival Gameplay</b> – Progressive speed & traffic difficulty</li>
-      <li><b>High Score System</b> – Persistent tracking with UI/audio feedback</li>
-      <li><b>Atmospheric Presentation</b> – Neon-noir visuals & arcade sound design</li>
-    </ul>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Technical Highlights</div>
+      <ul class="detail-list">
+        <li>Built entirely in Unity with C#</li>
+        <li>Modular spawner architecture with prefab-based design</li>
+        <li>Physics-safe spawning via lane occupancy checks</li>
+        <li>Persistent data using PlayerPrefs</li>
+        <li>UI built with Unity's UI Toolkit</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">🛠️ Technical Highlights</h2>
-    <ul class="detail-list fade-in">
-      <li>Built entirely in Unity (C#)</li>
-      <li>Modular spawner architecture</li>
-      <li>Physics-safe spawning via lane occupancy checks</li>
-      <li>Prefab-based modular design</li>
-      <li>Persistent data using PlayerPrefs</li>
-      <li>UI with Unity's UI Toolkit</li>
-    </ul>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">What I Learned</div>
+      <ul class="detail-list">
+        <li>Designing scalable arcade systems with clean separation of concerns</li>
+        <li>Managing prefab hierarchies for dynamic vehicle swapping</li>
+        <li>Preventing runtime physics edge cases during possession transitions</li>
+        <li>Shipping a complete build to Itch.io with a game-over flow</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">📚 What I Learned</h2>
-    <ul class="detail-list fade-in">
-      <li>Designing scalable arcade systems</li>
-      <li>Managing prefab hierarchies for dynamic swapping</li>
-      <li>Preventing runtime physics issues</li>
-      <li>Persistent scoring & game-over flows</li>
-      <li>Shipping a commercial-ready build</li>
-    </ul>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Platform</div>
+      <p class="detail-platform">PC (Windows) — Distributed via Itch.io</p>
+    </div>
 
-    <h2>🔗 Platform</h2>
-    <p class="hero-text">
-      PC (Windows)<br>
-      Distributed via itch.io
-    </p>
-    
-    <a href="https://dullestdear.itch.io/ghostly-rides" target="_blank" class="primary-btn">
-      🎮 Play on Itch.io
+    <a href="https://dullestdear.itch.io/ghostly-rides" target="_blank" class="btn-primary" style="margin-top:8px;">
+      Play on Itch.io ↗
     </a>
-
   </div>
 </div>
 
-
-<!-- ASTRO BLITZ DETAIL -->
+<!-- ══════════════════════════════════════════
+     PROJECT DETAIL: ASTRO BLITZ
+══════════════════════════════════════════ -->
 <div id="project-astro" class="screen hidden">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="showScreen('projects')">← Back to Games</button>
 
-  <div class="detail-container">
+    <div class="detail-subtitle fade-in">Python · Pygame · 2D Shooter · Passion Project</div>
+    <h1 class="detail-title fade-in">Astro Blitz</h1>
 
-    <button class="primary-btn fade-in" onclick="showScreen('projects')">
-      ← Back
-    </button>
-
-    <h1 class="fade-in">Astro Blitz</h1>
-
-    <h2 class="fade-in">
-      2D Space Shooter | Python (Pygame)
-    </h2>
-
-    <div class="fade-in tags-row">
+    <div class="detail-tags fade-in">
       <span class="tag">Python</span>
       <span class="tag">Pygame</span>
-      <span class="tag">2D Shooter</span>
+      <span class="tag">2D</span>
       <span class="tag">Arcade</span>
     </div>
 
@@ -846,336 +1372,198 @@
       </video>
     </div>
 
-    <p class="hero-text fade-in">
-      Astro Blitz is a fast-paced 2D side-scrolling space shooter built
-      using Python and Pygame. Players battle waves of enemies, dodge
-      projectiles, and chase high scores in an arcade-style experience.
-    </p>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Introduction</div>
+      <p class="detail-text">Astro Blitz is a fast-paced 2D side-scrolling space shooter built with Python and Pygame. Players battle waves of enemies, dodge projectiles, and chase high scores in a classic arcade-style experience. The game focuses on tight controls, readable enemy bullet patterns, and satisfying score feedback.</p>
+    </div>
 
-    <p class="hero-text fade-in">
-      The game focuses on tight controls, readable enemy patterns,
-      and satisfying scoring systems inspired by classic arcade shooters.
-    </p>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Gameplay Features</div>
+      <ul class="detail-list">
+        <li>Wave-based enemy encounters with escalating difficulty</li>
+        <li>Custom enemy bullet patterns per enemy type</li>
+        <li>Score & combo system rewarding aggressive play</li>
+        <li>Tight player shooting & movement mechanics</li>
+        <li>Arcade-inspired difficulty scaling over time</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">🎮 Gameplay Features</h2>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Technical Highlights</div>
+      <ul class="detail-list">
+        <li>Object-oriented enemy system with modular behaviour</li>
+        <li>Custom collision detection and hitbox logic</li>
+        <li>Game loop & state machine management</li>
+        <li>Custom sprite handling and sheet parsing</li>
+      </ul>
+    </div>
 
-    <ul class="detail-list fade-in">
-      <li>Wave-based enemy encounters</li>
-      <li>Custom enemy bullet patterns</li>
-      <li>Score & combo system</li>
-      <li>Player shooting & movement mechanics</li>
-      <li>Arcade-inspired difficulty scaling</li>
-    </ul>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">What I Learned</div>
+      <ul class="detail-list">
+        <li>Structuring larger Python game projects with OOP principles</li>
+        <li>Designing enemy AI behaviours and attack patterns</li>
+        <li>Optimising sprite rendering for consistent frame-rate</li>
+        <li>Balancing arcade difficulty curves to keep players engaged</li>
+        <li>Creating pixel art with LibreSprite</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">🛠️ Technical Highlights</h2>
-
-    <ul class="detail-list fade-in">
-      <li>Built with Python & Pygame</li>
-      <li>Object-oriented enemy system</li>
-      <li>Collision detection logic</li>
-      <li>Game loop & state management</li>
-      <li>Custom sprite handling</li>
-    </ul>
-
-    <h2 class="section-title fade-in">📚 What I Learned</h2>
-
-    <ul class="detail-list fade-in">
-      <li>Structuring larger Python game projects</li>
-      <li>Designing enemy AI behaviors</li>
-      <li>Optimizing sprite rendering</li>
-      <li>Balancing arcade difficulty curves</li>
-      <li>Creating pixel art with Libresprite</li>
-    </ul>
-
-    <h2 class="section-title fade-in">🔗 Platform</h2>
-
-    <p class="hero-text fade-in">
-      PC (Windows)<br>
-      Built with Python (Pygame)
-    </p>
-
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Platform</div>
+      <p class="detail-platform">PC (Windows) — Built with Python (Pygame)</p>
+    </div>
   </div>
-
 </div>
 
-<!-- SNOW SURFER DETAIL -->
+<!-- ══════════════════════════════════════════
+     PROJECT DETAIL: SNOW SURFER
+══════════════════════════════════════════ -->
 <div id="project-snow" class="screen hidden">
+  <div class="detail-wrap">
+    <button class="back-btn" onclick="showScreen('projects')">← Back to Games</button>
 
-  <div class="detail-container">
+    <div class="detail-subtitle fade-in">Unity · C# · 2D · Course Work</div>
+    <h1 class="detail-title fade-in">Snow Surfer</h1>
 
-    <button class="primary-btn fade-in" onclick="showScreen('projects')">
-      ← Back
-    </button>
-
-    <h1 class="fade-in">Snow Surfer</h1>
-
-    <h2 class="fade-in">
-      Arcade Snowboarding Game | Unity
-    </h2>
-
-    <!-- TECH TAGS -->
-    <div class="fade-in tags-row">
+    <div class="detail-tags fade-in">
       <span class="tag">Unity</span>
-      <span class="tag">Side Scroller</span>
+      <span class="tag">C#</span>
       <span class="tag">2D</span>
+      <span class="tag">Side Scroller</span>
       <span class="tag">Course Work</span>
     </div>
 
-    <!-- VIDEO -->
     <div class="project-media fade-in">
       <video class="project-detail-video" controls muted loop playsinline preload="auto">
         <source src="videos/snow-surfer.mp4" type="video/mp4">
       </video>
     </div>
 
-    <!-- DESCRIPTION -->
-    <h2 class="section-title fade-in">Introduction</h2>
-    <p class="hero-text fade-in">
-      Snow Surfer is a fast-paced downhill snowboarding Playable Prototype
-      Created as part of my Game Development coursework of GameDev.tv’s
-      Complete C# Unity Developer course,where players do flips, collect powerups, 
-      and push for high scores while speeding down icy mountain slopes.
-    </p>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Introduction</div>
+      <p class="detail-text">Snow Surfer is a fast-paced downhill snowboarding prototype created as part of the GameDev.tv Complete C# Unity Developer course. Players speed down icy mountain slopes performing tricks, collecting power-ups, and chasing high scores while avoiding obstacles.</p>
+    </div>
 
-    <h2 class="section-title fade-in">🎮 Gameplay Features</h2>
-    <ul class="detail-list fade-in">
-      <li>Hill based movement system</li>
-      <li>Multiple Playable Characters</li>
-      <li>Crash dectection mechanics</li>
-      <li>Speed boost & scoring system</li>
-      <li>Arcade-style high score tracking</li>
-    </ul>
-    
-    <h2 class="section-title fade-in">🛠️ Technical Highlights</h2>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Gameplay Features</div>
+      <ul class="detail-list">
+        <li>Smooth hill-based movement with slope physics</li>
+        <li>Multiple playable characters with a character selection screen</li>
+        <li>Crash detection mechanics with particle FX</li>
+        <li>Speed boost & scoring system</li>
+        <li>Arcade-style high score tracking</li>
+      </ul>
+    </div>
 
-    <ul class="detail-list fade-in">
-      <li>Built with Unity & C#</li>
-      <li>Collision detection logic</li>
-      <li>Game loop & state management</li>
-      <li>Custom sprite handling</li>
-    </ul>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Technical Highlights</div>
+      <ul class="detail-list">
+        <li>Built with Unity & C#</li>
+        <li>Level construction using Sprite Shape for organic terrain</li>
+        <li>Camera control via Cinemachine</li>
+        <li>Particle effects using Unity's Particle System</li>
+        <li>Data management with Scriptable Objects</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">📚 What I Learned</h2>
-    <ul class="detail-list fade-in">
-      <li>Creating Particles using Unity's Particle System</li>
-      <li>Character Selection Screen UI</li>
-      <li>Player controller with smooth slope physics</li>
-      <li>Creating Levels Through Sprite Shape</li>
-      <li>Using Cinemachine for Camera Control</li>
-      <li>Using Scriptable Objects for Data Management</li>
-    </ul>
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">What I Learned</div>
+      <ul class="detail-list">
+        <li>Unity Particle System for environmental and crash FX</li>
+        <li>Building a character selection flow with UI persistence</li>
+        <li>Smooth slope physics with a player controller</li>
+        <li>Terrain creation through Unity's Sprite Shape</li>
+        <li>Cinemachine for dynamic, responsive camera behaviour</li>
+        <li>Scriptable Objects for clean data management</li>
+      </ul>
+    </div>
 
-    <h2 class="section-title fade-in">🔗 Platform</h2>
-    <p class="hero-text fade-in">
-      PC (Windows)
-    </p>
-
+    <div class="detail-section fade-in">
+      <div class="detail-section-title">Platform</div>
+      <p class="detail-platform">PC (Windows)</p>
+    </div>
   </div>
 </div>
 
-
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
 <script>
   const screens = document.querySelectorAll('.screen');
+  const navBtns = {
+    home: document.getElementById('nav-home'),
+    projects: document.getElementById('nav-projects'),
+    about: document.getElementById('nav-about'),
+    contact: document.getElementById('nav-contact'),
+  };
 
   function showScreen(id) {
-    screens.forEach(screen => {
-      screen.classList.add('hidden');
+    screens.forEach(s => {
+      s.classList.add('hidden');
+      const v = s.querySelector('video');
+      if (v) v.pause();
     });
-    document.getElementById(id).classList.remove('hidden');
+
+    Object.values(navBtns).forEach(b => b && b.classList.remove('active'));
+    if (navBtns[id]) navBtns[id].classList.add('active');
+
+    const target = document.getElementById(id);
+    target.classList.remove('hidden');
+    target.scrollTop = 0;
   }
 
-  function openProject(projectId) {
-  // 1. Hide all screens
-  screens.forEach(screen => {
-    screen.classList.add('hidden');
-    
-    // Stop other videos so they don't play in background
-    const vid = screen.querySelector('video');
-    if(vid) vid.pause();
-  });
+  function openProject(id) {
+    screens.forEach(s => {
+      s.classList.add('hidden');
+      const v = s.querySelector('video');
+      if (v) v.pause();
+    });
 
-  // 2. Show the specific project screen
-  const targetScreen = document.getElementById('project-' + projectId);
-  targetScreen.classList.remove('hidden');
+    Object.values(navBtns).forEach(b => b && b.classList.remove('active'));
 
-  // 3. 🔥 FORCE PLAY THE VIDEO
-  const video = targetScreen.querySelector('video');
-  if (video) {
-    video.currentTime = 0; // Restart from beginning
-    video.play().catch(e => console.log("Autoplay prevented:", e));
-  }
-}
+    const target = document.getElementById('project-' + id);
+    target.classList.remove('hidden');
+    target.scrollTop = 0;
 
-  // Initialize: hide all screens except home
-  screens.forEach(screen => {
-    screen.classList.add('hidden');
-  });
-  document.getElementById('home').classList.remove('hidden');
-</script>
-
-<style>
-.detail-list {
-  text-align: left;
-  margin-top: 20px;
-}
-
-.detail-list li {
-  margin-bottom: 10px;
-  color: #cbd5f5;
-}
-</style>
-
-<!-- Video expand styles -->
-<style>
-.project-media.expanded {
-  position: fixed;
-  inset: 28px;
-  z-index: 10000;
-  max-width: none;
-  width: auto;
-  
-  /* 🔥 RESET THE HACK so it can be full screen */
-  height: auto; 
-  padding-bottom: 0; 
-  
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(2,6,23,0.95);
-  padding: 18px; /* Restore the border padding you like */
-  border-radius: 12px;
-  box-shadow: 0 40px 120px rgba(0,0,0,0.6);
-}
-
-.project-media.expanded .project-detail-video {
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  cursor: zoom-out;
-}
-
-/* small tweak so when expanded we avoid page scroll behind it */
-body.expanded-video {
-  overflow: hidden;
-}
-
-@media (max-width: 768px) {
-
-  .screen {
-    position: relative;   /* stop absolute stacking */
-    inset: auto;
-    padding: 100px 20px 60px;
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  .primary-btn {
-    width: 100%;
-    max-width: 320px;
-  }
-
-}
-@media (max-width: 768px) {
-
-  nav {
-    padding: 14px 16px;
-  }
-
-  .nav-links {
-    gap: 10px;
-  }
-
-  nav button {
-    font-size: 0.8rem;
-    margin-left: 10px;
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-}
-
-@media (max-width: 768px) {
-
-  .contact-wrapper {
-    grid-template-columns: 1fr;
-  }
-
-}
-</style>
-
-<script>
-// Toggle click-to-expand for detail videos
-document.addEventListener('click', (e) => {
-  const video = e.target.closest('.project-detail-video');
-  if (video) {
-    const media = video.closest('.project-media');
-    if (!media) return;
-    const expanded = media.classList.toggle('expanded');
-    document.body.classList.toggle('expanded-video', expanded);
-    // If expanded, ensure video plays and controls are visible; otherwise pause optionally
-    try {
-      if (expanded) {
-        video.play();
-      } else {
-        // keep playing if user wants; optional: pause when closing
-        // video.pause();
-      }
-    } catch (err) {
-      // ignore autoplay/security errors
-    }
-    e.stopPropagation();
-  } else {
-    // click outside any video closes expanded media
-    const open = document.querySelector('.project-media.expanded');
-    if (open && !e.target.closest('.project-media')) {
-      open.classList.remove('expanded');
-      document.body.classList.remove('expanded-video');
-    }
-  }
-});
-</script>
-<script>
-
-// Hover preview for project cards
-document.querySelectorAll('.project-card').forEach(card => {
-  const video = card.querySelector('.project-video');
-  if (!video) return;
-
-  card.addEventListener('mouseenter', () => {
-    video.currentTime = 0;
-    video.play().catch(() => {});
-  });
-
-  card.addEventListener('mouseleave', () => {
-    video.pause();
-    video.currentTime = 0;
-  });
-});
-
-// Add fade effect to detail section videos when they loop
-document.querySelectorAll('.project-detail-video').forEach(video => {
-  video.addEventListener('ended', () => {
-    video.style.opacity = '0';
-    setTimeout(() => {
+    const video = target.querySelector('video');
+    if (video) {
       video.currentTime = 0;
       video.play().catch(() => {});
-      video.style.opacity = '1';
-    }, 300);
+    }
+  }
+
+  // Init
+  screens.forEach(s => s.classList.add('hidden'));
+  document.getElementById('home').classList.remove('hidden');
+  navBtns.home.classList.add('active');
+
+  // Hover preview on cards
+  document.querySelectorAll('.project-card').forEach(card => {
+    const video = card.querySelector('.project-video');
+    if (!video) return;
+    card.addEventListener('mouseenter', () => { video.currentTime = 0; video.play().catch(() => {}); });
+    card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
   });
-});
 
-
+  // Click to expand detail video
+  document.addEventListener('click', (e) => {
+    const video = e.target.closest('.project-detail-video');
+    if (video) {
+      const media = video.closest('.project-media');
+      if (!media) return;
+      const expanded = media.classList.toggle('expanded');
+      document.body.classList.toggle('expanded-video', expanded);
+      if (expanded) video.play().catch(() => {});
+      e.stopPropagation();
+    } else {
+      const open = document.querySelector('.project-media.expanded');
+      if (open && !e.target.closest('.project-media')) {
+        open.classList.remove('expanded');
+        document.body.classList.remove('expanded-video');
+      }
+    }
+  });
 </script>
-
 </body>
 </html>
