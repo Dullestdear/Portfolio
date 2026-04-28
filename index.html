@@ -2,26 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Prakhar Bhatnagar | Game Designer</title>
+  <title>Prakhar Bhatnagar // Game Designer & Developer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#09090B">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
+    /* ════════════════════════════════════════════════════════════
+       FONTS
+    ════════════════════════════════════════════════════════════ */
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    /* ════════════════════════════════════════════════════════════
+       TOKENS - MODERN PREMIUM AAA STUDIO THEME
+    ════════════════════════════════════════════════════════════ */
     :root {
-      --bg: #080808;
-      --surface: #0f0f0f;
-      --surface2: #151515;
-      --border: rgba(255,255,255,0.07);
-      --accent: #ff4e1a;
-      --accent2: #ff8c42;
-      --accent-glow: rgba(255,78,26,0.18);
-      --text: #e8e8e8;
-      --muted: #666;
-      --muted2: #888;
-      --grid-color: rgba(255,255,255,0.025);
+      --bg:          #09090B;
+      --bg-deep:     #000000;
+      --bg-card:     rgba(255, 255, 255, 0.02);
+      --accent:      #00FF9D;
+      --accent-glow: rgba(0, 255, 157, 0.25);
+      --accent-dim:  rgba(0, 255, 157, 0.10);
+      --accent-soft: rgba(0, 255, 157, 0.04);
+      --secondary:   #B084FF;
+      --success:     #FFB000;
+      --text:        #F4F4F5;
+      --text-dim:    #A1A1AA;
+      --muted:       #71717A;
+      --radius:      6px;
+      --t-fast:      250ms ease;
+      --t-reveal:    600ms cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display:'Orbitron', monospace;
+      --font-head:   'Rajdhani', sans-serif;
+      --font-body:   'Inter', sans-serif;
+      --font-mono:   'JetBrains Mono', monospace;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,1017 +47,1642 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'DM Sans', sans-serif;
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.6;
       overflow-x: hidden;
       min-height: 100vh;
     }
 
-    /* ── GRID BACKGROUND ── */
+    /* Hide native cursor on devices that have a fine pointer */
+    @media (hover: hover) and (pointer: fine) {
+      body, a, button, input, textarea, select { cursor: none !important; }
+    }
+
+    /* Subtle scanline + grid atmosphere - Softened for better readability */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image:
-        linear-gradient(var(--grid-color) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-      background-size: 40px 40px;
+        linear-gradient(rgba(0, 255, 157, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.015) 1px, transparent 1px);
+      background-size: 64px 64px;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
+      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
     }
-
-    /* ── NOISE OVERLAY ── */
     body::after {
       content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        rgba(0,0,0,0.08) 3px,
+        rgba(0,0,0,0.08) 4px
+      );
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
+      z-index: 2;
+      opacity: 0.2;
+      mix-blend-mode: multiply;
     }
 
-    /* ── NAVIGATION ── */
+    ::selection { background: var(--accent); color: var(--bg-deep); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-deep); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(var(--accent), var(--secondary));
+      border: 2px solid var(--bg-deep);
+      border-radius: 4px;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ════════════════════════════════════════════════════════════ */
+    .cursor-outer, .cursor-inner {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      will-change: transform;
+      mix-blend-mode: screen;
+    }
+    .cursor-outer {
+      width: 24px; height: 24px;
+      margin: -12px 0 0 -12px;
+      transition: opacity 200ms;
+    }
+    .cursor-outer span {
+      position: absolute;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent-glow);
+    }
+    .cursor-outer span:nth-child(1) { left: 11.5px; top: 0; width: 1px; height: 6px; }
+    .cursor-outer span:nth-child(2) { left: 11.5px; bottom: 0; width: 1px; height: 6px; }
+    .cursor-outer span:nth-child(3) { top: 11.5px; left: 0; height: 1px; width: 6px; }
+    .cursor-outer span:nth-child(4) { top: 11.5px; right: 0; height: 1px; width: 6px; }
+    .cursor-inner {
+      width: 6px; height: 6px;
+      margin: -3px 0 0 -3px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+      transition: width 200ms, height 200ms, margin 200ms, background 200ms;
+    }
+    .cursor-inner.hover {
+      width: 36px; height: 36px;
+      margin: -18px 0 0 -18px;
+      background: var(--accent-dim);
+      box-shadow: 0 0 20px var(--accent-glow), inset 0 0 8px var(--accent);
+    }
+    .cursor-outer.hidden, .cursor-inner.hidden { opacity: 0; }
+
+    @media (hover: none), (pointer: coarse) {
+      .cursor-outer, .cursor-inner { display: none !important; }
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       NAV
+    ════════════════════════════════════════════════════════════ */
     nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 1000;
-      padding: 0 48px;
-      height: 64px;
+      height: 72px;
+      padding: 0 40px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(8,8,8,0.92);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--accent-dim);
     }
 
     .nav-logo {
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-      font-size: 0.85rem;
-      letter-spacing: 0.15em;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 1.15rem;
+      letter-spacing: 0.18em;
       color: var(--text);
-      text-transform: uppercase;
+      position: relative;
+      display: inline-block;
+      text-decoration: none;
     }
+    .nav-logo .dot { color: var(--accent); }
 
-    .nav-logo span {
-      color: var(--accent);
-    }
-
-    .nav-links {
+    .nav-center {
+      position: relative;
       display: flex;
       align-items: center;
-      gap: 4px;
     }
 
-    .nav-links button {
+    .nav-link {
       background: none;
       border: none;
-      color: var(--muted2);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 8px 14px;
+      padding: 26px 20px;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: color var(--t-fast);
       position: relative;
     }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
 
-    .nav-links button:hover { color: var(--text); }
+    .nav-indicator {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      height: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+      transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                  width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
 
-    .nav-links button.active { color: var(--accent); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
 
     .nav-resume {
+      position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-left: 16px;
-      padding: 7px 18px;
+      gap: 8px;
+      padding: 10px 20px;
       border: 1px solid var(--accent);
-      border-radius: 2px;
+      border-radius: var(--radius);
       color: var(--accent);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       text-decoration: none;
-      transition: all 0.2s;
+      overflow: hidden;
+      transition: color var(--t-fast);
+      z-index: 1;
     }
-
-    .nav-resume:hover {
+    .nav-resume::after {
+      content: '';
+      position: absolute;
+      inset: 0;
       background: var(--accent);
-      color: #000;
+      transform: translateX(-101%);
+      transition: transform 400ms cubic-bezier(0.7, 0, 0.3, 1);
+      z-index: -1;
     }
+    .nav-resume:hover { color: var(--bg-deep); }
+    .nav-resume:hover::after { transform: translateX(0); }
 
     .nav-socials {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-left: 16px;
+      gap: 14px;
+      padding-left: 20px;
+      border-left: 1px solid var(--accent-dim);
     }
-
     .nav-socials a {
-      opacity: 0.5;
-      transition: opacity 0.2s;
       display: flex;
       align-items: center;
+      justify-content: center;
+      width: 34px; height: 34px;
+      border: 1px solid transparent;
+      transition: all var(--t-fast);
+      border-radius: var(--radius);
     }
-
-    .nav-socials a:hover { opacity: 1; }
-
+    .nav-socials a:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
     .nav-socials img {
-      width: 16px;
-      height: 16px;
-      filter: invert(1);
+      width: 16px; height: 16px;
+      filter: invert(70%) sepia(8%) saturate(300%) hue-rotate(200deg) brightness(95%);
+      transition: filter var(--t-fast);
+    }
+    .nav-socials a:hover img {
+      filter: brightness(0) saturate(100%) invert(81%) sepia(26%) saturate(6320%) hue-rotate(99deg) brightness(108%) contrast(105%);
     }
 
-    /* ── SCREENS ── */
-    .screen {
-      position: fixed;
-      inset: 64px 0 0 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      z-index: 10;
-      padding: 80px 0 80px;
-      opacity: 1;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      transform: translateY(0);
-    }
+    .nav-mobile-toggle { display: none; }
 
-    .screen.hidden {
-      opacity: 0;
+    /* ════════════════════════════════════════════════════════════
+       GLITCH TEXT
+    ════════════════════════════════════════════════════════════ */
+    .glitch {
+      position: relative;
+      display: inline-block;
+      color: var(--text);
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
       pointer-events: none;
-      transform: translateY(16px);
+      opacity: 0;
+    }
+    .glitch.glitch-on::before {
+      color: var(--accent);
+      clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+      animation: glitchTop 800ms steps(8, end) 1;
+      opacity: 1;
+      text-shadow: 0 0 8px var(--accent);
+    }
+    .glitch.glitch-on::after {
+      color: var(--secondary);
+      clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+      animation: glitchBot 800ms steps(8, end) 1;
+      opacity: 1;
+      text-shadow: 0 0 8px var(--secondary);
+    }
+    .glitch.glitch-short.glitch-on::before { animation-duration: 400ms; }
+    .glitch.glitch-short.glitch-on::after  { animation-duration: 400ms; }
+    @keyframes glitchTop {
+      0%   { transform: translate(0, 0); }
+      10%  { transform: translate(-2px, -1px); }
+      20%  { transform: translate(-3px, 0); }
+      30%  { transform: translate(-1px, 1px); }
+      40%  { transform: translate(-2px, -1px); }
+      55%  { transform: translate(-3px, 0); }
+      70%  { transform: translate(-2px, 0); }
+      85%  { transform: translate(-1px, 0); }
+      100% { transform: translate(-2px, 0); opacity: 0; }
+    }
+    @keyframes glitchBot {
+      0%   { transform: translate(0, 0); }
+      10%  { transform: translate(2px, 1px); }
+      20%  { transform: translate(3px, 0); }
+      30%  { transform: translate(1px, -1px); }
+      40%  { transform: translate(2px, 1px); }
+      55%  { transform: translate(3px, 0); }
+      70%  { transform: translate(2px, 0); }
+      85%  { transform: translate(1px, 0); }
+      100% { transform: translate(2px, 0); opacity: 0; }
     }
 
-    .screen::-webkit-scrollbar { width: 4px; }
-    .screen::-webkit-scrollbar-track { background: transparent; }
-    .screen::-webkit-scrollbar-thumb { background: rgba(255,78,26,0.3); border-radius: 2px; }
-
-    /* ── CONTAINER ── */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 48px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── HOME SCREEN ── */
+    /* ════════════════════════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════════════════════════ */
     #home {
-      display: flex;
-      align-items: center;
-      min-height: calc(100vh - 64px);
-      padding: 0;
-    }
-
-    #home .container {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-
-    .home-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .home-eyebrow::before {
-      content: '';
-      width: 32px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .home-title {
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(3rem, 7vw, 6.5rem);
-      font-weight: 900;
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      margin-bottom: 32px;
-      color: var(--text);
-    }
-
-    .home-title .line-accent {
-      color: var(--accent);
-      display: block;
-    }
-
-    .home-bio {
-      max-width: 520px;
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: var(--muted2);
-      font-weight: 300;
-      margin-bottom: 48px;
-    }
-
-    .home-bio strong {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .home-cta {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      background: var(--accent);
-      color: #000;
-      border: none;
-      border-radius: 2px;
-      font-family: 'Orbitron', monospace;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
       position: relative;
+      min-height: 100vh;
+      padding: 80px 0 0;
+      display: flex;
+      align-items: center;
       overflow: hidden;
     }
 
-    .btn-primary::after {
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* HUD overlay frame */
+    #home::before {
+      content: '';
+      position: absolute;
+      inset: 100px 40px 40px 40px;
+      border: 1px solid var(--accent-dim);
+      border-radius: var(--radius);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hud-corners {
+      position: absolute;
+      inset: 100px 40px 40px 40px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hud-corners span {
+      position: absolute;
+      width: 24px; height: 24px;
+      border: 2px solid var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .hud-corners span:nth-child(1) { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: var(--radius); }
+    .hud-corners span:nth-child(2) { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: var(--radius); }
+    .hud-corners span:nth-child(3) { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: var(--radius); }
+    .hud-corners span:nth-child(4) { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: var(--radius); }
+
+    .hero-wrap {
+      position: relative;
+      z-index: 3;
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 100px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .hero-content { max-width: 760px; }
+
+    .hero-tag {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--t-reveal), transform var(--t-reveal);
+    }
+    .hero-tag.in { opacity: 1; transform: none; }
+    .hero-tag::before {
+      content: '';
+      width: 8px; height: 8px;
+      background: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--success);
+      animation: pulseDot 1.6s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 0.4; transform: scale(0.85); }
+      50%      { opacity: 1;   transform: scale(1.1);  }
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(3rem, 7.5vw, 6.8rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity var(--t-reveal) 80ms, transform var(--t-reveal) 80ms;
+    }
+    .hero-title.in { opacity: 1; transform: none; }
+    .hero-title .row {
+      display: block;
+      position: relative;
+    }
+    .hero-title .row.last { color: var(--accent); text-shadow: 0 0 32px var(--accent-glow); }
+
+    .hero-subtitle {
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin-bottom: 32px;
+      min-height: 1.5em;
+      display: flex;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--t-reveal) 160ms, transform var(--t-reveal) 160ms;
+    }
+    .hero-subtitle.in { opacity: 1; transform: none; }
+    .hero-subtitle .prefix {
+      color: var(--secondary);
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      margin-right: 14px;
+      opacity: 0.9;
+    }
+    .hero-subtitle .typed { color: var(--text); }
+    .type-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1.1em;
+      background: var(--accent);
+      margin-left: 6px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+
+    .hero-bio {
+      font-size: 1.12rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--t-reveal) 240ms, transform var(--t-reveal) 240ms;
+    }
+    .hero-bio.in { opacity: 1; transform: none; }
+    .hero-bio strong { color: var(--text); font-weight: 600; }
+
+    .hero-cta {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--t-reveal) 320ms, transform var(--t-reveal) 320ms;
+    }
+    .hero-cta.in { opacity: 1; transform: none; }
+
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      border-radius: var(--radius);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all var(--t-fast);
+      z-index: 1;
+      border: 1px solid;
+    }
+    .btn-primary {
+      color: var(--bg-deep);
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 4px 16px var(--accent-glow);
+    }
+    .btn-primary:hover { 
+      box-shadow: 0 8px 32px var(--accent-glow); 
+      transform: translateY(-2px);
+    }
+    .btn-ghost {
+      color: var(--text);
+      background: transparent;
+      border-color: var(--accent-dim);
+    }
+    .btn-ghost::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,0.15);
-      opacity: 0;
-      transition: opacity 0.2s;
+      background: var(--accent);
+      transform: translateX(-101%);
+      transition: transform 400ms cubic-bezier(0.7, 0, 0.3, 1);
+      z-index: -1;
     }
-
-    .btn-primary:hover::after { opacity: 1; }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px var(--accent-glow); }
-
-    .btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 14px 32px;
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s;
+    .btn-ghost:hover {
+      color: var(--bg-deep);
+      border-color: var(--accent);
     }
+    .btn-ghost:hover::after { transform: translateX(0); }
 
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-    .home-stats {
-      position: absolute;
-      right: 48px;
-      top: 50%;
-      transform: translateY(-50%);
+    /* ── HUD STATS ── */
+    .hero-stats {
       display: flex;
       flex-direction: column;
-      gap: 32px;
-      align-items: flex-end;
+      gap: 24px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity var(--t-reveal) 400ms, transform var(--t-reveal) 400ms;
     }
+    .hero-stats.in { opacity: 1; transform: none; }
 
-    .stat-item {
-      text-align: right;
+    .hex {
+      position: relative;
+      width: 160px;
+      height: 180px;
+      filter: drop-shadow(0 0 8px var(--accent-dim));
+      animation: hexPulse 3s ease-in-out infinite;
     }
-
-    .stat-number {
-      font-family: 'Orbitron', monospace;
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--accent);
-      line-height: 1;
-      display: block;
+    .hex:nth-child(2) { animation-delay: 0.5s; }
+    .hex:nth-child(3) { animation-delay: 1s; }
+    @keyframes hexPulse {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(0,255,157,0.1)); }
+      50%      { filter: drop-shadow(0 0 20px rgba(0,255,157,0.35)); }
     }
-
-    .stat-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 4px;
-      display: block;
-    }
-
-    .home-scroll-hint {
+    .hex-shell, .hex-face {
       position: absolute;
-      bottom: 32px;
+      inset: 0;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    .hex-shell { background: var(--accent); }
+    .hex-face {
+      inset: 2px;
+      background:
+        linear-gradient(135deg, rgba(9,9,11,0.95), rgba(9,9,11,0.85)),
+        linear-gradient(135deg, var(--accent-dim), transparent);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .hex-num {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2.8rem;
+      line-height: 1;
+      color: var(--accent);
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+    .hex-num .suffix { font-size: 1.8rem; opacity: 0.85; }
+    .hex-label {
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 10px;
+      text-align: center;
+      padding: 0 16px;
+      opacity: 0;
+      transition: opacity 400ms ease;
+    }
+    .hex-label.in { opacity: 1; }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 70px;
       left: 50%;
       transform: translateX(-50%);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
       color: var(--muted);
+      text-transform: uppercase;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      z-index: 3;
+      pointer-events: none;
     }
-
-    .scroll-line {
-      width: 1px;
-      height: 40px;
+    .scroll-hint .bar {
+      width: 2px; height: 40px;
       background: linear-gradient(to bottom, var(--accent), transparent);
       animation: scrollPulse 2s ease-in-out infinite;
     }
-
     @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; }
-      50% { opacity: 1; }
+      0%, 100% { opacity: 0.15; }
+      50%      { opacity: 1; }
     }
 
-    /* ── SECTION HEADER ── */
-    .section-header {
-      margin-bottom: 64px;
+    /* ════════════════════════════════════════════════════════════
+       SECTION SCAFFOLD
+    ════════════════════════════════════════════════════════════ */
+    section.section {
+      position: relative;
+      padding: 160px 0 140px;
+    }
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 100px;
     }
 
+    .section-head {
+      position: relative;
+      margin-bottom: 90px;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity var(--t-reveal), transform var(--t-reveal);
+    }
+    .section-head.in { opacity: 1; transform: none; }
+    .section-num {
+      position: absolute;
+      top: -64px;
+      right: 0;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(6rem, 14vw, 12rem);
+      line-height: 1;
+      color: var(--accent);
+      opacity: 0.05;
+      letter-spacing: -0.04em;
+      pointer-events: none;
+      user-select: none;
+    }
     .section-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.25em;
       color: var(--accent);
       margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      letter-spacing: 4px;
+      text-transform: uppercase;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 20px;
+      color: var(--text);
     }
-
-    .section-eyebrow::after {
+    .section-title::before {
+      content: '';
+      width: 48px; height: 3px;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
+      flex-shrink: 0;
+    }
+    .section-title::after {
       content: '';
       flex: 1;
-      max-width: 60px;
+      max-width: 400px;
       height: 1px;
-      background: var(--accent);
+      background: linear-gradient(to right, var(--accent-dim), transparent);
     }
 
-    .section-title-large {
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      color: var(--text);
-    }
-
-    /* ── PROJECTS GRID ── */
-    .projects-grid {
+    /* ════════════════════════════════════════════════════════════
+       GAMES
+    ════════════════════════════════════════════════════════════ */
+    .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2px;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 32px;
     }
 
-    .project-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    .game-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--accent-dim);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      overflow: hidden;
       cursor: pointer;
-      overflow: hidden;
+      transition: border-color var(--t-fast), box-shadow var(--t-fast), transform 100ms ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    .game-card.in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity var(--t-reveal), transform var(--t-reveal);
+    }
+    .game-card:hover {
+      border-color: rgba(0, 255, 157, 0.6);
+      box-shadow: 0 0 32px rgba(0, 255, 157, 0.15), 0 16px 48px rgba(0,0,0,0.5);
+    }
+
+    .game-card-corner {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      opacity: 0.8;
+      z-index: 4;
+      pointer-events: none;
+      background: rgba(0,0,0,0.6);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .game-media {
       position: relative;
-      transition: border-color 0.25s;
-    }
-
-    .project-card:hover {
-      border-color: var(--accent);
-      z-index: 2;
-    }
-
-    .project-card:hover .card-overlay { opacity: 1; }
-    .project-card:hover .card-arrow { transform: translate(4px, -4px); }
-
-    .card-media {
-      aspect-ratio: 16/9;
-      overflow: hidden;
+      aspect-ratio: 16 / 9;
       background: #000;
-      position: relative;
+      overflow: hidden;
     }
-
-    .project-video {
-      width: 100%;
-      height: 100%;
+    .game-video {
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.5s ease;
     }
-
-    .project-card:hover .project-video {
-      transform: scale(1.04);
+    .game-media::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0, transparent 1px,
+        rgba(0,0,0,0.15) 1px, rgba(0,0,0,0.15) 2px
+      );
+      pointer-events: none;
+      z-index: 2;
     }
-
-    .card-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(255,78,26,0.35), transparent);
+    .game-media .scan-glow {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0, 255, 157, 0.25), transparent 60%);
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity var(--t-fast);
+      pointer-events: none;
+      z-index: 3;
     }
+    .game-card:hover .scan-glow { opacity: 1; }
 
-    .card-body {
-      padding: 24px;
+    .game-body {
+      padding: 28px 28px 32px;
     }
-
-    .card-meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
+    .game-meta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      color: var(--secondary);
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
+      margin-bottom: 14px;
+      opacity: 0.9;
     }
-
-    .card-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.1rem;
+    .game-title {
+      font-family: var(--font-display);
       font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
       color: var(--text);
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 14px;
     }
-
-    .card-arrow {
-      font-size: 0.9rem;
+    .game-open {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.18em;
       color: var(--accent);
-      transition: transform 0.2s;
+      padding: 6px 10px;
+      border: 1px solid var(--accent-glow);
+      border-radius: 4px;
+      transition: all var(--t-fast);
+      white-space: nowrap;
     }
-
-    .card-desc {
-      font-size: 0.88rem;
-      line-height: 1.6;
-      color: var(--muted2);
-      margin-bottom: 16px;
+    .game-card:hover .game-open {
+      background: var(--accent);
+      color: var(--bg-deep);
+      border-color: var(--accent);
+      box-shadow: 0 0 16px var(--accent-glow);
     }
-
-    .tags {
+    .game-desc {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-dim);
+      margin-bottom: 22px;
+    }
+    .tag-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
     }
-
     .tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.08em;
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      padding: 4px 10px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      color: var(--muted2);
-      border-radius: 1px;
+      padding: 6px 12px;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-dim);
+      color: var(--accent);
+      border-radius: 4px;
     }
 
-    /* ── ABOUT SCREEN ── */
+    /* ════════════════════════════════════════════════════════════
+       ABOUT
+    ════════════════════════════════════════════════════════════ */
     .about-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      gap: 80px;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 90px;
       align-items: start;
     }
 
     .about-text {
-      font-size: 1.05rem;
-      line-height: 1.8;
-      color: var(--muted2);
-      font-weight: 300;
+      font-size: 1.1rem;
+      line-height: 1.85;
+      color: var(--text-dim);
     }
+    .about-text strong { color: var(--text); font-weight: 500; }
+    .about-text p + p { margin-top: 24px; }
 
-    .about-text strong {
-      color: var(--text);
-      font-weight: 500;
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-dim);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      padding: 32px;
+      position: relative;
     }
-
-    .about-text p + p { margin-top: 20px; }
-
-    .skills-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .skills-group-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .skill-pill {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      letter-spacing: 0.06em;
-      padding: 6px 14px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 1px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .skill-pill:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 24px; right: 24px;
+      height: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     .edu-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      padding: 24px;
       margin-top: 48px;
     }
-
     .edu-card h3 {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.85rem;
+      font-family: var(--font-display);
       font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    .edu-card p {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      color: var(--muted2);
+      font-size: 1.05rem;
       letter-spacing: 0.04em;
-      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 10px;
     }
+    .edu-card p {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      line-height: 1.8;
+    }
+    .edu-card p span { color: var(--accent); }
 
     .cert-list {
-      margin-top: 48px;
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
     }
-
     .cert-item {
       display: flex;
       align-items: flex-start;
       gap: 16px;
       padding: 20px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px dashed var(--accent-dim);
     }
-
-    .cert-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
+    .cert-item:last-child { border-bottom: none; }
+    .cert-bracket {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--accent);
       flex-shrink: 0;
-      margin-top: 5px;
+      margin-top: 2px;
     }
-
     .cert-name {
-      font-size: 0.9rem;
+      font-size: 1rem;
       color: var(--text);
       font-weight: 500;
       line-height: 1.4;
     }
-
     .cert-issuer {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
       color: var(--muted);
       letter-spacing: 0.06em;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
-    /* ── CONTACT SCREEN ── */
+    /* Skills hexagons */
+    .skills-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .skill-group-title {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .skill-group-title::before {
+      content: '▸';
+      color: var(--secondary);
+    }
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+      gap: 16px;
+    }
+    .skill-hex {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 80 / 90;
+      max-width: 96px;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 500ms ease, transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .skill-hex.in { opacity: 1; transform: scale(1); }
+
+    .skill-hex .shell, .skill-hex .face {
+      position: absolute; inset: 0;
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+    .skill-hex .shell { background: var(--accent-glow); }
+    .skill-hex .face {
+      inset: 1.5px;
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background var(--t-fast);
+    }
+    .skill-hex:hover .shell { background: var(--accent); }
+    .skill-hex:hover .face { background: rgba(0, 255, 157, 0.15); }
+    .skill-hex img {
+      width: 36px; height: 36px;
+      object-fit: contain;
+      transition: filter var(--t-fast), transform var(--t-fast);
+    }
+    .skill-hex:hover img {
+      filter: drop-shadow(0 0 8px var(--accent)) drop-shadow(0 0 12px var(--accent-glow));
+      transform: scale(1.08);
+    }
+    .skill-hex .abbr {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      color: var(--text);
+      transition: text-shadow var(--t-fast), color var(--t-fast);
+    }
+    .skill-hex:hover .abbr {
+      color: var(--accent);
+      text-shadow: 0 0 12px var(--accent);
+    }
+    .skill-hex .label {
+      font-family: var(--font-head);
+      font-weight: 600;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-align: center;
+      padding: 0 8px;
+      line-height: 1.1;
+      max-width: 90%;
+    }
+
+    /* ════════════════════════════════════════════════════════════
+       CONTACT — TERMINAL
+    ════════════════════════════════════════════════════════════ */
+    .terminal {
+      background: var(--bg-deep);
+      border: 1px solid var(--accent-dim);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--accent-dim);
+    }
+    .terminal-bar .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .terminal-bar .dot.g { background: var(--success); box-shadow: 0 0 8px var(--success); }
+    .terminal-bar .title {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+    .terminal-body {
+      padding: 36px;
+      font-family: var(--font-mono);
+    }
+
+    .term-line {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--secondary);
+      letter-spacing: 0.04em;
+      margin-bottom: 12px;
+      text-transform: lowercase;
+    }
+    .term-line .arrow { color: var(--accent); margin-right: 8px; }
+
+    .term-field {
+      position: relative;
+      margin-bottom: 32px;
+    }
+    .term-input,
+    .term-textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--accent-glow);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 15px;
+      padding: 10px 0 12px;
+      outline: none;
+      transition: border-color var(--t-fast), box-shadow var(--t-fast);
+    }
+    .term-textarea {
+      min-height: 120px;
+      resize: vertical;
+      line-height: 1.65;
+    }
+    .term-input::placeholder,
+    .term-textarea::placeholder { color: rgba(244, 244, 245, 0.2); }
+    .term-input:focus,
+    .term-textarea:focus {
+      border-bottom-color: var(--accent);
+      box-shadow: 0 1px 0 0 var(--accent), 0 4px 16px -4px var(--accent-glow);
+    }
+
+    .term-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 28px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      transition: color var(--t-fast);
+      z-index: 1;
+    }
+    .term-submit::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--accent);
+      transform: translateX(-101%);
+      transition: transform 400ms cubic-bezier(0.7, 0, 0.3, 1);
+      z-index: -1;
+    }
+    .term-submit:hover { color: var(--bg-deep); }
+    .term-submit:hover::after { transform: translateX(0); }
+
+    /* Contact layout */
     .contact-layout {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      grid-template-columns: 1.3fr 1fr;
       gap: 64px;
       align-items: start;
     }
 
-    .contact-form-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 32px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      display: block;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .form-input,
-    .form-textarea {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 12px 16px;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus {
-      border-color: var(--accent);
-    }
-
-    .form-textarea {
-      height: 140px;
-      resize: vertical;
-      line-height: 1.6;
-    }
-
-    .contact-info-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 36px;
-    }
-
-    .contact-info-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 24px;
-    }
-
-    .contact-item {
+    .contact-list {
       display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
+      flex-direction: column;
+      gap: 8px;
     }
-
-    .contact-item:last-child { border-bottom: none; }
-
-    .contact-item-icon {
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 20px 24px;
+      border: 1px solid var(--accent-dim);
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      transition: all var(--t-fast);
+      text-decoration: none;
+      color: inherit;
+    }
+    .contact-row:hover {
+      border-color: var(--accent);
+      transform: translateX(6px);
+      box-shadow: 0 0 24px var(--accent-glow);
+    }
+    .contact-row .icon-wrap {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px;
+      border: 1px solid var(--accent-glow);
+      background: var(--accent-soft);
+      flex-shrink: 0;
+      border-radius: 4px;
+    }
+    .contact-row .icon-wrap img {
+      width: 18px; height: 18px;
+      /* Converting to match Mint Green #00FF9D */
+      filter: brightness(0) saturate(100%) invert(81%) sepia(26%) saturate(6320%) hue-rotate(99deg) brightness(108%) contrast(105%);
+    }
+    .contact-row .meta-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--secondary);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .contact-row .meta-value {
       font-size: 1rem;
-      margin-top: 2px;
+      color: var(--text);
+      word-break: break-all;
     }
 
-    .contact-item-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.62rem;
+    .contact-note {
+      margin-top: 24px;
+      padding: 20px 24px;
+      border: 1px dashed var(--accent-glow);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+    }
+    .contact-note .green { color: var(--accent); font-weight: 600;}
+
+    /* ════════════════════════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════════════════════════ */
+    footer {
+      padding: 40px 100px 32px;
+      border-top: 1px solid var(--accent-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
     }
+    footer .credit { color: var(--accent); }
 
-    .contact-item-value {
-      font-size: 0.88rem;
-      color: var(--text);
+    /* ════════════════════════════════════════════════════════════
+       PROJECT DETAIL OVERLAY
+    ════════════════════════════════════════════════════════════ */
+    .detail-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: var(--bg);
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 100px 0 90px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 400ms ease;
     }
-
-    .contact-item-value a {
-      color: var(--accent);
-      text-decoration: none;
+    .detail-screen.show {
+      opacity: 1;
+      pointer-events: auto;
     }
-
-    .contact-item-value a:hover { text-decoration: underline; }
-
-    /* ── PROJECT DETAIL ── */
     .detail-wrap {
-      max-width: 900px;
+      max-width: 1024px;
       margin: 0 auto;
-      padding: 0 48px 80px;
+      padding: 0 80px;
       position: relative;
-      z-index: 1;
     }
-
     .back-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
-      margin-bottom: 48px;
-      transition: color 0.2s;
-    }
-
-    .back-btn:hover { color: var(--accent); }
-
-    .detail-title {
-      font-family: 'Orbitron', monospace;
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 900;
-      color: var(--text);
-      margin-bottom: 8px;
-      line-height: 1;
-    }
-
-    .detail-subtitle {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--accent);
+      cursor: pointer;
+      background: none;
+      border: 1px solid var(--accent-glow);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      margin-bottom: 48px;
+      transition: all var(--t-fast);
+    }
+    .back-btn:hover {
+      background: var(--accent);
+      color: var(--bg-deep);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .detail-subtitle {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--secondary);
+      margin-bottom: 16px;
+    }
+    .detail-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1;
       margin-bottom: 24px;
     }
-
     .detail-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 40px;
+      gap: 10px;
+      margin-bottom: 48px;
     }
-
-    .project-media {
+    .detail-media {
       width: 100%;
       aspect-ratio: 16/9;
       background: #000;
-      border: 1px solid var(--border);
-      border-radius: 2px;
+      border: 1px solid var(--accent-dim);
+      border-radius: var(--radius);
       overflow: hidden;
-      margin-bottom: 48px;
+      margin-bottom: 56px;
       position: relative;
     }
-
-    .project-detail-video {
-      width: 100%;
-      height: 100%;
+    .detail-media::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0, transparent 1px,
+        rgba(0,0,0,0.15) 1px, rgba(0,0,0,0.15) 2px
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+    .detail-video {
+      width: 100%; height: 100%;
       object-fit: contain;
       background: #000;
       display: block;
       cursor: zoom-in;
     }
-
-    .project-media.expanded {
+    .detail-media.expanded {
       position: fixed;
-      inset: 28px;
-      z-index: 10000;
+      inset: 32px;
+      z-index: 9999;
       width: auto;
       aspect-ratio: unset;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0,0,0,0.96);
+      background: rgba(0,0,0,0.98);
       border-color: var(--accent);
+      box-shadow: 0 0 60px rgba(0, 255, 157, 0.2);
     }
-
-    .project-media.expanded .project-detail-video {
+    .detail-media.expanded .detail-video {
       cursor: zoom-out;
       max-height: 100%;
     }
-
     body.expanded-video { overflow: hidden; }
 
-    .detail-section {
-      margin-bottom: 40px;
-    }
-
-    .detail-section-title {
-      font-family: 'Orbitron', monospace;
-      font-size: 0.85rem;
+    .detail-block { margin-bottom: 40px; }
+    .detail-block-title {
+      font-family: var(--font-head);
       font-weight: 700;
-      letter-spacing: 0.1em;
+      font-size: 1.05rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 20px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--accent-dim);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-
+    .detail-block-title::before {
+      content: '▸';
+      color: var(--secondary);
+    }
     .detail-text {
-      font-size: 0.98rem;
-      line-height: 1.8;
-      color: var(--muted2);
-      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-dim);
     }
-
     .detail-list {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
-
     .detail-list li {
-      font-size: 0.92rem;
-      color: var(--muted2);
-      line-height: 1.5;
-      padding-left: 20px;
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      padding-left: 24px;
       position: relative;
     }
-
     .detail-list li::before {
-      content: '▸';
+      content: '▶';
       position: absolute;
       left: 0;
       color: var(--accent);
       font-size: 0.75rem;
+      top: 6px;
     }
 
-    .detail-list li strong {
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .detail-platform {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      color: var(--muted2);
-      line-height: 1.8;
-    }
-
-    /* ── DECORATIVE ACCENT CORNER ── */
-    .accent-corner {
+    /* ════════════════════════════════════════════════════════════
+       KONAMI — FLASH + ACHIEVEMENT TOAST
+    ════════════════════════════════════════════════════════════ */
+    .konami-flash {
       position: fixed;
-      top: 64px;
-      right: 0;
-      width: 300px;
-      height: 300px;
-      background: radial-gradient(circle at top right, rgba(255,78,26,0.06), transparent 70%);
+      inset: 0;
+      background: #fff;
+      opacity: 0;
       pointer-events: none;
-      z-index: 0;
+      z-index: 99998;
+      transition: opacity 100ms;
+    }
+    .konami-flash.flash { opacity: 0.9; }
+
+    .achievement {
+      position: fixed;
+      top: 100px;
+      right: 40px;
+      z-index: 99997;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 28px;
+      background: rgba(9, 9, 11, 0.98);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      box-shadow:
+        0 0 0 2px var(--bg-deep),
+        0 0 0 3px var(--accent),
+        0 0 40px rgba(0, 255, 157, 0.4);
+      transform: translateX(calc(100% + 80px));
+      transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 420px;
+    }
+    .achievement.show { transform: translateX(0); }
+    .achievement .trophy {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 24px;
+      color: var(--accent);
+      width: 48px; height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      flex-shrink: 0;
+      box-shadow: inset 0 0 16px var(--accent-glow);
+    }
+    .achievement .ach-text { display: flex; flex-direction: column; gap: 4px; }
+    .achievement .ach-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--success);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .achievement .ach-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+      letter-spacing: 0.05em;
     }
 
-    /* ── DIVIDER ── */
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: var(--border);
-      margin: 56px 0;
+    /* ════════════════════════════════════════════════════════════
+       MOBILE
+    ════════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .hero-wrap { grid-template-columns: 1fr; gap: 48px; padding: 0 48px; }
+      .hero-stats { flex-direction: row; flex-wrap: wrap; }
+      .container { padding: 0 48px; }
+      .about-grid { grid-template-columns: 1fr; gap: 64px; }
+      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
     }
-
-    /* ── FADE IN ANIMATION ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in { animation: fadeUp 0.5s ease forwards; }
-    .delay-1 { animation-delay: 0.1s; opacity: 0; }
-    .delay-2 { animation-delay: 0.2s; opacity: 0; }
-    .delay-3 { animation-delay: 0.3s; opacity: 0; }
-    .delay-4 { animation-delay: 0.4s; opacity: 0; }
-    .delay-5 { animation-delay: 0.5s; opacity: 0; }
-
-    /* ── MOBILE ── */
-    @media (max-width: 768px) {
-      nav { padding: 0 20px; }
-      .container { padding: 0 20px; }
-      .detail-wrap { padding: 0 20px 60px; }
-
-      .home-stats { display: none; }
-
-      .about-grid { grid-template-columns: 1fr; gap: 40px; }
-      .contact-layout { grid-template-columns: 1fr; gap: 40px; }
-      .projects-grid { grid-template-columns: 1fr; }
-
-      .nav-links button { display: none; }
-      .nav-links button[data-mobile="true"] { display: inline-block; }
-
-      .home-title { font-size: 2.8rem; }
-    }
-
-    @media (max-width: 480px) {
+    @media (max-width: 720px) {
+      nav { padding: 0 24px; }
+      .nav-center { display: none; }
+      .nav-mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px; height: 40px;
+        background: transparent;
+        border: 1px solid var(--accent-glow);
+        color: var(--accent);
+        cursor: pointer;
+        border-radius: var(--radius);
+      }
+      .nav-mobile-menu {
+        position: fixed;
+        top: 72px; left: 0; right: 0;
+        background: rgba(9, 9, 11, 0.98);
+        backdrop-filter: blur(24px);
+        border-bottom: 1px solid var(--accent-dim);
+        padding: 16px 0;
+        display: none;
+        flex-direction: column;
+      }
+      .nav-mobile-menu.open { display: flex; }
+      .nav-mobile-menu button {
+        background: none; border: none;
+        color: var(--text); padding: 16px 28px;
+        text-align: left;
+        font-family: var(--font-head);
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .nav-mobile-menu button.active { color: var(--accent); }
       .nav-socials { display: none; }
+      .container { padding: 0 24px; }
+      .hero-wrap { padding: 0 24px; }
+      #home::before, .hud-corners { inset: 100px 16px 24px 16px; }
+      .scroll-hint { display: none; }
+      .hero-stats { gap: 16px; justify-content: center; }
+      .hex { width: 120px; height: 135px; }
+      .hex-num { font-size: 2.2rem; }
+      .hex-num .suffix { font-size: 1.4rem; }
+      section.section { padding: 120px 0 100px; }
+      .section-num { top: -40px; font-size: 7rem; }
+      .games-grid { grid-template-columns: 1fr; }
+      .game-card { transform: none !important; }
+      .skill-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
+      .terminal-body { padding: 24px 20px; }
+      .detail-wrap { padding: 0 24px; }
+      footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+      .achievement { right: 16px; left: 16px; max-width: none; }
+      .nav-resume { padding: 8px 14px; font-size: 11px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .game-card { transform: none !important; }
     }
   </style>
 </head>
+
 <body>
 
-<div class="accent-corner"></div>
+<div class="cursor-outer" id="cursorOuter">
+  <span></span><span></span><span></span><span></span>
+</div>
+<div class="cursor-inner" id="cursorInner"></div>
 
-<!-- ── NAV ── -->
-<nav>
-  <div class="nav-logo">P.<span>B</span></div>
-  <div class="nav-links">
-    <button onclick="showScreen('home')" class="active" id="nav-home">Home</button>
-    <button onclick="showScreen('projects')" id="nav-projects">Games</button>
-    <button onclick="showScreen('about')" id="nav-about">About</button>
-    <button onclick="showScreen('contact')" id="nav-contact">Contact</button>
-    <a class="nav-resume" href="resume.pdf" target="_blank" download>↓ Resume</a>
-    <div class="nav-socials">
-      <a href="https://github.com/Dullestdear" target="_blank" title="GitHub">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
-      </a>
-      <a href="https://dullestdear.itch.io/" target="_blank" title="Itch.io">
-        <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
-      </a>
-      <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" title="LinkedIn">
-        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
-      </a>
-    </div>
-  </div>
-</nav>
-
-<!-- ══════════════════════════════════════════
-     HOME
-══════════════════════════════════════════ -->
-<div id="home" class="screen">
-  <div class="container" style="position:relative;">
-
-    <div class="home-eyebrow fade-in delay-1">Game Designer & Developer</div>
-
-    <h1 class="home-title fade-in delay-2">
-      PRAKHAR<br>
-      <span class="line-accent">BHATNAGAR</span>
-    </h1>
-
-    <p class="home-bio fade-in delay-3">
-      21-year-old game developer building <strong>complete, playable games</strong> focused
-      on tight gameplay systems, UI polish, and player experience.
-      Specialising in <strong>Unity / C#</strong> — currently seeking my first industry internship.
-    </p>
-
-    <div class="home-cta fade-in delay-4">
-      <button class="btn-primary" onclick="showScreen('projects')">View My Games ▸</button>
-      <a class="btn-ghost" href="https://dullestdear.itch.io/" target="_blank">Itch.io Profile</a>
-    </div>
-
-    <div class="home-stats fade-in delay-5">
-      <div class="stat-item">
-        <span class="stat-number">3</span>
-        <span class="stat-label">Games Shipped</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">2+</span>
-        <span class="stat-label">Years Building</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number">2</span>
-        <span class="stat-label">Engines Used</span>
-      </div>
-    </div>
-
+<div class="konami-flash" id="konamiFlash"></div>
+<div class="achievement" id="achievement">
+  <div class="trophy">★</div>
+  <div class="ach-text">
+    <div class="ach-tag">[ Achievement Unlocked ]</div>
+    <div class="ach-title">You found the secret.</div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     PROJECTS
-══════════════════════════════════════════ -->
-<div id="projects" class="screen hidden">
-  <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Portfolio</div>
-      <h2 class="section-title-large">Games</h2>
+<nav>
+  <a href="#home" class="nav-logo glitch glitch-short" data-text="P.B" id="navLogo">P<span class="dot">.</span>B</a>
+
+  <div class="nav-center">
+    <button class="nav-link active" data-section="home">Home</button>
+    <button class="nav-link" data-section="games">Games</button>
+    <button class="nav-link" data-section="about">About</button>
+    <button class="nav-link" data-section="contact">Contact</button>
+    <span class="nav-indicator" id="navIndicator"></span>
+  </div>
+
+  <div class="nav-right">
+    <a class="nav-resume" href="resume.pdf" target="_blank" download>↓ Resume</a>
+    <div class="nav-socials">
+      <a href="https://github.com/Dullestdear" target="_blank" rel="noopener" title="GitHub">
+        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
+      </a>
+      <a href="https://dullestdear.itch.io/" target="_blank" rel="noopener" title="Itch.io">
+        <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
+      </a>
+      <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" rel="noopener" title="LinkedIn">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
+      </a>
+    </div>
+    <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <button data-section="home" class="active">Home</button>
+  <button data-section="games">Games</button>
+  <button data-section="about">About</button>
+  <button data-section="contact">Contact</button>
+</div>
+
+<section id="home">
+  <canvas id="particle-canvas"></canvas>
+  <div class="hud-corners">
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="hero-wrap">
+    <div class="hero-content">
+      <div class="hero-tag" data-reveal>SYSTEM ONLINE / READY TO BUILD</div>
+
+      <h1 class="hero-title" data-reveal>
+        <span class="row glitch" data-text="PRAKHAR" id="heroLine1">PRAKHAR</span>
+        <span class="row last glitch" data-text="BHATNAGAR" id="heroLine2">BHATNAGAR</span>
+      </h1>
+
+      <div class="hero-subtitle" data-reveal>
+        <span class="prefix">&gt;</span>
+        <span class="typed" id="typedText"></span><span class="type-cursor"></span>
+      </div>
+
+      <p class="hero-bio" data-reveal>
+        21-year-old game developer building <strong>complete, playable games</strong> focused
+        on tight gameplay systems, UI polish, and player experience.
+        Specialising in <strong>Unity / C#</strong> — currently seeking my first industry internship.
+      </p>
+
+      <div class="hero-cta" data-reveal>
+        <button class="btn btn-primary" data-scroll="games">
+          ▸ View My Games
+        </button>
+        <a class="btn btn-ghost" href="https://dullestdear.itch.io/" target="_blank" rel="noopener">
+          Itch.io Profile
+        </a>
+      </div>
     </div>
 
-    <div class="projects-grid">
+    <div class="hero-stats" data-reveal id="heroStats">
+      <div class="hex" data-stat="3">
+        <div class="hex-shell"></div>
+        <div class="hex-face">
+          <div class="hex-num"><span class="num">0</span></div>
+          <div class="hex-label">Games Shipped</div>
+        </div>
+      </div>
+      <div class="hex" data-stat="2" data-suffix="+">
+        <div class="hex-shell"></div>
+        <div class="hex-face">
+          <div class="hex-num"><span class="num">0</span><span class="suffix"></span></div>
+          <div class="hex-label">Years Building</div>
+        </div>
+      </div>
+      <div class="hex" data-stat="2">
+        <div class="hex-shell"></div>
+        <div class="hex-face">
+          <div class="hex-num"><span class="num">0</span></div>
+          <div class="hex-label">Engines Used</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      <!-- Ghostly Rides -->
-      <div class="project-card fade-in delay-1" onclick="openProject('ghostly')">
-        <div class="card-media">
-          <video class="project-video" muted loop playsinline preload="metadata">
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <span class="bar"></span>
+  </div>
+</section>
+
+<section id="games" class="section">
+  <div class="container">
+    <div class="section-head" data-reveal>
+      <div class="section-num">01</div>
+      <div class="section-eyebrow">// Portfolio</div>
+      <h2 class="section-title">Games</h2>
+    </div>
+
+    <div class="games-grid">
+
+      <div class="game-card tilt" data-project="ghostly" data-reveal data-delay="0">
+        <span class="game-card-corner">[ 01 ]</span>
+        <div class="game-media">
+          <video class="game-video" muted loop playsinline preload="metadata">
             <source src="videos/ghostly-rides.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"></div>
+          <div class="scan-glow"></div>
         </div>
-        <div class="card-body">
-          <div class="card-meta">Unity · C# · 3D · Passion Project</div>
-          <div class="card-title">
+        <div class="game-body">
+          <div class="game-meta">Unity · C# · 3D · Passion Project</div>
+          <div class="game-title">
             Ghostly Rides
-            <span class="card-arrow">↗</span>
+            <span class="game-open">[ OPEN ]</span>
           </div>
-          <p class="card-desc">Arcade survival traffic-dodging game with a car possession mechanic, power-ups, and polished UI. Published on Itch.io.</p>
-          <div class="tags">
+          <p class="game-desc">Arcade survival traffic-dodging game with a car possession mechanic, power-ups, and polished UI. Published on Itch.io.</p>
+          <div class="tag-row">
             <span class="tag">Unity</span>
             <span class="tag">C#</span>
             <span class="tag">3D</span>
@@ -1050,22 +1691,22 @@
         </div>
       </div>
 
-      <!-- Astro Blitz -->
-      <div class="project-card fade-in delay-2" onclick="openProject('astro')">
-        <div class="card-media">
-          <video class="project-video" muted loop playsinline preload="metadata">
+      <div class="game-card tilt" data-project="astro" data-reveal data-delay="150">
+        <span class="game-card-corner">[ 02 ]</span>
+        <div class="game-media">
+          <video class="game-video" muted loop playsinline preload="metadata">
             <source src="videos/astro-blitz.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"></div>
+          <div class="scan-glow"></div>
         </div>
-        <div class="card-body">
-          <div class="card-meta">Python · Pygame · 2D</div>
-          <div class="card-title">
+        <div class="game-body">
+          <div class="game-meta">Python · Pygame · 2D</div>
+          <div class="game-title">
             Astro Blitz
-            <span class="card-arrow">↗</span>
+            <span class="game-open">[ OPEN ]</span>
           </div>
-          <p class="card-desc">2D side-scrolling space shooter with custom enemy bullet patterns, a combo system, and arcade-style difficulty scaling.</p>
-          <div class="tags">
+          <p class="game-desc">2D side-scrolling space shooter with custom enemy bullet patterns, a combo system, and arcade-style difficulty scaling.</p>
+          <div class="tag-row">
             <span class="tag">Python</span>
             <span class="tag">Pygame</span>
             <span class="tag">2D</span>
@@ -1073,22 +1714,22 @@
         </div>
       </div>
 
-      <!-- Snow Surfer -->
-      <div class="project-card fade-in delay-3" onclick="openProject('snow')">
-        <div class="card-media">
-          <video class="project-video" muted loop playsinline preload="metadata">
+      <div class="game-card tilt" data-project="snow" data-reveal data-delay="300">
+        <span class="game-card-corner">[ 03 ]</span>
+        <div class="game-media">
+          <video class="game-video" muted loop playsinline preload="metadata">
             <source src="videos/snow-surfer.mp4" type="video/mp4">
           </video>
-          <div class="card-overlay"></div>
+          <div class="scan-glow"></div>
         </div>
-        <div class="card-body">
-          <div class="card-meta">Unity · C# · 2D · Course Work</div>
-          <div class="card-title">
+        <div class="game-body">
+          <div class="game-meta">Unity · C# · 2D · Course Work</div>
+          <div class="game-title">
             Snow Surfer
-            <span class="card-arrow">↗</span>
+            <span class="game-open">[ OPEN ]</span>
           </div>
-          <p class="card-desc">Fast-paced downhill snowboarding prototype with slope physics, multiple playable characters, and particle-driven crash FX.</p>
-          <div class="tags">
+          <p class="game-desc">Fast-paced downhill snowboarding prototype with slope physics, multiple playable characters, and particle-driven crash FX.</p>
+          <div class="tag-row">
             <span class="tag">Unity</span>
             <span class="tag">C#</span>
             <span class="tag">Cinemachine</span>
@@ -1098,44 +1739,40 @@
 
     </div>
   </div>
-</div>
+</section>
 
-<!-- ══════════════════════════════════════════
-     ABOUT
-══════════════════════════════════════════ -->
-<div id="about" class="screen hidden">
+<section id="about" class="section">
   <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Background</div>
-      <h2 class="section-title-large">About Me</h2>
+    <div class="section-head" data-reveal>
+      <div class="section-num">02</div>
+      <div class="section-eyebrow">// Profile</div>
+      <h2 class="section-title">About Me</h2>
     </div>
 
     <div class="about-grid">
-
-      <!-- LEFT: text + edu + certs -->
       <div>
-        <div class="about-text">
+        <div class="about-text" data-reveal>
           <p>I'm a <strong>21-year-old game developer</strong> studying B.Tech Computer Science (AI specialisation) at the Institute of Advanced Research. I've been building games for over two years — starting with Python and Pygame, then moving to Unity and C#.</p>
           <p>My focus is on <strong>gameplay feel</strong>: tight controls, readable systems, and polished feedback loops. Every project I ship starts with a core mechanic and builds outward from there.</p>
           <p>I'm currently looking for my <strong>first game development internship</strong> where I can contribute to a real production pipeline, learn from senior developers, and grow as a game designer.</p>
         </div>
 
-        <div class="edu-card" style="margin-top:40px;">
+        <div class="panel edu-card" data-reveal>
           <h3>B.Tech Computer Science — AI Specialisation</h3>
-          <p>Institute Of Advanced Research · 2023 – Present<br>
-          Relevant: Game Design · Game Programming · Level Design · CS Fundamentals</p>
+          <p>Institute Of Advanced Research <span>·</span> 2023 – Present<br>
+          Relevant: Game Design <span>·</span> Game Programming <span>·</span> Level Design <span>·</span> CS Fundamentals</p>
         </div>
 
-        <div class="cert-list">
+        <div class="cert-list" data-reveal>
           <div class="cert-item">
-            <div class="cert-dot"></div>
+            <div class="cert-bracket">[+]</div>
             <div>
               <div class="cert-name">Complete Guide to Game Design</div>
               <div class="cert-issuer">HP Gaming Garage · EDX</div>
             </div>
           </div>
           <div class="cert-item">
-            <div class="cert-dot"></div>
+            <div class="cert-bracket">[+]</div>
             <div>
               <div class="cert-name">Complete C# Unity 2D Game Development</div>
               <div class="cert-issuer">GameDev.tv · Udemy</div>
@@ -1143,150 +1780,255 @@
           </div>
         </div>
 
-        <a class="btn-ghost" href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing" target="_blank" style="margin-top:32px; display:inline-flex;">
+        <a class="btn btn-ghost" href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing"
+           target="_blank" rel="noopener" style="margin-top: 36px;">
           View Certificates ↗
         </a>
       </div>
 
-      <!-- RIGHT: skills -->
-      <div class="skills-panel">
-        <div>
-          <div class="skills-group-title">Game Dev</div>
-          <div class="skills-list">
-            <span class="skill-pill">Unity</span>
-            <span class="skill-pill">C#</span>
-            <span class="skill-pill">Pygame</span>
-            <span class="skill-pill">Python</span>
-            <span class="skill-pill">Cinemachine</span>
-            <span class="skill-pill">UI Toolkit</span>
-            <span class="skill-pill">Particle System</span>
+      <div class="skills-stack">
+        <div data-reveal>
+          <div class="skill-group-title">Game Dev</div>
+          <div class="skill-grid">
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="">
+                <div class="label">Unity</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="">
+                <div class="label">C#</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">PYG</div>
+                <div class="label">Pygame</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">
+                <div class="label">Python</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">CINE</div>
+                <div class="label">Cinemachine</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">UI</div>
+                <div class="label">UI Toolkit</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">VFX</div>
+                <div class="label">Particle Sys</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <div class="skills-group-title">Design & Art</div>
-          <div class="skills-list">
-            <span class="skill-pill">LibreSprite</span>
-            <span class="skill-pill">Level Design</span>
-            <span class="skill-pill">Game Feel</span>
-            <span class="skill-pill">Pixel Art</span>
+
+        <div data-reveal>
+          <div class="skill-group-title">Design &amp; Art</div>
+          <div class="skill-grid">
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">LBS</div>
+                <div class="label">LibreSprite</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">LVL</div>
+                <div class="label">Level Design</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">FEEL</div>
+                <div class="label">Game Feel</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">PXL</div>
+                <div class="label">Pixel Art</div>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <div class="skills-group-title">Tools</div>
-          <div class="skills-list">
-            <span class="skill-pill">Git / GitHub</span>
-            <span class="skill-pill">VS Code</span>
-            <span class="skill-pill">Notion</span>
-            <span class="skill-pill">Itch.io</span>
+
+        <div data-reveal>
+          <div class="skill-group-title">Tools</div>
+          <div class="skill-grid">
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="">
+                <div class="label">Git</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="">
+                <div class="label">GitHub</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="">
+                <div class="label">VS Code</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg" alt="">
+                <div class="label">Notion</div>
+              </div>
+            </div>
+            <div class="skill-hex" data-skill>
+              <div class="shell"></div>
+              <div class="face">
+                <div class="abbr">ITCH</div>
+                <div class="label">Itch.io</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
-</div>
+</section>
 
-<!-- ══════════════════════════════════════════
-     CONTACT
-══════════════════════════════════════════ -->
-<div id="contact" class="screen hidden">
+<section id="contact" class="section">
   <div class="container">
-    <div class="section-header">
-      <div class="section-eyebrow">Get In Touch</div>
-      <h2 class="section-title-large">Contact</h2>
+    <div class="section-head" data-reveal>
+      <div class="section-num">03</div>
+      <div class="section-eyebrow">// Establish Connection</div>
+      <h2 class="section-title">Contact</h2>
     </div>
 
     <div class="contact-layout">
-
-      <!-- FORM -->
-      <div>
-        <div class="contact-form-title">Send a Message</div>
-        <form action="https://formspree.io/f/mvzbnagp" method="POST">
-          <input type="hidden" name="_next" value="https://dullestdear.github.io/Portfolio/#contact">
-          <div class="form-group">
-            <label class="form-label">Name</label>
-            <input type="text" name="name" class="form-input" placeholder="Your name" required>
+      <div data-reveal>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot g"></span>
+            <span class="title">~/contact $ ./send-message</span>
           </div>
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Message</label>
-            <textarea name="message" class="form-textarea" placeholder="What's on your mind?" required></textarea>
-          </div>
-          <input type="hidden" name="_captcha" value="false">
-          <button type="submit" class="btn-primary">Send Message ▸</button>
-        </form>
-      </div>
+          <div class="terminal-body">
+            <form action="https://formspree.io/f/mvzbnagp" method="POST">
+              <input type="hidden" name="_next" value="https://dullestdear.github.io/Portfolio/#contact">
+              <input type="hidden" name="_captcha" value="false">
 
-      <!-- INFO PANEL -->
-      <div class="contact-info-panel">
-        <div class="contact-info-title">Direct Contact</div>
+              <div class="term-field">
+                <label class="term-line"><span class="arrow">&gt;</span>name:</label>
+                <input type="text" name="name" class="term-input" placeholder="enter your name..." required autocomplete="off">
+              </div>
 
-        <div class="contact-item">
-          <div class="contact-item-icon">📧</div>
-          <div>
-            <div class="contact-item-label">Email</div>
-            <div class="contact-item-value">
-              <a href="mailto:Prakharbhatnagar619@gmail.com">Prakharbhatnagar619@gmail.com</a>
-            </div>
+              <div class="term-field">
+                <label class="term-line"><span class="arrow">&gt;</span>email:</label>
+                <input type="email" name="email" class="term-input" placeholder="your@email.com" required autocomplete="off">
+              </div>
+
+              <div class="term-field">
+                <label class="term-line"><span class="arrow">&gt;</span>message:</label>
+                <textarea name="message" class="term-textarea" placeholder="what's on your mind?" required></textarea>
+              </div>
+
+              <button type="submit" class="term-submit">[ Send Message &gt;&gt; ]</button>
+            </form>
           </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-item-icon">🎮</div>
-          <div>
-            <div class="contact-item-label">Itch.io</div>
-            <div class="contact-item-value">
-              <a href="https://dullestdear.itch.io/" target="_blank">dullestdear.itch.io</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-item-icon">💼</div>
-          <div>
-            <div class="contact-item-label">LinkedIn</div>
-            <div class="contact-item-value">
-              <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank">prakhar-bhatnagar</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-item">
-          <div class="contact-item-icon">🐙</div>
-          <div>
-            <div class="contact-item-label">GitHub</div>
-            <div class="contact-item-value">
-              <a href="https://github.com/Dullestdear" target="_blank">Dullestdear</a>
-            </div>
-          </div>
-        </div>
-
-        <div style="margin-top:28px; padding-top:24px; border-top: 1px solid var(--border);">
-          <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing:0.06em; line-height:1.7;">
-            Open to internship opportunities in game development.<br>
-            Response within 24 hours.
-          </p>
         </div>
       </div>
 
+      <div data-reveal>
+        <div class="contact-list">
+          <a class="contact-row" href="mailto:Prakharbhatnagar619@gmail.com">
+            <div class="icon-wrap">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="">
+            </div>
+            <div>
+              <div class="meta-label">Email</div>
+              <div class="meta-value">Prakharbhatnagar619@gmail.com</div>
+            </div>
+          </a>
+
+          <a class="contact-row" href="https://dullestdear.itch.io/" target="_blank" rel="noopener">
+            <div class="icon-wrap">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/itchdotio.svg" alt="">
+            </div>
+            <div>
+              <div class="meta-label">Itch.io</div>
+              <div class="meta-value">dullestdear.itch.io</div>
+            </div>
+          </a>
+
+          <a class="contact-row" href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" rel="noopener">
+            <div class="icon-wrap">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="">
+            </div>
+            <div>
+              <div class="meta-label">LinkedIn</div>
+              <div class="meta-value">prakhar-bhatnagar</div>
+            </div>
+          </a>
+
+          <a class="contact-row" href="https://github.com/Dullestdear" target="_blank" rel="noopener">
+            <div class="icon-wrap">
+              <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="">
+            </div>
+            <div>
+              <div class="meta-label">GitHub</div>
+              <div class="meta-value">Dullestdear</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="contact-note">
+          <span class="green">$</span> status: <span class="green">open to internships</span><br>
+          <span class="green">$</span> response_time: ~24h
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ══════════════════════════════════════════
-     PROJECT DETAIL: GHOSTLY RIDES
-══════════════════════════════════════════ -->
-<div id="project-ghostly" class="screen hidden">
+<footer>
+  <div>© 2025 / Prakhar Bhatnagar / All systems nominal</div>
+  <div class="credit">Built &amp; designed in Unity time. ▮</div>
+</footer>
+
+<div id="detail-ghostly" class="detail-screen">
   <div class="detail-wrap">
-    <button class="back-btn" onclick="showScreen('projects')">← Back to Games</button>
+    <button class="back-btn" data-back>← Back to Games</button>
 
-    <div class="detail-subtitle fade-in">Unity · C# · 3D · Arcade · Passion Project</div>
-    <h1 class="detail-title fade-in">Ghostly Rides</h1>
+    <div class="detail-subtitle">// Unity · C# · 3D · Arcade · Passion Project</div>
+    <h1 class="detail-title">Ghostly Rides</h1>
 
-    <div class="detail-tags fade-in">
+    <div class="detail-tags">
       <span class="tag">Unity</span>
       <span class="tag">C#</span>
       <span class="tag">3D</span>
@@ -1294,42 +2036,41 @@
       <span class="tag">Itch.io</span>
     </div>
 
-    <div class="project-media fade-in">
-      <video class="project-detail-video" controls muted loop playsinline preload="auto">
+    <div class="detail-media">
+      <video class="detail-video" controls muted loop playsinline preload="auto">
         <source src="videos/ghostly-rides.mp4" type="video/mp4">
       </video>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Introduction</div>
-      <p class="detail-text">Ghostly Rides is an arcade-style survival driving game where players possess special vehicles mid-run, gain powerful (and sometimes cursed) abilities, and push for high scores in an endless night drive. The core design revolves around a <strong>risk vs reward</strong> loop — choosing when to possess special cars, managing temporary powers, and surviving increasing traffic density as the game speeds up.</p>
+    <div class="detail-block">
+      <div class="detail-block-title">Introduction</div>
+      <p class="detail-text">Ghostly Rides is an arcade survival traffic-dodging game built in Unity & C#. The player controls a ghost that must possess oncoming cars to keep moving — switching vehicles before each one is destroyed. The game blends fast-paced reaction gameplay with a unique possession mechanic, power-ups, and a polished UI flow from main menu to game-over screen.</p>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Key Features</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Gameplay Features</div>
       <ul class="detail-list">
-        <li><strong>Car Possession System</strong> — Swap into special vehicles mid-run while preserving physics & controls</li>
-        <li><strong>Power-up & Curse Mechanics</strong> — Speed boosts, shields, score multipliers & negative effects</li>
-        <li><strong>Lane-Based Traffic System</strong> — Collision-safe lane spawning for consistent challenge</li>
-        <li><strong>Endless Survival Loop</strong> — Progressive speed & traffic difficulty over time</li>
-        <li><strong>High Score System</strong> — Persistent tracking with UI & audio feedback</li>
-        <li><strong>Atmospheric Presentation</strong> — Neon-noir visuals with arcade sound design</li>
+        <li>Possession-based vehicle swapping with cooldown timing</li>
+        <li>Lane-based traffic spawning with escalating difficulty</li>
+        <li>Power-up pickups (shield, slow-mo) integrated into the loop</li>
+        <li>Score &amp; survival timer tracking with persistent high score</li>
+        <li>Polished menu &amp; game-over flow</li>
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Technical Highlights</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Technical Highlights</div>
       <ul class="detail-list">
-        <li>Built entirely in Unity with C#</li>
-        <li>Modular spawner architecture with prefab-based design</li>
+        <li>Built with Unity &amp; C#</li>
+        <li>Modular vehicle prefab system for clean possession swapping</li>
         <li>Physics-safe spawning via lane occupancy checks</li>
         <li>Persistent data using PlayerPrefs</li>
         <li>UI built with Unity's UI Toolkit</li>
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">What I Learned</div>
+    <div class="detail-block">
+      <div class="detail-block-title">What I Learned</div>
       <ul class="detail-list">
         <li>Designing scalable arcade systems with clean separation of concerns</li>
         <li>Managing prefab hierarchies for dynamic vehicle swapping</li>
@@ -1338,68 +2079,65 @@
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Platform</div>
-      <p class="detail-platform">PC (Windows) — Distributed via Itch.io</p>
+    <div class="detail-block">
+      <div class="detail-block-title">Platform</div>
+      <p class="detail-text">PC (Windows) — Distributed via Itch.io</p>
     </div>
 
-    <a href="https://dullestdear.itch.io/ghostly-rides" target="_blank" class="btn-primary" style="margin-top:8px;">
-      Play on Itch.io ↗
+    <a href="https://dullestdear.itch.io/ghostly-rides" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 16px;">
+      ▶ Play on Itch.io
     </a>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     PROJECT DETAIL: ASTRO BLITZ
-══════════════════════════════════════════ -->
-<div id="project-astro" class="screen hidden">
+<div id="detail-astro" class="detail-screen">
   <div class="detail-wrap">
-    <button class="back-btn" onclick="showScreen('projects')">← Back to Games</button>
+    <button class="back-btn" data-back>← Back to Games</button>
 
-    <div class="detail-subtitle fade-in">Python · Pygame · 2D Shooter · Passion Project</div>
-    <h1 class="detail-title fade-in">Astro Blitz</h1>
+    <div class="detail-subtitle">// Python · Pygame · 2D Shooter · Passion Project</div>
+    <h1 class="detail-title">Astro Blitz</h1>
 
-    <div class="detail-tags fade-in">
+    <div class="detail-tags">
       <span class="tag">Python</span>
       <span class="tag">Pygame</span>
       <span class="tag">2D</span>
       <span class="tag">Arcade</span>
     </div>
 
-    <div class="project-media fade-in">
-      <video class="project-detail-video" controls muted loop playsinline preload="auto">
+    <div class="detail-media">
+      <video class="detail-video" controls muted loop playsinline preload="auto">
         <source src="videos/astro-blitz.mp4" type="video/mp4">
       </video>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Introduction</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Introduction</div>
       <p class="detail-text">Astro Blitz is a fast-paced 2D side-scrolling space shooter built with Python and Pygame. Players battle waves of enemies, dodge projectiles, and chase high scores in a classic arcade-style experience. The game focuses on tight controls, readable enemy bullet patterns, and satisfying score feedback.</p>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Gameplay Features</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Gameplay Features</div>
       <ul class="detail-list">
         <li>Wave-based enemy encounters with escalating difficulty</li>
         <li>Custom enemy bullet patterns per enemy type</li>
-        <li>Score & combo system rewarding aggressive play</li>
-        <li>Tight player shooting & movement mechanics</li>
+        <li>Score &amp; combo system rewarding aggressive play</li>
+        <li>Tight player shooting &amp; movement mechanics</li>
         <li>Arcade-inspired difficulty scaling over time</li>
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Technical Highlights</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Technical Highlights</div>
       <ul class="detail-list">
         <li>Object-oriented enemy system with modular behaviour</li>
         <li>Custom collision detection and hitbox logic</li>
-        <li>Game loop & state machine management</li>
+        <li>Game loop &amp; state machine management</li>
         <li>Custom sprite handling and sheet parsing</li>
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">What I Learned</div>
+    <div class="detail-block">
+      <div class="detail-block-title">What I Learned</div>
       <ul class="detail-list">
         <li>Structuring larger Python game projects with OOP principles</li>
         <li>Designing enemy AI behaviours and attack patterns</li>
@@ -1409,24 +2147,21 @@
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Platform</div>
-      <p class="detail-platform">PC (Windows) — Built with Python (Pygame)</p>
+    <div class="detail-block">
+      <div class="detail-block-title">Platform</div>
+      <p class="detail-text">PC (Windows) — Built with Python (Pygame)</p>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     PROJECT DETAIL: SNOW SURFER
-══════════════════════════════════════════ -->
-<div id="project-snow" class="screen hidden">
+<div id="detail-snow" class="detail-screen">
   <div class="detail-wrap">
-    <button class="back-btn" onclick="showScreen('projects')">← Back to Games</button>
+    <button class="back-btn" data-back>← Back to Games</button>
 
-    <div class="detail-subtitle fade-in">Unity · C# · 2D · Course Work</div>
-    <h1 class="detail-title fade-in">Snow Surfer</h1>
+    <div class="detail-subtitle">// Unity · C# · 2D · Course Work</div>
+    <h1 class="detail-title">Snow Surfer</h1>
 
-    <div class="detail-tags fade-in">
+    <div class="detail-tags">
       <span class="tag">Unity</span>
       <span class="tag">C#</span>
       <span class="tag">2D</span>
@@ -1434,32 +2169,32 @@
       <span class="tag">Course Work</span>
     </div>
 
-    <div class="project-media fade-in">
-      <video class="project-detail-video" controls muted loop playsinline preload="auto">
+    <div class="detail-media">
+      <video class="detail-video" controls muted loop playsinline preload="auto">
         <source src="videos/snow-surfer.mp4" type="video/mp4">
       </video>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Introduction</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Introduction</div>
       <p class="detail-text">Snow Surfer is a fast-paced downhill snowboarding prototype created as part of the GameDev.tv Complete C# Unity Developer course. Players speed down icy mountain slopes performing tricks, collecting power-ups, and chasing high scores while avoiding obstacles.</p>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Gameplay Features</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Gameplay Features</div>
       <ul class="detail-list">
         <li>Smooth hill-based movement with slope physics</li>
         <li>Multiple playable characters with a character selection screen</li>
         <li>Crash detection mechanics with particle FX</li>
-        <li>Speed boost & scoring system</li>
+        <li>Speed boost &amp; scoring system</li>
         <li>Arcade-style high score tracking</li>
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Technical Highlights</div>
+    <div class="detail-block">
+      <div class="detail-block-title">Technical Highlights</div>
       <ul class="detail-list">
-        <li>Built with Unity & C#</li>
+        <li>Built with Unity &amp; C#</li>
         <li>Level construction using Sprite Shape for organic terrain</li>
         <li>Camera control via Cinemachine</li>
         <li>Particle effects using Unity's Particle System</li>
@@ -1467,8 +2202,8 @@
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">What I Learned</div>
+    <div class="detail-block">
+      <div class="detail-block-title">What I Learned</div>
       <ul class="detail-list">
         <li>Unity Particle System for environmental and crash FX</li>
         <li>Building a character selection flow with UI persistence</li>
@@ -1479,91 +2214,506 @@
       </ul>
     </div>
 
-    <div class="detail-section fade-in">
-      <div class="detail-section-title">Platform</div>
-      <p class="detail-platform">PC (Windows)</p>
+    <div class="detail-block">
+      <div class="detail-block-title">Platform</div>
+      <p class="detail-text">PC (Windows)</p>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════
-     SCRIPTS
-══════════════════════════════════════════ -->
 <script>
-  const screens = document.querySelectorAll('.screen');
-  const navBtns = {
-    home: document.getElementById('nav-home'),
-    projects: document.getElementById('nav-projects'),
-    about: document.getElementById('nav-about'),
-    contact: document.getElementById('nav-contact'),
-  };
+(() => {
+  'use strict';
 
-  function showScreen(id) {
-    screens.forEach(s => {
-      s.classList.add('hidden');
-      const v = s.querySelector('video');
-      if (v) v.pause();
+  const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ───────── CUSTOM CURSOR ───────── */
+  const cursorOuter = document.getElementById('cursorOuter');
+  const cursorInner = document.getElementById('cursorInner');
+
+  if (isFinePointer) {
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let ix = mx, iy = my;
+
+    document.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      cursorOuter.style.transform = `translate(${mx}px, ${my}px)`;
     });
 
-    Object.values(navBtns).forEach(b => b && b.classList.remove('active'));
-    if (navBtns[id]) navBtns[id].classList.add('active');
+    document.addEventListener('mouseleave', () => {
+      cursorOuter.classList.add('hidden');
+      cursorInner.classList.add('hidden');
+    });
+    document.addEventListener('mouseenter', () => {
+      cursorOuter.classList.remove('hidden');
+      cursorInner.classList.remove('hidden');
+    });
 
-    const target = document.getElementById(id);
-    target.classList.remove('hidden');
-    target.scrollTop = 0;
+    function tick() {
+      ix += (mx - ix) * 0.15;
+      iy += (my - iy) * 0.15;
+      cursorInner.style.transform = `translate(${ix}px, ${iy}px)`;
+      requestAnimationFrame(tick);
+    }
+    tick();
+
+    // Hover state on interactive elements
+    const hoverSelector = 'a, button, input, textarea, [data-project], .skill-hex, .nav-link, .game-card';
+    document.addEventListener('mouseover', (e) => {
+      if (e.target.closest(hoverSelector)) cursorInner.classList.add('hover');
+    });
+    document.addEventListener('mouseout', (e) => {
+      if (e.target.closest(hoverSelector)) cursorInner.classList.remove('hover');
+    });
+  } else {
+    cursorOuter.style.display = 'none';
+    cursorInner.style.display = 'none';
   }
 
-  function openProject(id) {
-    screens.forEach(s => {
-      s.classList.add('hidden');
-      const v = s.querySelector('video');
-      if (v) v.pause();
-    });
+  /* ───────── PARTICLE CANVAS ───────── */
+  const canvas = document.getElementById('particle-canvas');
+  const ctx = canvas.getContext('2d');
+  const heroEl = document.getElementById('home');
+  let particles = [];
+  const mouse = { x: -9999, y: -9999 };
+  let canvasActive = true;
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    Object.values(navBtns).forEach(b => b && b.classList.remove('active'));
+  function resizeCanvas() {
+    const rect = heroEl.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
 
-    const target = document.getElementById('project-' + id);
-    target.classList.remove('hidden');
-    target.scrollTop = 0;
-
-    const video = target.querySelector('video');
-    if (video) {
-      video.currentTime = 0;
-      video.play().catch(() => {});
+  function initParticles() {
+    const count = window.innerWidth < 600 ? 60 : 120;
+    const w = canvas.width / dpr, h = canvas.height / dpr;
+    particles = [];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6
+      });
     }
   }
 
-  // Init
-  screens.forEach(s => s.classList.add('hidden'));
-  document.getElementById('home').classList.remove('hidden');
-  navBtns.home.classList.add('active');
+  function drawParticles() {
+    if (!canvasActive) { requestAnimationFrame(drawParticles); return; }
+    const w = canvas.width / dpr, h = canvas.height / dpr;
+    ctx.clearRect(0, 0, w, h);
 
-  // Hover preview on cards
-  document.querySelectorAll('.project-card').forEach(card => {
-    const video = card.querySelector('.project-video');
-    if (!video) return;
-    card.addEventListener('mouseenter', () => { video.currentTime = 0; video.play().catch(() => {}); });
-    card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      // Mouse repulsion
+      const dx = p.x - mouse.x;
+      const dy = p.y - mouse.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 22500) { // 150 * 150
+        const d = Math.sqrt(d2) || 0.01;
+        const force = (150 - d) / 150 * 1.5;
+        p.x += (dx / d) * force;
+        p.y += (dy / d) * force;
+      }
+
+      // Movement
+      p.x += p.vx;
+      p.y += p.vy;
+
+      // Wrap
+      if (p.x < 0) p.x = w;
+      else if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      else if (p.y > h) p.y = 0;
+
+      // Draw dot
+      ctx.fillStyle = 'rgba(0, 255, 157, 0.30)';
+      ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+    }
+
+    // Connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const p1 = particles[i], p2 = particles[j];
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        const d2 = dx * dx + dy * dy;
+        if (d2 < 14400) { // 120 * 120
+          const alpha = (1 - Math.sqrt(d2) / 120) * 0.25;
+          ctx.strokeStyle = `rgba(0, 255, 157,${alpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(drawParticles);
+  }
+
+  if (!reduceMotion) {
+    resizeCanvas();
+    initParticles();
+    drawParticles();
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resizeCanvas();
+        initParticles();
+      }, 200);
+    });
+
+    heroEl.addEventListener('mousemove', (e) => {
+      const rect = heroEl.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      mouse.x = -9999; mouse.y = -9999;
+    });
+
+    // Pause when hero off-screen
+    const heroIO = new IntersectionObserver((entries) => {
+      entries.forEach(e => { canvasActive = e.isIntersecting; });
+    }, { threshold: 0.05 });
+    heroIO.observe(heroEl);
+  } else {
+    canvas.style.display = 'none';
+  }
+
+  /* ───────── GLITCH (page load + hover) ───────── */
+  function fireGlitch(el, delay = 0) {
+    setTimeout(() => {
+      el.classList.add('glitch-on');
+      setTimeout(() => el.classList.remove('glitch-on'),
+                 el.classList.contains('glitch-short') ? 400 : 800);
+    }, delay);
+  }
+  document.querySelectorAll('.glitch').forEach((el, idx) => {
+    fireGlitch(el, 100 + idx * 120);
+    el.addEventListener('mouseenter', () => {
+      if (!el.classList.contains('glitch-on')) fireGlitch(el);
+    });
   });
 
-  // Click to expand detail video
+  /* ───────── TYPEWRITER ───────── */
+  const typedEl = document.getElementById('typedText');
+  const words = ['Game Designer', 'Unity Developer', 'C# Engineer', 'Systems Builder' , 'Pixel Artist'];
+  let wIdx = 0, cIdx = 0, deleting = false;
+  function typewriter() {
+    const word = words[wIdx];
+    if (!deleting) {
+      cIdx++;
+      typedEl.textContent = word.slice(0, cIdx);
+      if (cIdx === word.length) {
+        deleting = true;
+        return setTimeout(typewriter, 1800);
+      }
+      setTimeout(typewriter, 60);
+    } else {
+      cIdx--;
+      typedEl.textContent = word.slice(0, cIdx);
+      if (cIdx === 0) {
+        deleting = false;
+        wIdx = (wIdx + 1) % words.length;
+        return setTimeout(typewriter, 300);
+      }
+      setTimeout(typewriter, 40);
+    }
+  }
+  setTimeout(typewriter, 800);
+
+  /* ───────── REVEAL ON SCROLL ───────── */
+  const revealIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const delay = parseInt(e.target.dataset.delay || '0', 10);
+        if (delay) {
+          setTimeout(() => e.target.classList.add('in'), delay);
+        } else {
+          e.target.classList.add('in');
+        }
+        revealIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => revealIO.observe(el));
+
+  // Hero reveals fire immediately
+  setTimeout(() => {
+    document.querySelectorAll('#home [data-reveal]').forEach(el => el.classList.add('in'));
+  }, 80);
+
+  /* ───────── STAT COUNTERS ───────── */
+  function animateCount(el, target, duration = 1400) {
+    const numEl = el.querySelector('.num');
+    const suffix = el.dataset.suffix || '';
+    const suffixEl = el.querySelector('.suffix');
+    const labelEl = el.querySelector('.hex-label');
+    const start = performance.now();
+
+    function step(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      numEl.textContent = Math.round(target * eased);
+      if (t < 1) {
+        requestAnimationFrame(step);
+      } else {
+        numEl.textContent = target;
+        if (suffixEl && suffix) suffixEl.textContent = suffix;
+        setTimeout(() => labelEl.classList.add('in'), 300);
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  const statIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const target = parseInt(e.target.dataset.stat, 10);
+        animateCount(e.target, target);
+        statIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('[data-stat]').forEach(el => statIO.observe(el));
+
+  /* ───────── 3D TILT GAME CARDS ───────── */
+  if (isFinePointer && !reduceMotion) {
+    document.querySelectorAll('.tilt').forEach(card => {
+      let raf = null;
+      const max = 12;
+
+      function onMove(e) {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const rotY = ((x - cx) / cx) * max;
+        const rotX = -((y - cy) / cy) * max;
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px)`;
+          card.style.transition = 'box-shadow var(--t-fast), border-color var(--t-fast)';
+        });
+      }
+      function onLeave() {
+        if (raf) cancelAnimationFrame(raf);
+        card.style.transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow var(--t-fast), border-color var(--t-fast)';
+        card.style.transform = '';
+      }
+
+      card.addEventListener('mousemove', onMove);
+      card.addEventListener('mouseleave', onLeave);
+    });
+  }
+
+  /* ───────── GAME VIDEO HOVER PLAY ───────── */
+  document.querySelectorAll('.game-card').forEach(card => {
+    const v = card.querySelector('.game-video');
+    if (!v) return;
+    card.addEventListener('mouseenter', () => {
+      v.currentTime = 0;
+      v.play().catch(() => {});
+    });
+    card.addEventListener('mouseleave', () => {
+      v.pause();
+      v.currentTime = 0;
+    });
+  });
+
+  /* ───────── SKILL HEX STAGGERED REVEAL ───────── */
+  const skillIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const hexes = e.target.querySelectorAll('.skill-hex');
+        hexes.forEach((hex, i) => {
+          setTimeout(() => hex.classList.add('in'), i * 60);
+        });
+        skillIO.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.skills-stack > div').forEach(el => skillIO.observe(el));
+
+  /* ───────── NAV — SMOOTH SCROLL + ACTIVE INDICATOR ───────── */
+  const navLinks = document.querySelectorAll('.nav-link');
+  const indicator = document.getElementById('navIndicator');
+  const sections = ['home', 'games', 'about', 'contact']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+
+  function moveIndicator(link) {
+    if (!link) return;
+    const linkRect = link.getBoundingClientRect();
+    const parentRect = link.parentElement.getBoundingClientRect();
+    indicator.style.width = (linkRect.width - 24) + 'px';
+    indicator.style.transform = `translateX(${linkRect.left - parentRect.left + 12}px)`;
+  }
+
+  function setActive(sectionId) {
+    let activated = null;
+    navLinks.forEach(l => {
+      if (l.dataset.section === sectionId) {
+        l.classList.add('active');
+        activated = l;
+      } else {
+        l.classList.remove('active');
+      }
+    });
+    document.querySelectorAll('#navMobileMenu button').forEach(b => {
+      b.classList.toggle('active', b.dataset.section === sectionId);
+    });
+    if (activated) moveIndicator(activated);
+  }
+
+  // Initial position
+  setTimeout(() => setActive('home'), 300);
+  window.addEventListener('resize', () => {
+    const cur = document.querySelector('.nav-link.active');
+    if (cur) moveIndicator(cur);
+  });
+
+  // Click → smooth scroll
+  function scrollToSection(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.pageYOffset - (id === 'home' ? 0 : 30);
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+  navLinks.forEach(l => {
+    l.addEventListener('click', () => {
+      scrollToSection(l.dataset.section);
+      setActive(l.dataset.section);
+    });
+  });
+  document.querySelectorAll('[data-scroll]').forEach(b => {
+    b.addEventListener('click', () => scrollToSection(b.dataset.scroll));
+  });
+  document.querySelectorAll('#navMobileMenu button').forEach(b => {
+    b.addEventListener('click', () => {
+      scrollToSection(b.dataset.section);
+      setActive(b.dataset.section);
+      document.getElementById('navMobileMenu').classList.remove('open');
+    });
+  });
+
+  // Section visibility tracking
+  const sectionIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) setActive(e.target.id);
+    });
+  }, { threshold: [0.4, 0.6], rootMargin: '-80px 0px -40% 0px' });
+  sections.forEach(s => sectionIO.observe(s));
+
+  /* ───────── MOBILE NAV ───────── */
+  const mobileToggle = document.getElementById('navMobileToggle');
+  const mobileMenu = document.getElementById('navMobileMenu');
+  if (mobileToggle) {
+    mobileToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+  }
+
+  /* ───────── PROJECT DETAIL OVERLAYS ───────── */
+  const detailScreens = document.querySelectorAll('.detail-screen');
+
+  function openProject(id) {
+    const screen = document.getElementById('detail-' + id);
+    if (!screen) return;
+    document.body.style.overflow = 'hidden';
+    screen.classList.add('show');
+    screen.scrollTop = 0;
+    const v = screen.querySelector('.detail-video');
+    if (v) { v.currentTime = 0; v.play().catch(() => {}); }
+  }
+  function closeProject() {
+    detailScreens.forEach(s => {
+      s.classList.remove('show');
+      const v = s.querySelector('.detail-video');
+      if (v) v.pause();
+    });
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('[data-project]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Ignore clicks inside the card that are on links (none expected, but safe)
+      if (e.target.closest('a')) return;
+      openProject(card.dataset.project);
+    });
+  });
+  document.querySelectorAll('[data-back]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      closeProject();
+      setTimeout(() => scrollToSection('games'), 100);
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeProject();
+  });
+
+  // Detail video expand-to-fullscreen on click
   document.addEventListener('click', (e) => {
-    const video = e.target.closest('.project-detail-video');
-    if (video) {
-      const media = video.closest('.project-media');
-      if (!media) return;
+    const v = e.target.closest('.detail-video');
+    if (v) {
+      const media = v.closest('.detail-media');
       const expanded = media.classList.toggle('expanded');
       document.body.classList.toggle('expanded-video', expanded);
-      if (expanded) video.play().catch(() => {});
+      if (expanded) v.play().catch(() => {});
       e.stopPropagation();
     } else {
-      const open = document.querySelector('.project-media.expanded');
-      if (open && !e.target.closest('.project-media')) {
+      const open = document.querySelector('.detail-media.expanded');
+      if (open && !e.target.closest('.detail-media')) {
         open.classList.remove('expanded');
         document.body.classList.remove('expanded-video');
       }
     }
   });
+
+  /* ───────── KONAMI CODE ───────── */
+  const konami = [
+    'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+    'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
+    'KeyB','KeyA'
+  ];
+  let kIdx = 0;
+  const flashEl = document.getElementById('konamiFlash');
+  const achievement = document.getElementById('achievement');
+
+  function triggerAchievement() {
+    flashEl.classList.add('flash');
+    setTimeout(() => flashEl.classList.remove('flash'), 100);
+    setTimeout(() => {
+      achievement.classList.add('show');
+      setTimeout(() => achievement.classList.remove('show'), 4000);
+    }, 200);
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.code === konami[kIdx]) {
+      kIdx++;
+      if (kIdx === konami.length) {
+        triggerAchievement();
+        kIdx = 0;
+      }
+    } else {
+      kIdx = (e.code === konami[0]) ? 1 : 0;
+    }
+  });
+
+})();
 </script>
+
 </body>
 </html>
