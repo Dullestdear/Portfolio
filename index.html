@@ -1737,6 +1737,32 @@
         </div>
       </div>
 
+
+      <div class="game-card tilt" data-project="ar-stealth" data-reveal data-delay="450">
+        <span class="game-card-corner">[ 04 ]</span>
+        <div class="game-media">
+          <video class="game-video" muted loop playsinline preload="metadata">
+            <source src="videos/ar-stealth.mp4" type="video/mp4">
+          </video>
+          <div class="scan-glow"></div>
+        </div>
+        <div class="game-body">
+          <div class="game-meta">Unity · Python · MediaPipe · UDP</div>
+          <div class="game-title">
+            Hand-Tracked Stealth FPS
+            <span class="game-open">[ OPEN ]</span>
+          </div>
+          <p class="game-desc">A real-time AR shooter controlled entirely by physical hand gestures, featuring a custom UDP network bridge and an autonomous hunting AI.</p>
+          <div class="tag-row">
+            <span class="tag">Unity</span>
+            <span class="tag">Computer Vision</span>
+            <span class="tag">Python</span>
+            <span class="tag">AI</span>
+            <span class="tag">UDP</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -2217,6 +2243,59 @@
     <div class="detail-block">
       <div class="detail-block-title">Platform</div>
       <p class="detail-text">PC (Windows)</p>
+    </div>
+  </div>
+</div>
+
+<div id="detail-ar-stealth" class="detail-screen">
+  <div class="detail-wrap">
+    <button class="back-btn" data-back>← Back to Games</button>
+
+    <div class="detail-subtitle">// Unity · Python · MediaPipe · UDP</div>
+    <h1 class="detail-title">Hand-Tracked Stealth FPS</h1>
+
+    <div class="detail-tags">
+      <span class="tag">Unity</span>
+      <span class="tag">Computer Vision</span>
+      <span class="tag">Python</span>
+      <span class="tag">AI</span>
+      <span class="tag">UDP</span>
+    </div>
+
+    <div class="detail-media">
+      <video class="detail-video" controls muted loop playsinline preload="auto">
+        <source src="videos/ar-stealth.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">Introduction</div>
+      <p class="detail-text">A fully functional, AR-controlled stealth game built from scratch. No keyboard, no mouse—just real-time hand gestures tracked via webcam to control a Unity FPS character.</p>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">Gameplay Features</div>
+      <ul class="detail-list">
+        <li>Physical hand gesture controls — Pinch to shoot, Open palm to reload, Peace sign ✌️ to swap weapons</li>
+        <li>Autonomous enemy drones that actively hunt the player</li>
+        <li>Auditory detection spheres — enemies hear your gunshots and investigate</li>
+        <li>Dynamic line-of-sight raycasting for combat state triggering</li>
+      </ul>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">Technical Highlights</div>
+      <ul class="detail-list">
+        <li>Python &amp; Google MediaPipe for 21-point 3D hand landmark tracking</li>
+        <li>Custom, zero-lag UDP socket networking to bridge Python and C#</li>
+        <li>Unity NavMesh for dynamic enemy pathfinding around obstacles</li>
+        <li>Packaged into standalone executables using PyInstaller</li>
+      </ul>
+    </div>
+
+    <div class="detail-block">
+      <div class="detail-block-title">What I Learned</div>
+      <p class="detail-text">Bridging two completely different programming languages/environments in real-time, working with AI computer vision models, and designing autonomous state-machine enemy behaviors.</p>
     </div>
   </div>
 </div>
