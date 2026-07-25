@@ -1,1765 +1,1264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Prakhar Bhatnagar // Game Designer & Developer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#09090B">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <style>
-    /* ════════════════════════════════════════════════════════════
-       FONTS
-    ════════════════════════════════════════════════════════════ */
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
-    /* ════════════════════════════════════════════════════════════
-       TOKENS - MODERN PREMIUM AAA STUDIO THEME
-    ════════════════════════════════════════════════════════════ */
-    :root {
-      --bg:          #09090B;
-      --bg-deep:     #000000;
-      --bg-card:     rgba(255, 255, 255, 0.02);
-      --accent:      #00FF9D;
-      --accent-glow: rgba(0, 255, 157, 0.25);
-      --accent-dim:  rgba(0, 255, 157, 0.10);
-      --accent-soft: rgba(0, 255, 157, 0.04);
-      --secondary:   #B084FF;
-      --success:     #FFB000;
-      --text:        #F4F4F5;
-      --text-dim:    #A1A1AA;
-      --muted:       #71717A;
-      --radius:      6px;
-      --t-fast:      250ms ease;
-      --t-reveal:    600ms cubic-bezier(0.16, 1, 0.3, 1);
-      --font-display:'Orbitron', monospace;
-      --font-head:   'Rajdhani', sans-serif;
-      --font-body:   'Inter', sans-serif;
-      --font-mono:   'JetBrains Mono', monospace;
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-weight: 400;
-      line-height: 1.6;
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-
-    /* Hide native cursor on devices that have a fine pointer */
-    @media (hover: hover) and (pointer: fine) {
-      body, a, button, input, textarea, select { cursor: none !important; }
-    }
-
-    /* Subtle scanline + grid atmosphere - Softened for better readability */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(0, 255, 157, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 157, 0.015) 1px, transparent 1px);
-      background-size: 64px 64px;
-      pointer-events: none;
-      z-index: 1;
-      mask-image: radial-gradient(ellipse at center, #000 30%, transparent 80%);
-    }
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0,
-        transparent 3px,
-        rgba(0,0,0,0.08) 3px,
-        rgba(0,0,0,0.08) 4px
-      );
-      pointer-events: none;
-      z-index: 2;
-      opacity: 0.2;
-      mix-blend-mode: multiply;
-    }
-
-    ::selection { background: var(--accent); color: var(--bg-deep); }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-deep); }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(var(--accent), var(--secondary));
-      border: 2px solid var(--bg-deep);
-      border-radius: 4px;
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       CUSTOM CURSOR
-    ════════════════════════════════════════════════════════════ */
-    .cursor-outer, .cursor-inner {
-      position: fixed;
-      top: 0; left: 0;
-      pointer-events: none;
-      z-index: 99999;
-      will-change: transform;
-      mix-blend-mode: screen;
-    }
-    .cursor-outer {
-      width: 24px; height: 24px;
-      margin: -12px 0 0 -12px;
-      transition: opacity 200ms;
-    }
-    .cursor-outer span {
-      position: absolute;
-      background: var(--accent);
-      box-shadow: 0 0 6px var(--accent-glow);
-    }
-    .cursor-outer span:nth-child(1) { left: 11.5px; top: 0; width: 1px; height: 6px; }
-    .cursor-outer span:nth-child(2) { left: 11.5px; bottom: 0; width: 1px; height: 6px; }
-    .cursor-outer span:nth-child(3) { top: 11.5px; left: 0; height: 1px; width: 6px; }
-    .cursor-outer span:nth-child(4) { top: 11.5px; right: 0; height: 1px; width: 6px; }
-    .cursor-inner {
-      width: 6px; height: 6px;
-      margin: -3px 0 0 -3px;
-      background: var(--accent);
-      border-radius: 50%;
-      box-shadow: 0 0 10px var(--accent);
-      transition: width 200ms, height 200ms, margin 200ms, background 200ms;
-    }
-    .cursor-inner.hover {
-      width: 36px; height: 36px;
-      margin: -18px 0 0 -18px;
-      background: var(--accent-dim);
-      box-shadow: 0 0 20px var(--accent-glow), inset 0 0 8px var(--accent);
-    }
-    .cursor-outer.hidden, .cursor-inner.hidden { opacity: 0; }
-
-    @media (hover: none), (pointer: coarse) {
-      .cursor-outer, .cursor-inner { display: none !important; }
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       NAV
-    ════════════════════════════════════════════════════════════ */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      height: 72px;
-      padding: 0 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(9, 9, 11, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-bottom: 1px solid var(--accent-dim);
-    }
-
-    .nav-logo {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: 1.15rem;
-      letter-spacing: 0.18em;
-      color: var(--text);
-      position: relative;
-      display: inline-block;
-      text-decoration: none;
-    }
-    .nav-logo .dot { color: var(--accent); }
-
-    .nav-center {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-link {
-      background: none;
-      border: none;
-      color: var(--text-dim);
-      font-family: var(--font-head);
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      padding: 26px 20px;
-      cursor: pointer;
-      transition: color var(--t-fast);
-      position: relative;
-    }
-    .nav-link:hover { color: var(--text); }
-    .nav-link.active { color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
-
-    .nav-indicator {
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      height: 2px;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent);
-      transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
-                  width 400ms cubic-bezier(0.16, 1, 0.3, 1);
-      pointer-events: none;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .nav-resume {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      color: var(--accent);
-      font-family: var(--font-head);
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      overflow: hidden;
-      transition: color var(--t-fast);
-      z-index: 1;
-    }
-    .nav-resume::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent);
-      transform: translateX(-101%);
-      transition: transform 400ms cubic-bezier(0.7, 0, 0.3, 1);
-      z-index: -1;
-    }
-    .nav-resume:hover { color: var(--bg-deep); }
-    .nav-resume:hover::after { transform: translateX(0); }
-
-    .nav-socials {
-      display: flex;
-      gap: 14px;
-      padding-left: 20px;
-      border-left: 1px solid var(--accent-dim);
-    }
-    .nav-socials a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34px; height: 34px;
-      border: 1px solid transparent;
-      transition: all var(--t-fast);
-      border-radius: var(--radius);
-    }
-    .nav-socials a:hover {
-      border-color: var(--accent);
-      background: var(--accent-soft);
-      box-shadow: 0 0 16px var(--accent-glow);
-    }
-    .nav-socials img {
-      width: 16px; height: 16px;
-      filter: invert(70%) sepia(8%) saturate(300%) hue-rotate(200deg) brightness(95%);
-      transition: filter var(--t-fast);
-    }
-    .nav-socials a:hover img {
-      filter: brightness(0) saturate(100%) invert(81%) sepia(26%) saturate(6320%) hue-rotate(99deg) brightness(108%) contrast(105%);
-    }
-
-    .nav-mobile-toggle { display: none; }
-
-    /* ════════════════════════════════════════════════════════════
-       GLITCH TEXT
-    ════════════════════════════════════════════════════════════ */
-    .glitch {
-      position: relative;
-      display: inline-block;
-      color: var(--text);
-    }
-    .glitch::before, .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      pointer-events: none;
-      opacity: 0;
-    }
-    .glitch.glitch-on::before {
-      color: var(--accent);
-      clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
-      animation: glitchTop 800ms steps(8, end) 1;
-      opacity: 1;
-      text-shadow: 0 0 8px var(--accent);
-    }
-    .glitch.glitch-on::after {
-      color: var(--secondary);
-      clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
-      animation: glitchBot 800ms steps(8, end) 1;
-      opacity: 1;
-      text-shadow: 0 0 8px var(--secondary);
-    }
-    .glitch.glitch-short.glitch-on::before { animation-duration: 400ms; }
-    .glitch.glitch-short.glitch-on::after  { animation-duration: 400ms; }
-    @keyframes glitchTop {
-      0%   { transform: translate(0, 0); }
-      10%  { transform: translate(-2px, -1px); }
-      20%  { transform: translate(-3px, 0); }
-      30%  { transform: translate(-1px, 1px); }
-      40%  { transform: translate(-2px, -1px); }
-      55%  { transform: translate(-3px, 0); }
-      70%  { transform: translate(-2px, 0); }
-      85%  { transform: translate(-1px, 0); }
-      100% { transform: translate(-2px, 0); opacity: 0; }
-    }
-    @keyframes glitchBot {
-      0%   { transform: translate(0, 0); }
-      10%  { transform: translate(2px, 1px); }
-      20%  { transform: translate(3px, 0); }
-      30%  { transform: translate(1px, -1px); }
-      40%  { transform: translate(2px, 1px); }
-      55%  { transform: translate(3px, 0); }
-      70%  { transform: translate(2px, 0); }
-      85%  { transform: translate(1px, 0); }
-      100% { transform: translate(2px, 0); opacity: 0; }
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       HERO
-    ════════════════════════════════════════════════════════════ */
-    #home {
-      position: relative;
-      min-height: 100vh;
-      padding: 80px 0 0;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    #particle-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* HUD overlay frame */
-    #home::before {
-      content: '';
-      position: absolute;
-      inset: 100px 40px 40px 40px;
-      border: 1px solid var(--accent-dim);
-      border-radius: var(--radius);
-      pointer-events: none;
-      z-index: 1;
-    }
-    .hud-corners {
-      position: absolute;
-      inset: 100px 40px 40px 40px;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .hud-corners span {
-      position: absolute;
-      width: 24px; height: 24px;
-      border: 2px solid var(--accent);
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-    .hud-corners span:nth-child(1) { top: -2px; left: -2px; border-right: none; border-bottom: none; border-top-left-radius: var(--radius); }
-    .hud-corners span:nth-child(2) { top: -2px; right: -2px; border-left: none; border-bottom: none; border-top-right-radius: var(--radius); }
-    .hud-corners span:nth-child(3) { bottom: -2px; left: -2px; border-right: none; border-top: none; border-bottom-left-radius: var(--radius); }
-    .hud-corners span:nth-child(4) { bottom: -2px; right: -2px; border-left: none; border-top: none; border-bottom-right-radius: var(--radius); }
-
-    .hero-wrap {
-      position: relative;
-      z-index: 3;
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 0 100px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 80px;
-      align-items: center;
-    }
-
-    .hero-content { max-width: 760px; }
-
-    .hero-tag {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity var(--t-reveal), transform var(--t-reveal);
-    }
-    .hero-tag.in { opacity: 1; transform: none; }
-    .hero-tag::before {
-      content: '';
-      width: 8px; height: 8px;
-      background: var(--success);
-      border-radius: 50%;
-      box-shadow: 0 0 12px var(--success);
-      animation: pulseDot 1.6s ease-in-out infinite;
-    }
-    @keyframes pulseDot {
-      0%, 100% { opacity: 0.4; transform: scale(0.85); }
-      50%      { opacity: 1;   transform: scale(1.1);  }
-    }
-
-    .hero-title {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: clamp(3rem, 7.5vw, 6.8rem);
-      line-height: 0.95;
-      letter-spacing: -0.02em;
-      text-transform: uppercase;
-      margin-bottom: 32px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity var(--t-reveal) 80ms, transform var(--t-reveal) 80ms;
-    }
-    .hero-title.in { opacity: 1; transform: none; }
-    .hero-title .row {
-      display: block;
-      position: relative;
-    }
-    .hero-title .row.last { color: var(--accent); text-shadow: 0 0 32px var(--accent-glow); }
-
-    .hero-subtitle {
-      font-family: var(--font-head);
-      font-weight: 600;
-      font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-      letter-spacing: 0.05em;
-      color: var(--text-dim);
-      margin-bottom: 32px;
-      min-height: 1.5em;
-      display: flex;
-      align-items: center;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity var(--t-reveal) 160ms, transform var(--t-reveal) 160ms;
-    }
-    .hero-subtitle.in { opacity: 1; transform: none; }
-    .hero-subtitle .prefix {
-      color: var(--secondary);
-      font-family: var(--font-mono);
-      font-size: 0.9em;
-      margin-right: 14px;
-      opacity: 0.9;
-    }
-    .hero-subtitle .typed { color: var(--text); }
-    .type-cursor {
-      display: inline-block;
-      width: 3px;
-      height: 1.1em;
-      background: var(--accent);
-      margin-left: 6px;
-      vertical-align: middle;
-      animation: blink 1s step-end infinite;
-    }
-    @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-
-    .hero-bio {
-      font-size: 1.12rem;
-      line-height: 1.8;
-      color: var(--text-dim);
-      max-width: 600px;
-      margin-bottom: 48px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity var(--t-reveal) 240ms, transform var(--t-reveal) 240ms;
-    }
-    .hero-bio.in { opacity: 1; transform: none; }
-    .hero-bio strong { color: var(--text); font-weight: 600; }
-
-    .hero-cta {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity var(--t-reveal) 320ms, transform var(--t-reveal) 320ms;
-    }
-    .hero-cta.in { opacity: 1; transform: none; }
-
-    .btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 32px;
-      border-radius: var(--radius);
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      text-decoration: none;
-      cursor: pointer;
-      overflow: hidden;
-      transition: all var(--t-fast);
-      z-index: 1;
-      border: 1px solid;
-    }
-    .btn-primary {
-      color: var(--bg-deep);
-      background: var(--accent);
-      border-color: var(--accent);
-      box-shadow: 0 4px 16px var(--accent-glow);
-    }
-    .btn-primary:hover { 
-      box-shadow: 0 8px 32px var(--accent-glow); 
-      transform: translateY(-2px);
-    }
-    .btn-ghost {
-      color: var(--text);
-      background: transparent;
-      border-color: var(--accent-dim);
-    }
-    .btn-ghost::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent);
-      transform: translateX(-101%);
-      transition: transform 400ms cubic-bezier(0.7, 0, 0.3, 1);
-      z-index: -1;
-    }
-    .btn-ghost:hover {
-      color: var(--bg-deep);
-      border-color: var(--accent);
-    }
-    .btn-ghost:hover::after { transform: translateX(0); }
-
-    /* ── HUD STATS ── */
-    .hero-stats {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity var(--t-reveal) 400ms, transform var(--t-reveal) 400ms;
-    }
-    .hero-stats.in { opacity: 1; transform: none; }
-
-    .hex {
-      position: relative;
-      width: 160px;
-      height: 180px;
-      filter: drop-shadow(0 0 8px var(--accent-dim));
-      animation: hexPulse 3s ease-in-out infinite;
-    }
-    .hex:nth-child(2) { animation-delay: 0.5s; }
-    .hex:nth-child(3) { animation-delay: 1s; }
-    @keyframes hexPulse {
-      0%, 100% { filter: drop-shadow(0 0 6px rgba(0,255,157,0.1)); }
-      50%      { filter: drop-shadow(0 0 20px rgba(0,255,157,0.35)); }
-    }
-    .hex-shell, .hex-face {
-      position: absolute;
-      inset: 0;
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    }
-    .hex-shell { background: var(--accent); }
-    .hex-face {
-      inset: 2px;
-      background:
-        linear-gradient(135deg, rgba(9,9,11,0.95), rgba(9,9,11,0.85)),
-        linear-gradient(135deg, var(--accent-dim), transparent);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .hex-num {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: 2.8rem;
-      line-height: 1;
-      color: var(--accent);
-      text-shadow: 0 0 20px var(--accent-glow);
-    }
-    .hex-num .suffix { font-size: 1.8rem; opacity: 0.85; }
-    .hex-label {
-      font-family: var(--font-head);
-      font-weight: 600;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-top: 10px;
-      text-align: center;
-      padding: 0 16px;
-      opacity: 0;
-      transition: opacity 400ms ease;
-    }
-    .hex-label.in { opacity: 1; }
-
-    .scroll-hint {
-      position: absolute;
-      bottom: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      color: var(--muted);
-      text-transform: uppercase;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      z-index: 3;
-      pointer-events: none;
-    }
-    .scroll-hint .bar {
-      width: 2px; height: 40px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.15; }
-      50%      { opacity: 1; }
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       SECTION SCAFFOLD
-    ════════════════════════════════════════════════════════════ */
-    section.section {
-      position: relative;
-      padding: 160px 0 140px;
-    }
-    .container {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 0 100px;
-    }
-
-    .section-head {
-      position: relative;
-      margin-bottom: 90px;
-      opacity: 0;
-      transform: translateX(-20px);
-      transition: opacity var(--t-reveal), transform var(--t-reveal);
-    }
-    .section-head.in { opacity: 1; transform: none; }
-    .section-num {
-      position: absolute;
-      top: -64px;
-      right: 0;
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: clamp(6rem, 14vw, 12rem);
-      line-height: 1;
-      color: var(--accent);
-      opacity: 0.05;
-      letter-spacing: -0.04em;
-      pointer-events: none;
-      user-select: none;
-    }
-    .section-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.25em;
-      color: var(--accent);
-      margin-bottom: 16px;
-      text-transform: uppercase;
-    }
-    .section-title {
-      font-family: var(--font-head);
-      font-weight: 700;
-      font-size: clamp(2.4rem, 5vw, 3.8rem);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      color: var(--text);
-    }
-    .section-title::before {
-      content: '';
-      width: 48px; height: 3px;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent-glow);
-      flex-shrink: 0;
-    }
-    .section-title::after {
-      content: '';
-      flex: 1;
-      max-width: 400px;
-      height: 1px;
-      background: linear-gradient(to right, var(--accent-dim), transparent);
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       GAMES
-    ════════════════════════════════════════════════════════════ */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 32px;
-    }
-
-    .game-card {
-      position: relative;
-      background: var(--bg-card);
-      border: 1px solid var(--accent-dim);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: var(--radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color var(--t-fast), box-shadow var(--t-fast), transform 100ms ease;
-      transform-style: preserve-3d;
-      will-change: transform;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    .game-card.in {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity var(--t-reveal), transform var(--t-reveal);
-    }
-    .game-card:hover {
-      border-color: rgba(0, 255, 157, 0.6);
-      box-shadow: 0 0 32px rgba(0, 255, 157, 0.15), 0 16px 48px rgba(0,0,0,0.5);
-    }
-
-    .game-card-corner {
-      position: absolute;
-      top: 12px; right: 12px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      opacity: 0.8;
-      z-index: 4;
-      pointer-events: none;
-      background: rgba(0,0,0,0.6);
-      padding: 4px 8px;
-      border-radius: 4px;
-    }
-
-    .game-media {
-      position: relative;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      overflow: hidden;
-    }
-    .game-video {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .game-media::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0, transparent 1px,
-        rgba(0,0,0,0.15) 1px, rgba(0,0,0,0.15) 2px
-      );
-      pointer-events: none;
-      z-index: 2;
-    }
-    .game-media .scan-glow {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0, 255, 157, 0.25), transparent 60%);
-      opacity: 0;
-      transition: opacity var(--t-fast);
-      pointer-events: none;
-      z-index: 3;
-    }
-    .game-card:hover .scan-glow { opacity: 1; }
-
-    .game-body {
-      padding: 28px 28px 32px;
-    }
-    .game-meta {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      color: var(--secondary);
-      text-transform: uppercase;
-      margin-bottom: 14px;
-      opacity: 0.9;
-    }
-    .game-title {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.4rem;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-    .game-open {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      color: var(--accent);
-      padding: 6px 10px;
-      border: 1px solid var(--accent-glow);
-      border-radius: 4px;
-      transition: all var(--t-fast);
-      white-space: nowrap;
-    }
-    .game-card:hover .game-open {
-      background: var(--accent);
-      color: var(--bg-deep);
-      border-color: var(--accent);
-      box-shadow: 0 0 16px var(--accent-glow);
-    }
-    .game-desc {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: var(--text-dim);
-      margin-bottom: 22px;
-    }
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .tag {
-      font-family: var(--font-head);
-      font-weight: 600;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      background: var(--accent-soft);
-      border: 1px solid var(--accent-dim);
-      color: var(--accent);
-      border-radius: 4px;
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       ABOUT
-    ════════════════════════════════════════════════════════════ */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 90px;
-      align-items: start;
-    }
-
-    .about-text {
-      font-size: 1.1rem;
-      line-height: 1.85;
-      color: var(--text-dim);
-    }
-    .about-text strong { color: var(--text); font-weight: 500; }
-    .about-text p + p { margin-top: 24px; }
-
-    .panel {
-      background: var(--bg-card);
-      border: 1px solid var(--accent-dim);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: var(--radius);
-      padding: 32px;
-      position: relative;
-    }
-    .panel::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 24px; right: 24px;
-      height: 2px;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent-glow);
-    }
-
-    .edu-card {
-      margin-top: 48px;
-    }
-    .edu-card h3 {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: 0.04em;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-    .edu-card p {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
-      line-height: 1.8;
-    }
-    .edu-card p span { color: var(--accent); }
-
-    .cert-list {
-      margin-top: 36px;
-      display: flex;
-      flex-direction: column;
-    }
-    .cert-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      padding: 20px 0;
-      border-bottom: 1px dashed var(--accent-dim);
-    }
-    .cert-item:last-child { border-bottom: none; }
-    .cert-bracket {
-      font-family: var(--font-mono);
-      font-size: 1rem;
-      color: var(--accent);
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .cert-name {
-      font-size: 1rem;
-      color: var(--text);
-      font-weight: 500;
-      line-height: 1.4;
-    }
-    .cert-issuer {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.06em;
-      margin-top: 6px;
-    }
-
-    /* Skills hexagons */
-    .skills-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-    }
-    .skill-group-title {
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .skill-group-title::before {
-      content: '▸';
-      color: var(--secondary);
-    }
-    .skill-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
-      gap: 16px;
-    }
-    .skill-hex {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 80 / 90;
-      max-width: 96px;
-      opacity: 0;
-      transform: scale(0.8);
-      transition: opacity 500ms ease, transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .skill-hex.in { opacity: 1; transform: scale(1); }
-
-    .skill-hex .shell, .skill-hex .face {
-      position: absolute; inset: 0;
-      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    }
-    .skill-hex .shell { background: var(--accent-glow); }
-    .skill-hex .face {
-      inset: 1.5px;
-      background: rgba(9, 9, 11, 0.85);
-      backdrop-filter: blur(8px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: background var(--t-fast);
-    }
-    .skill-hex:hover .shell { background: var(--accent); }
-    .skill-hex:hover .face { background: rgba(0, 255, 157, 0.15); }
-    .skill-hex img {
-      width: 36px; height: 36px;
-      object-fit: contain;
-      transition: filter var(--t-fast), transform var(--t-fast);
-    }
-    .skill-hex:hover img {
-      filter: drop-shadow(0 0 8px var(--accent)) drop-shadow(0 0 12px var(--accent-glow));
-      transform: scale(1.08);
-    }
-    .skill-hex .abbr {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 13px;
-      letter-spacing: 0.05em;
-      color: var(--text);
-      transition: text-shadow var(--t-fast), color var(--t-fast);
-    }
-    .skill-hex:hover .abbr {
-      color: var(--accent);
-      text-shadow: 0 0 12px var(--accent);
-    }
-    .skill-hex .label {
-      font-family: var(--font-head);
-      font-weight: 600;
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      text-align: center;
-      padding: 0 8px;
-      line-height: 1.1;
-      max-width: 90%;
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       CONTACT — TERMINAL
-    ════════════════════════════════════════════════════════════ */
-    .terminal {
-      background: var(--bg-deep);
-      border: 1px solid var(--accent-dim);
-      border-radius: var(--radius);
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    }
-    .terminal-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 20px;
-      background: rgba(255,255,255,0.03);
-      border-bottom: 1px solid var(--accent-dim);
-    }
-    .terminal-bar .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--muted);
-    }
-    .terminal-bar .dot.g { background: var(--success); box-shadow: 0 0 8px var(--success); }
-    .terminal-bar .title {
-      margin-left: auto;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--text-dim);
-      letter-spacing: 0.1em;
-    }
-    .terminal-body {
-      padding: 36px;
-      font-family: var(--font-mono);
-    }
-
-    .term-line {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      color: var(--secondary);
-      letter-spacing: 0.04em;
-      margin-bottom: 12px;
-      text-transform: lowercase;
-    }
-    .term-line .arrow { color: var(--accent); margin-right: 8px; }
-
-    .term-field {
-      position: relative;
-      margin-bottom: 32px;
-    }
-    .term-input,
-    .term-textarea {
-      width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--accent-glow);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 15px;
-      padding: 10px 0 12px;
-      outline: none;
-      transition: border-color var(--t-fast), box-shadow var(--t-fast);
-    }
-    .term-textarea {
-      min-height: 120px;
-      resize: vertical;
-      line-height: 1.65;
-    }
-    .term-input::placeholder,
-    .term-textarea::placeholder { color: rgba(244, 244, 245, 0.2); }
-    .term-input:focus,
-    .term-textarea:focus {
-      border-bottom-color: var(--accent);
-      box-shadow: 0 1px 0 0 var(--accent), 0 4px 16px -4px var(--accent-glow);
-    }
-
-    .term-submit {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 28px;
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius);
-      transition: color var(--t-fast);
-      z-index: 1;
-    }
-    .term-submit::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: var(--accent);
-      transform: translateX(-101%);
-      transition: transform 400ms cubic-bezier(0.7, 0, 0.3, 1);
-      z-index: -1;
-    }
-    .term-submit:hover { color: var(--bg-deep); }
-    .term-submit:hover::after { transform: translateX(0); }
-
-    /* Contact layout */
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 64px;
-      align-items: start;
-    }
-
-    .contact-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .contact-row {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 20px 24px;
-      border: 1px solid var(--accent-dim);
-      border-radius: var(--radius);
-      background: var(--bg-card);
-      backdrop-filter: blur(12px);
-      transition: all var(--t-fast);
-      text-decoration: none;
-      color: inherit;
-    }
-    .contact-row:hover {
-      border-color: var(--accent);
-      transform: translateX(6px);
-      box-shadow: 0 0 24px var(--accent-glow);
-    }
-    .contact-row .icon-wrap {
-      display: flex; align-items: center; justify-content: center;
-      width: 40px; height: 40px;
-      border: 1px solid var(--accent-glow);
-      background: var(--accent-soft);
-      flex-shrink: 0;
-      border-radius: 4px;
-    }
-    .contact-row .icon-wrap img {
-      width: 18px; height: 18px;
-      /* Converting to match Mint Green #00FF9D */
-      filter: brightness(0) saturate(100%) invert(81%) sepia(26%) saturate(6320%) hue-rotate(99deg) brightness(108%) contrast(105%);
-    }
-    .contact-row .meta-label {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      color: var(--secondary);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .contact-row .meta-value {
-      font-size: 1rem;
-      color: var(--text);
-      word-break: break-all;
-    }
-
-    .contact-note {
-      margin-top: 24px;
-      padding: 20px 24px;
-      border: 1px dashed var(--accent-glow);
-      border-radius: var(--radius);
-      font-family: var(--font-mono);
-      font-size: 12px;
-      line-height: 1.8;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
-    }
-    .contact-note .green { color: var(--accent); font-weight: 600;}
-
-    /* ════════════════════════════════════════════════════════════
-       FOOTER
-    ════════════════════════════════════════════════════════════ */
-    footer {
-      padding: 40px 100px 32px;
-      border-top: 1px solid var(--accent-dim);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    footer .credit { color: var(--accent); }
-
-    /* ════════════════════════════════════════════════════════════
-       PROJECT DETAIL OVERLAY
-    ════════════════════════════════════════════════════════════ */
-    .detail-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 5000;
-      background: var(--bg);
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 100px 0 90px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 400ms ease;
-    }
-    .detail-screen.show {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .detail-wrap {
-      max-width: 1024px;
-      margin: 0 auto;
-      padding: 0 80px;
-      position: relative;
-    }
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      font-family: var(--font-mono);
-      font-size: 12px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent);
-      cursor: pointer;
-      background: none;
-      border: 1px solid var(--accent-glow);
-      border-radius: var(--radius);
-      padding: 10px 16px;
-      margin-bottom: 48px;
-      transition: all var(--t-fast);
-    }
-    .back-btn:hover {
-      background: var(--accent);
-      color: var(--bg-deep);
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-    .detail-subtitle {
-      font-family: var(--font-mono);
-      font-size: 13px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--secondary);
-      margin-bottom: 16px;
-    }
-    .detail-title {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
-      color: var(--text);
-      letter-spacing: -0.01em;
-      line-height: 1;
-      margin-bottom: 24px;
-    }
-    .detail-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 48px;
-    }
-    .detail-media {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #000;
-      border: 1px solid var(--accent-dim);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 56px;
-      position: relative;
-    }
-    .detail-media::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: repeating-linear-gradient(
-        to bottom,
-        transparent 0, transparent 1px,
-        rgba(0,0,0,0.15) 1px, rgba(0,0,0,0.15) 2px
-      );
-      pointer-events: none;
-      z-index: 2;
-    }
-    .detail-video {
-      width: 100%; height: 100%;
-      object-fit: contain;
-      background: #000;
-      display: block;
-      cursor: zoom-in;
-    }
-    .detail-media.expanded {
-      position: fixed;
-      inset: 32px;
-      z-index: 9999;
-      width: auto;
-      aspect-ratio: unset;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.98);
-      border-color: var(--accent);
-      box-shadow: 0 0 60px rgba(0, 255, 157, 0.2);
-    }
-    .detail-media.expanded .detail-video {
-      cursor: zoom-out;
-      max-height: 100%;
-    }
-    body.expanded-video { overflow: hidden; }
-
-    .detail-block { margin-bottom: 40px; }
-    .detail-block-title {
-      font-family: var(--font-head);
-      font-weight: 700;
-      font-size: 1.05rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 20px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--accent-dim);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .detail-block-title::before {
-      content: '▸';
-      color: var(--secondary);
-    }
-    .detail-text {
-      font-size: 1.05rem;
-      line-height: 1.85;
-      color: var(--text-dim);
-    }
-    .detail-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .detail-list li {
-      font-size: 1rem;
-      color: var(--text-dim);
-      line-height: 1.6;
-      padding-left: 24px;
-      position: relative;
-    }
-    .detail-list li::before {
-      content: '▶';
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-size: 0.75rem;
-      top: 6px;
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       KONAMI — FLASH + ACHIEVEMENT TOAST
-    ════════════════════════════════════════════════════════════ */
-    .konami-flash {
-      position: fixed;
-      inset: 0;
-      background: #fff;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 99998;
-      transition: opacity 100ms;
-    }
-    .konami-flash.flash { opacity: 0.9; }
-
-    .achievement {
-      position: fixed;
-      top: 100px;
-      right: 40px;
-      z-index: 99997;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 28px;
-      background: rgba(9, 9, 11, 0.98);
-      backdrop-filter: blur(24px);
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      box-shadow:
-        0 0 0 2px var(--bg-deep),
-        0 0 0 3px var(--accent),
-        0 0 40px rgba(0, 255, 157, 0.4);
-      transform: translateX(calc(100% + 80px));
-      transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-      max-width: 420px;
-    }
-    .achievement.show { transform: translateX(0); }
-    .achievement .trophy {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: 24px;
-      color: var(--accent);
-      width: 48px; height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--accent);
-      border-radius: 4px;
-      flex-shrink: 0;
-      box-shadow: inset 0 0 16px var(--accent-glow);
-    }
-    .achievement .ach-text { display: flex; flex-direction: column; gap: 4px; }
-    .achievement .ach-tag {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      color: var(--success);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-    .achievement .ach-title {
-      font-family: var(--font-display);
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--text);
-      letter-spacing: 0.05em;
-    }
-
-    /* ════════════════════════════════════════════════════════════
-       MOBILE
-    ════════════════════════════════════════════════════════════ */
-    @media (max-width: 1024px) {
-      .hero-wrap { grid-template-columns: 1fr; gap: 48px; padding: 0 48px; }
-      .hero-stats { flex-direction: row; flex-wrap: wrap; }
-      .container { padding: 0 48px; }
-      .about-grid { grid-template-columns: 1fr; gap: 64px; }
-      .contact-layout { grid-template-columns: 1fr; gap: 48px; }
-    }
-    @media (max-width: 720px) {
-      nav { padding: 0 24px; }
-      .nav-center { display: none; }
-      .nav-mobile-toggle {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px; height: 40px;
-        background: transparent;
-        border: 1px solid var(--accent-glow);
-        color: var(--accent);
-        cursor: pointer;
-        border-radius: var(--radius);
-      }
-      .nav-mobile-menu {
-        position: fixed;
-        top: 72px; left: 0; right: 0;
-        background: rgba(9, 9, 11, 0.98);
-        backdrop-filter: blur(24px);
-        border-bottom: 1px solid var(--accent-dim);
-        padding: 16px 0;
-        display: none;
-        flex-direction: column;
-      }
-      .nav-mobile-menu.open { display: flex; }
-      .nav-mobile-menu button {
-        background: none; border: none;
-        color: var(--text); padding: 16px 28px;
-        text-align: left;
-        font-family: var(--font-head);
-        font-weight: 600;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-size: 13px;
-        cursor: pointer;
-      }
-      .nav-mobile-menu button.active { color: var(--accent); }
-      .nav-socials { display: none; }
-      .container { padding: 0 24px; }
-      .hero-wrap { padding: 0 24px; }
-      #home::before, .hud-corners { inset: 100px 16px 24px 16px; }
-      .scroll-hint { display: none; }
-      .hero-stats { gap: 16px; justify-content: center; }
-      .hex { width: 120px; height: 135px; }
-      .hex-num { font-size: 2.2rem; }
-      .hex-num .suffix { font-size: 1.4rem; }
-      section.section { padding: 120px 0 100px; }
-      .section-num { top: -40px; font-size: 7rem; }
-      .games-grid { grid-template-columns: 1fr; }
-      .game-card { transform: none !important; }
-      .skill-grid { grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); }
-      .terminal-body { padding: 24px 20px; }
-      .detail-wrap { padding: 0 24px; }
-      footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
-      .achievement { right: 16px; left: 16px; max-width: none; }
-      .nav-resume { padding: 8px 14px; font-size: 11px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-      .game-card { transform: none !important; }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Prakhar Bhatnagar — Game Developer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Prakhar Bhatnagar — Game Developer. Unity · C# · Python. Building games that are actually fun to play.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Martian+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════
+   DESIGN TOKENS
+═══════════════════════════ */
+:root {
+  /* Palette — warm stationery */
+  --cream:      #F7F3EC;
+  --cream-2:    #F0EAE0;
+  --cream-3:    #E8E0D2;
+  --parchment:  #EDE7DA;
+  --ink:        #1C1814;
+  --ink-2:      #3D3630;
+  --ink-3:      #6B6158;
+  --ink-4:      #9C9088;
+  --rule:       #D8D0C2;
+  --rule-2:     #C8BEB0;
+
+  /* Single accent — dusty sage */
+  --sage:       #4A7C59;
+  --sage-light: #EAF2EC;
+  --sage-mid:   #C8DFCC;
+  --sage-dark:  #2F5238;
+
+  /* Warm helpers */
+  --warm-red:   #C0503A;
+  --warm-amber: #B8732A;
+  --warm-blue:  #3D6B8C;
+
+  /* Spacing */
+  --r:   6px;
+  --r-lg: 14px;
+  --r-xl: 22px;
+
+  /* Type */
+  --font-d: 'Bricolage Grotesque', sans-serif;
+  --font-b: 'Plus Jakarta Sans', sans-serif;
+  --font-m: 'Martian Mono', monospace;
+
+  /* Motion */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease:   cubic-bezier(0.16, 1, 0.3, 1);
+  --t1: 180ms;
+  --t2: 320ms;
+  --t3: 560ms;
+}
+
+
+/* ═══════════════════════════
+   DARK MODE
+═══════════════════════════ */
+[data-theme="dark"] {
+  --cream:      #1E1B16;
+  --cream-2:    #26221C;
+  --cream-3:    #2E2921;
+  --parchment:  #1A1712;
+  --ink:        #F0EAE0;
+  --ink-2:      #D4CABF;
+  --ink-3:      #A89F92;
+  --ink-4:      #6B6158;
+  --rule:       #38322A;
+  --rule-2:     #4A4238;
+  --sage:       #5A9A6C;
+  --sage-light: rgba(90,154,108,0.12);
+  --sage-mid:   rgba(90,154,108,0.28);
+  --sage-dark:  #7DC08E;
+}
+[data-theme="dark"] body::before {
+  background-image: radial-gradient(circle, var(--rule) 0.4px, transparent 0.4px);
+  opacity: 0.06;
+}
+[data-theme="dark"] nav {
+  background: rgba(30,27,22,0.94);
+}
+[data-theme="dark"] .mob-menu {
+  background: rgba(30,27,22,0.97);
+}
+[data-theme="dark"] .edu-card,
+[data-theme="dark"] .gcard,
+[data-theme="dark"] .contact-form-wrap,
+[data-theme="dark"] .ccard,
+[data-theme="dark"] .bc {
+  background: var(--cream-2);
+}
+[data-theme="dark"] .bc.sage-bg { background: rgba(90,154,108,0.1); }
+[data-theme="dark"] .bc.ink-bg  { background: var(--ink); }
+[data-theme="dark"] .bc.ink-bg .bc-label { color: var(--cream); }
+[data-theme="dark"] .bc.ink-bg .bc-big   { color: var(--cream); }
+[data-theme="dark"] .bc.dashed  { background: transparent; }
+[data-theme="dark"] .overlay.open { background: rgba(10,9,7,0.6); }
+[data-theme="dark"] .drawer { background: var(--cream); }
+[data-theme="dark"] .skill-track { background: var(--cream-3); }
+[data-theme="dark"] .tool-item   { background: var(--cream-3); }
+[data-theme="dark"] ::-webkit-scrollbar-track { background: var(--cream-2); }
+[data-theme="dark"] #home::before,
+[data-theme="dark"] #home::after  { border-color: var(--rule); }
+
+/* ── DARK MODE TOGGLE BUTTON ── */
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 99px;
+  border: 1.5px solid var(--rule);
+  background: var(--cream-2);
+  color: var(--ink-3); font-size: 16px; line-height: 1;
+  transition: all var(--t1); flex-shrink: 0;
+}
+.theme-toggle:hover {
+  border-color: var(--sage-mid); background: var(--sage-light);
+  color: var(--sage-dark); transform: rotate(12deg);
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-b);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+/* subtle paper texture via repeating dot */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: radial-gradient(circle, var(--ink) 0.4px, transparent 0.4px);
+  background-size: 22px 22px;
+  opacity: 0.018;
+  pointer-events: none;
+  z-index: 0;
+}
+@media (hover:hover) and (pointer:fine) {
+  body, a, button, input, textarea, select { cursor: none !important; }
+}
+::selection { background: var(--sage); color: #fff; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream-2); }
+::-webkit-scrollbar-thumb { background: var(--sage-mid); border-radius: 3px; }
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3, h4 { font-family: var(--font-d); line-height: 1.05; }
+
+/* ═══════════════════════════
+   CURSOR
+═══════════════════════════ */
+#cursor {
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 99999;
+  will-change: transform;
+}
+#c-ring {
+  position: absolute;
+  width: 28px; height: 28px;
+  border: 1.5px solid var(--sage);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width var(--t2) var(--ease),
+              height var(--t2) var(--ease),
+              background var(--t2),
+              border-color var(--t2);
+}
+#c-dot {
+  position: absolute;
+  width: 5px; height: 5px;
+  background: var(--sage);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+body.chover #c-ring {
+  width: 52px; height: 52px;
+  background: rgba(74, 124, 89, 0.08);
+  border-color: var(--sage-dark);
+}
+body.chover #c-dot { background: var(--sage-dark); }
+@media (hover:none),(pointer:coarse) { #cursor { display: none; } }
+
+/* ═══════════════════════════
+   NAV
+═══════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+  background: rgba(247,243,236,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-logo {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: 1.1rem; letter-spacing: -0.01em;
+  color: var(--ink); text-decoration: none;
+  display: flex; align-items: baseline; gap: 2px;
+}
+.nav-logo .dot { color: var(--sage); font-size: 1.4em; line-height: 0; }
+.nav-pills { display: flex; align-items: center; gap: 2px; }
+.nav-pill {
+  font-family: var(--font-b); font-weight: 500;
+  font-size: 13px; color: var(--ink-3);
+  padding: 7px 16px; border-radius: 99px;
+  border: none; background: transparent;
+  transition: background var(--t1), color var(--t1);
+}
+.nav-pill:hover { background: var(--cream-2); color: var(--ink); }
+.nav-pill.on { background: var(--ink); color: var(--cream); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-cv {
+  font-family: var(--font-b); font-weight: 600; font-size: 13px;
+  color: var(--sage-dark); background: var(--sage-light);
+  border: 1.5px solid var(--sage-mid);
+  padding: 8px 20px; border-radius: 99px;
+  text-decoration: none;
+  transition: background var(--t1), border-color var(--t1), transform var(--t1), box-shadow var(--t1);
+}
+.nav-cv:hover {
+  background: var(--sage); color: #fff;
+  border-color: var(--sage);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(74,124,89,0.2);
+}
+.nav-icons { display: flex; gap: 6px; }
+.nav-icons a {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--rule);
+  background: var(--cream);
+  transition: all var(--t1);
+  text-decoration: none;
+}
+.nav-icons a:hover {
+  border-color: var(--sage-mid);
+  background: var(--sage-light);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(74,124,89,0.12);
+}
+.nav-icons img {
+  width: 14px; height: 14px;
+  filter: brightness(0) saturate(0) brightness(0.5);
+  transition: filter var(--t1);
+}
+.nav-icons a:hover img {
+  filter: brightness(0) saturate(100%) invert(35%) sepia(40%)
+          saturate(600%) hue-rotate(100deg) brightness(90%);
+}
+.mob-btn {
+  display: none; background: var(--cream-2);
+  border: 1.5px solid var(--rule); border-radius: var(--r);
+  color: var(--ink-2); padding: 7px 12px; font-size: 16px;
+}
+.mob-menu {
+  position: fixed; top: 64px; left: 0; right: 0;
+  background: rgba(247,243,236,0.97);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--rule);
+  padding: 12px 16px; display: none;
+  flex-direction: column; gap: 2px; z-index: 899;
+}
+.mob-menu.open { display: flex; }
+.mob-menu button {
+  background: none; border: none; text-align: left;
+  font-family: var(--font-b); font-weight: 500; font-size: 14px;
+  color: var(--ink-2); padding: 12px 16px; border-radius: var(--r);
+  transition: background var(--t1);
+}
+.mob-menu button:hover { background: var(--cream-2); }
+.mob-menu button.on { color: var(--sage-dark); font-weight: 600; }
+
+/* ═══════════════════════════
+   REVEAL
+═══════════════════════════ */
+.rv {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity var(--t3) var(--ease), transform var(--t3) var(--ease);
+}
+.rv.show { opacity: 1; transform: none; }
+.rv-l {
+  opacity: 0; transform: translateX(-20px);
+  transition: opacity var(--t3) var(--ease), transform var(--t3) var(--ease);
+}
+.rv-l.show { opacity: 1; transform: none; }
+.rv-r {
+  opacity: 0; transform: translateX(20px);
+  transition: opacity var(--t3) var(--ease), transform var(--t3) var(--ease);
+}
+.rv-r.show { opacity: 1; transform: none; }
+
+/* ═══════════════════════════
+   LAYOUT
+═══════════════════════════ */
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 56px; }
+.sec { padding: 120px 0; position: relative; }
+.sec.alt { background: var(--parchment); }
+.sec-label {
+  font-family: var(--font-m); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--sage);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.sec-label::before {
+  content: ''; display: inline-block; width: 18px; height: 1.5px;
+  background: var(--sage); border-radius: 1px;
+}
+.sec-h2 {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  letter-spacing: -0.025em; color: var(--ink); line-height: 1.05;
+}
+
+/* ═══════════════════════════
+   BUTTONS
+═══════════════════════════ */
+.btn {
+  font-family: var(--font-b); font-weight: 600; font-size: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border-radius: 99px;
+  text-decoration: none; border: none;
+  transition: transform var(--t1) var(--spring),
+              box-shadow var(--t1), background var(--t1), color var(--t1);
+}
+.btn:active { transform: scale(0.97); }
+.btn-sage {
+  background: var(--sage); color: #fff;
+  box-shadow: 0 2px 12px rgba(74,124,89,0.18);
+}
+.btn-sage:hover {
+  background: var(--sage-dark);
+  box-shadow: 0 6px 24px rgba(74,124,89,0.28);
+  transform: translateY(-2px);
+}
+.btn-ink {
+  background: var(--ink); color: var(--cream);
+  box-shadow: 0 2px 12px rgba(28,24,20,0.14);
+}
+.btn-ink:hover {
+  background: var(--ink-2);
+  box-shadow: 0 6px 24px rgba(28,24,20,0.2);
+  transform: translateY(-2px);
+}
+.btn-outline {
+  background: transparent; color: var(--ink-2);
+  border: 1.5px solid var(--rule-2);
+}
+.btn-outline:hover {
+  border-color: var(--sage-mid); color: var(--sage-dark);
+  background: var(--sage-light);
+  transform: translateY(-2px);
+}
+.btn-sm { padding: 10px 20px; font-size: 13px; }
+
+/* ═══════════════════════════
+   HERO
+═══════════════════════════ */
+#home {
+  min-height: 100svh;
+  padding-top: 64px;
+  padding-bottom: 80px;
+  display: flex; align-items: center;
+  position: relative; overflow: hidden;
+}
+/* decorative arcs */
+#home::before {
+  content: '';
+  position: absolute; right: -180px; top: 50%;
+  transform: translateY(-50%);
+  width: 700px; height: 700px;
+  border: 1.5px dashed var(--cream-3);
+  border-radius: 50%;
+  pointer-events: none;
+}
+#home::after {
+  content: '';
+  position: absolute; right: -60px; top: 50%;
+  transform: translateY(-50%);
+  width: 450px; height: 450px;
+  border: 1.5px dashed var(--rule);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hero-inner {
+  position: relative; z-index: 2; width: 100%;
+}
+.hero-layout {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 64px; align-items: center;
+}
+/* hero badge */
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--sage-light); border: 1.5px solid var(--sage-mid);
+  border-radius: 99px; padding: 6px 14px 6px 10px;
+  font-family: var(--font-b); font-weight: 500; font-size: 12px;
+  color: var(--sage-dark); margin-bottom: 32px;
+  margin-top: 36px;
+  animation: badgeIn var(--t3) var(--spring) 80ms both;
+}
+.hero-badge-dot {
+  width: 7px; height: 7px; background: var(--sage);
+  border-radius: 50%; animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.4;transform:scale(0.85)} 50%{opacity:1;transform:scale(1.1)} }
+@keyframes badgeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+
+.hero-name {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: clamp(2.8rem, 6.5vw, 6.4rem);
+  letter-spacing: -0.03em; line-height: 0.95;
+  color: var(--ink); margin-bottom: 28px;
+  animation: heroIn var(--t3) var(--ease) 160ms both;
+}
+.hero-name .name-first {
+  display: block;
+}
+.hero-name .name-last {
+  display: block;
+  color: var(--sage);
+  white-space: nowrap;
+}
+@keyframes heroIn { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:none} }
+
+.hero-subline {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--font-m); font-size: 13px;
+  color: var(--ink-3); margin-bottom: 28px;
+  min-height: 1.6em;
+  animation: heroIn var(--t3) var(--ease) 240ms both;
+}
+.hero-subline .prompt { color: var(--sage); }
+#typed { color: var(--ink-2); }
+.tcur {
+  display: inline-block; width: 2px; height: 1.1em;
+  background: var(--sage); vertical-align: middle;
+  margin-left: 3px; animation: blink 1s step-end infinite;
+}
+.hero-bio {
+  font-size: 1.1rem; line-height: 1.85; color: var(--ink-3);
+  max-width: 540px; margin-bottom: 44px;
+  animation: heroIn var(--t3) var(--ease) 320ms both;
+}
+.hero-bio strong { color: var(--ink); font-weight: 600; }
+.hero-ctas {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  animation: heroIn var(--t3) var(--ease) 400ms both;
+}
+
+/* stats column */
+.hero-stats {
+  display: flex; flex-direction: column; gap: 0;
+  animation: heroIn var(--t3) var(--ease) 480ms both;
+  min-width: 180px;
+}
+.stat-box {
+  padding: 24px 0; border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.stat-box:first-child { border-top: 1px solid var(--rule); }
+.stat-num {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: 3rem; letter-spacing: -0.03em;
+  color: var(--ink); line-height: 1;
+}
+.stat-num .sup { font-size: 1.3rem; color: var(--ink-4); font-weight: 600; }
+.stat-lbl {
+  font-family: var(--font-b); font-size: 12px; font-weight: 500;
+  color: var(--ink-4); margin-top: 5px; letter-spacing: 0.01em;
+}
+
+/* scroll hint */
+.hero-scroll-hint {
+  position: absolute; bottom: 36px; left: 56px;
+  font-family: var(--font-m); font-size: 10px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-4); display: flex; align-items: center; gap: 10px;
+  animation: heroIn 1s var(--ease) 700ms both; z-index: 2;
+}
+.scroll-tick {
+  width: 1.5px; height: 28px; background: var(--rule-2);
+  position: relative; overflow: hidden; border-radius: 1px;
+}
+.scroll-tick::after {
+  content: ''; position: absolute; top: -100%; left: 0; right: 0;
+  height: 100%; background: var(--sage);
+  animation: scrollSlide 2s ease-in-out infinite;
+}
+@keyframes scrollSlide { 0%{top:-100%} 50%{top:0} 100%{top:100%} }
+
+/* ═══════════════════════════
+   GAMES
+═══════════════════════════ */
+.games-header {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-bottom: 48px; gap: 24px;
+}
+/* filter chips */
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  font-family: var(--font-b); font-weight: 500; font-size: 12px;
+  padding: 7px 16px; border-radius: 99px;
+  border: 1.5px solid var(--rule);
+  background: var(--cream); color: var(--ink-3);
+  transition: all var(--t1);
+}
+.chip:hover { border-color: var(--sage-mid); color: var(--sage-dark); background: var(--sage-light); }
+.chip.on { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+/* game cards — magazine-shelf layout */
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+/* first card spans full width */
+.game-grid .gcard:first-child {
+  grid-column: 1 / -1;
+  grid-template-columns: 1.1fr 1fr;
+  display: grid;
+}
+.game-grid .gcard:first-child .gcard-media { aspect-ratio: unset; min-height: 340px; }
+
+.gcard {
+  background: var(--cream); border: 1.5px solid var(--rule);
+  border-radius: var(--r-xl); overflow: hidden;
+  cursor: pointer; position: relative;
+  transition: border-color var(--t2), box-shadow var(--t2), transform var(--t2) var(--spring);
+}
+.gcard:hover {
+  border-color: var(--sage-mid);
+  box-shadow: 0 12px 40px rgba(74,124,89,0.1), 0 2px 8px rgba(28,24,20,0.06);
+  transform: translateY(-4px);
+}
+.gcard-media {
+  position: relative; aspect-ratio: 16/10;
+  background: var(--cream-2); overflow: hidden;
+}
+.gcard-media video {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform var(--t3) var(--ease), filter var(--t3);
+  filter: saturate(0.88);
+}
+.gcard:hover .gcard-media video {
+  transform: scale(1.04); filter: saturate(1);
+}
+.gcard-media-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-d); font-weight: 700;
+  font-size: 1.3rem; color: var(--ink-4);
+  background: var(--cream-2);
+}
+
+/* jam chip */
+.jam-chip {
+  position: absolute; top: 14px; left: 14px; z-index: 4;
+  font-family: var(--font-m); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  background: var(--warm-amber); color: #fff;
+  padding: 5px 10px; border-radius: 99px;
+}
+/* work-chip for current internship */
+.work-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-m); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: var(--sage-light); color: var(--sage-dark);
+  border: 1px solid var(--sage-mid);
+  padding: 4px 10px; border-radius: 99px; margin-bottom: 10px;
+}
+.work-chip::before { content: '●'; color: var(--sage); font-size: 7px; }
+/* internship card in about */
+.internship-card {
+  margin-top: 20px; padding: 22px 26px;
+  background: var(--cream); border: 1.5px solid var(--sage-mid);
+  border-radius: var(--r-lg); position: relative;
+}
+.internship-card::before {
+  content: ''; position: absolute; top: 0; left: 20px; right: 20px;
+  height: 2px; background: var(--sage); border-radius: 0 0 2px 2px;
+}
+.internship-card .ic-role {
+  font-family: var(--font-d); font-weight: 700; font-size: 1rem;
+  color: var(--ink); margin-bottom: 5px;
+}
+.internship-card .ic-meta {
+  font-size: 0.82rem; color: var(--ink-3); line-height: 1.7;
+}
+.internship-card .ic-meta strong { color: var(--sage-dark); font-weight: 600; }
+[data-theme="dark"] .internship-card { background: var(--cream-2); }
+
+/* published chip on card */
+.pub-chip {
+  position: absolute; top: 14px; left: 14px; z-index: 4;
+  font-family: var(--font-m); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  background: var(--sage); color: #fff;
+  padding: 5px 10px; border-radius: 99px;
+}
+
+.gcard-body { padding: 28px 28px 32px; }
+.game-grid .gcard:first-child .gcard-body {
+  padding: 44px 40px; display: flex; flex-direction: column; justify-content: center;
+}
+
+.gcard-cat {
+  font-family: var(--font-m); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-4); margin-bottom: 10px;
+}
+.gcard-title {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  letter-spacing: -0.02em; color: var(--ink);
+  margin-bottom: 12px; line-height: 1.1;
+}
+.gcard-desc {
+  font-size: 0.96rem; line-height: 1.75; color: var(--ink-3);
+  margin-bottom: 22px;
+}
+.gcard-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 24px; }
+.gtag {
+  font-family: var(--font-m); font-size: 9.5px; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 99px;
+  background: var(--cream-2); border: 1px solid var(--rule);
+  color: var(--ink-3);
+}
+.gcard-link {
+  font-family: var(--font-b); font-weight: 600; font-size: 13px;
+  color: var(--sage-dark); display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none; position: relative;
+}
+.gcard-link::after {
+  content: ''; position: absolute; bottom: -1px; left: 0; right: 0;
+  height: 1.5px; background: var(--sage-mid);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--t2) var(--ease);
+}
+.gcard:hover .gcard-link::after { transform: scaleX(1); }
+.gcard-link .arrow { transition: transform var(--t2) var(--spring); }
+.gcard:hover .gcard-link .arrow { transform: translateX(4px); }
+.gcard.hidden { display: none; }
+
+/* ═══════════════════════════
+   ABOUT
+═══════════════════════════ */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.about-intro {
+  font-family: var(--font-d); font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  letter-spacing: -0.02em; color: var(--ink);
+  line-height: 1.3; margin-bottom: 28px;
+}
+.about-intro em { color: var(--sage); font-style: normal; }
+.about-p { font-size: 1.05rem; line-height: 1.85; color: var(--ink-3); margin-bottom: 22px; }
+.about-p strong { color: var(--ink); font-weight: 600; }
+
+/* edu card */
+.edu-card {
+  margin-top: 40px; padding: 24px 28px;
+  background: var(--cream); border: 1.5px solid var(--rule);
+  border-radius: var(--r-lg); position: relative;
+}
+.edu-card::before {
+  content: ''; position: absolute; top: 0; left: 20px; right: 20px;
+  height: 2px; background: var(--sage-mid); border-radius: 0 0 2px 2px;
+}
+.edu-card h3 {
+  font-family: var(--font-d); font-weight: 700; font-size: 1rem;
+  letter-spacing: -0.01em; color: var(--ink); margin-bottom: 6px;
+}
+.edu-card p { font-size: 0.9rem; color: var(--ink-3); line-height: 1.7; }
+
+/* certs */
+.cert-list { margin-top: 28px; }
+.cert-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 0; border-bottom: 1px dashed var(--rule);
+}
+.cert-item:last-child { border-bottom: none; }
+.cert-num {
+  font-family: var(--font-m); font-size: 10px; font-weight: 500;
+  color: var(--sage); width: 24px; flex-shrink: 0; padding-top: 3px;
+}
+.cert-n { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.cert-s { font-size: 0.78rem; color: var(--ink-4); font-family: var(--font-m); letter-spacing: 0.04em; }
+
+/* right side: timeline */
+.tline-head {
+  font-family: var(--font-m); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 36px;
+  display: flex; align-items: center; gap: 10px;
+}
+.tline-head::after {
+  content: ''; flex: 1; height: 1px; background: var(--rule);
+}
+.tline { display: flex; flex-direction: column; }
+.tl-item {
+  display: grid; grid-template-columns: 52px 1fr;
+  gap: 0; padding-bottom: 36px; position: relative;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before {
+  content: ''; position: absolute; left: 22px; top: 26px; bottom: 0;
+  width: 1px; background: var(--rule); border-left: 1px dashed var(--rule);
+}
+.tl-item:last-child::before { display: none; }
+.tl-yr {
+  font-family: var(--font-m); font-size: 11px; font-weight: 500;
+  color: var(--sage-dark); padding-top: 5px;
+  position: relative;
+}
+.tl-yr::after {
+  content: ''; position: absolute; top: 12px; right: -5px;
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--cream); border: 2px solid var(--sage);
+}
+.tl-item:last-child .tl-yr::after {
+  background: var(--sage); border-color: var(--sage);
+  box-shadow: 0 0 0 3px var(--sage-light);
+  animation: nowPulse 2s ease-in-out infinite;
+}
+@keyframes nowPulse {
+  0%,100%{box-shadow:0 0 0 3px rgba(74,124,89,0.15)}
+  50%{box-shadow:0 0 0 6px rgba(74,124,89,0.08)}
+}
+.tl-body { padding-left: 24px; }
+.tl-title { font-family: var(--font-d); font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 5px; }
+.tl-text { font-size: 0.88rem; color: var(--ink-3); line-height: 1.65; }
+.tl-text strong { color: var(--ink-2); font-weight: 500; }
+
+/* ═══════════════════════════
+   BENTO SKILLS
+═══════════════════════════ */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(118px, auto);
+  gap: 12px;
+}
+.bc {
+  background: var(--cream); border: 1.5px solid var(--rule);
+  border-radius: var(--r-lg); padding: 22px;
+  transition: border-color var(--t2), box-shadow var(--t2), transform var(--t2) var(--spring);
+  position: relative;
+  display: flex; flex-direction: column;
+}
+.bc:hover {
+  border-color: var(--sage-mid);
+  box-shadow: 0 8px 28px rgba(74,124,89,0.08), 0 2px 6px rgba(28,24,20,0.04);
+  transform: translateY(-3px);
+}
+/* column spans */
+.s2 { grid-column: span 2; }
+.s3 { grid-column: span 3; }
+.s4 { grid-column: span 4; }
+.s6 { grid-column: span 6; }
+.s7 { grid-column: span 7; }
+.s8 { grid-column: span 8; }
+.s12 { grid-column: span 12; }
+/* row spans */
+.r2 { grid-row: span 2; }
+.r3 { grid-row: span 3; }
+
+.bc-label {
+  font-family: var(--font-d); font-weight: 700; font-size: 1rem;
+  color: var(--ink); letter-spacing: -0.01em;
+}
+.bc-sub {
+  font-family: var(--font-m); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-4); margin-top: 3px;
+}
+.bc-desc { font-size: 0.84rem; color: var(--ink-3); line-height: 1.6; margin-top: 8px; }
+.bc-emoji { font-size: 1.8rem; margin-bottom: 8px; line-height: 1; }
+
+/* big stat cell */
+.bc-big {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: 3.2rem; color: var(--ink); letter-spacing: -0.03em;
+  line-height: 1;
+}
+.bc-big sub { font-size: 1.1rem; color: var(--ink-4); font-weight: 600; }
+
+/* skill bar */
+.skill-rows { display: flex; flex-direction: column; gap: 12px; flex: 1; justify-content: flex-end; }
+.skill-row-item {}
+.skill-row-top {
+  display: flex; justify-content: space-between;
+  font-family: var(--font-b); font-size: 12px; font-weight: 500;
+  color: var(--ink-2); margin-bottom: 5px;
+}
+.skill-row-top span { font-family: var(--font-m); font-size: 10px; color: var(--ink-4); }
+.skill-track {
+  height: 4px; background: var(--cream-3); border-radius: 2px; overflow: hidden;
+}
+.skill-fill {
+  height: 100%; background: var(--sage);
+  border-radius: 2px; width: 0;
+  transition: width 1s var(--ease);
+}
+.bc.shown .skill-fill { width: var(--w); }
+
+/* tool icons */
+.tool-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 8px;
+}
+.tool-item {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 10px 6px;
+  background: var(--cream-2); border: 1px solid var(--rule);
+  border-radius: var(--r); transition: all var(--t1);
+}
+.tool-item:hover {
+  background: var(--sage-light); border-color: var(--sage-mid);
+  transform: translateY(-2px);
+}
+.tool-item img { width: 24px; height: 24px; object-fit: contain; }
+.tool-item span {
+  font-family: var(--font-m); font-size: 8px; font-weight: 500;
+  letter-spacing: 0.08em; color: var(--ink-3); text-transform: uppercase;
+}
+/* accent bg cell */
+.bc.sage-bg {
+  background: var(--sage-light); border-color: var(--sage-mid);
+}
+.bc.ink-bg {
+  background: var(--ink); border-color: var(--ink);
+}
+.bc.ink-bg .bc-label { color: var(--cream); }
+.bc.ink-bg .bc-sub { color: rgba(247,243,236,0.45); }
+.bc.ink-bg .bc-desc { color: rgba(247,243,236,0.6); }
+.bc.ink-bg .bc-big { color: var(--cream); }
+.bc.ink-bg .bc-big sub { color: rgba(247,243,236,0.4); }
+/* dashed cell */
+.bc.dashed {
+  border-style: dashed; border-color: var(--rule);
+  background: transparent; align-items: center; justify-content: center;
+  text-align: center;
+}
+.bc.dashed:hover { border-color: var(--sage-mid); background: var(--sage-light); }
+
+/* ═══════════════════════════
+   CONTACT
+═══════════════════════════ */
+.contact-layout {
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: start;
+}
+.contact-heading {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: clamp(2rem, 4.5vw, 3.6rem);
+  letter-spacing: -0.025em; line-height: 1.05;
+  color: var(--ink); margin-bottom: 20px;
+}
+.contact-heading em { color: var(--sage); font-style: normal; }
+.contact-blurb { font-size: 1rem; line-height: 1.8; color: var(--ink-3); margin-bottom: 40px; }
+.contact-cards { display: flex; flex-direction: column; gap: 8px; }
+.ccard {
+  display: flex; align-items: center; gap: 16px;
+  padding: 16px 20px; border: 1.5px solid var(--rule);
+  border-radius: var(--r-lg); background: var(--cream);
+  text-decoration: none; color: inherit;
+  transition: all var(--t2);
+}
+.ccard:hover {
+  border-color: var(--sage-mid); background: var(--sage-light);
+  transform: translateX(4px);
+  box-shadow: 0 4px 16px rgba(74,124,89,0.1);
+}
+.ccard-icon {
+  width: 38px; height: 38px; border-radius: var(--r);
+  background: var(--cream-2); border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: all var(--t1);
+}
+.ccard:hover .ccard-icon { background: var(--sage-mid); border-color: var(--sage-mid); }
+.ccard-icon img {
+  width: 16px; height: 16px;
+  filter: brightness(0) saturate(0) brightness(0.4);
+  transition: filter var(--t1);
+}
+.ccard:hover .ccard-icon img {
+  filter: brightness(0) saturate(100%) invert(30%) sepia(50%) saturate(600%) hue-rotate(100deg) brightness(85%);
+}
+.ccard-lbl { font-size: 11px; color: var(--ink-4); font-family: var(--font-m); margin-bottom: 3px; letter-spacing: 0.06em; }
+.ccard-val { font-size: 0.92rem; font-weight: 600; color: var(--ink); }
+.contact-status {
+  margin-top: 16px; padding: 16px 20px;
+  border: 1.5px dashed var(--sage-mid); border-radius: var(--r-lg);
+  font-family: var(--font-m); font-size: 11px; line-height: 2.1;
+  color: var(--ink-3); background: var(--sage-light);
+}
+.contact-status .ok { color: var(--sage-dark); font-weight: 500; }
+
+/* form */
+.contact-form-wrap {
+  background: var(--cream); border: 1.5px solid var(--rule);
+  border-radius: var(--r-xl); padding: 40px;
+}
+.form-title {
+  font-family: var(--font-d); font-weight: 700; font-size: 1.3rem;
+  letter-spacing: -0.015em; color: var(--ink); margin-bottom: 6px;
+}
+.form-sub { font-size: 0.9rem; color: var(--ink-3); margin-bottom: 32px; }
+.f-row { margin-bottom: 24px; }
+.f-lbl {
+  display: block; font-family: var(--font-b); font-weight: 600;
+  font-size: 12px; color: var(--ink-2); margin-bottom: 8px;
+  letter-spacing: 0.01em;
+}
+.f-inp, .f-ta {
+  width: 100%; background: var(--cream-2);
+  border: 1.5px solid var(--rule); border-radius: var(--r-lg);
+  color: var(--ink); font-family: var(--font-b); font-size: 14px;
+  padding: 12px 16px; outline: none;
+  transition: border-color var(--t1), box-shadow var(--t1), background var(--t1);
+}
+.f-ta { min-height: 110px; resize: vertical; line-height: 1.65; }
+.f-inp::placeholder, .f-ta::placeholder { color: var(--ink-4); font-size: 13px; }
+.f-inp:focus, .f-ta:focus {
+  border-color: var(--sage);
+  background: var(--cream);
+  box-shadow: 0 0 0 3px rgba(74,124,89,0.1);
+}
+.f-submit {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-b); font-weight: 600; font-size: 14px;
+  color: #fff; background: var(--sage);
+  border: none; padding: 14px 28px; border-radius: 99px;
+  box-shadow: 0 3px 14px rgba(74,124,89,0.22);
+  transition: transform var(--t1) var(--spring), box-shadow var(--t1), background var(--t1);
+}
+.f-submit:hover {
+  background: var(--sage-dark); transform: translateY(-2px);
+  box-shadow: 0 7px 24px rgba(74,124,89,0.3);
+}
+
+/* ═══════════════════════════
+   FOOTER
+═══════════════════════════ */
+footer {
+  border-top: 1px solid var(--rule); padding: 32px 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 16px;
+  font-size: 13px; color: var(--ink-4); font-family: var(--font-b);
+}
+footer strong { color: var(--sage-dark); font-weight: 600; }
+footer a { color: var(--ink-3); text-decoration: none; }
+footer a:hover { color: var(--sage-dark); }
+
+/* ═══════════════════════════
+   DETAIL DRAWER
+═══════════════════════════ */
+.overlay {
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(28,24,20,0); backdrop-filter: blur(0px);
+  pointer-events: none;
+  transition: background var(--t2), backdrop-filter var(--t2);
+}
+.overlay.open {
+  background: rgba(28,24,20,0.45);
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+}
+.drawer {
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: min(720px, 96vw);
+  background: var(--cream); border-left: 1.5px solid var(--rule);
+  overflow-y: auto; padding: 56px 56px 80px;
+  transform: translateX(100%);
+  transition: transform 500ms var(--ease);
+  box-shadow: -16px 0 60px rgba(28,24,20,0.08);
+}
+.overlay.open .drawer { transform: none; }
+.drawer-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 40px;
+}
+.drawer-close {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1.5px solid var(--rule); background: var(--cream-2);
+  color: var(--ink-2); font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all var(--t1); flex-shrink: 0;
+}
+.drawer-close:hover { background: var(--sage); color: #fff; border-color: var(--sage); }
+.d-kicker { font-family: var(--font-m); font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sage); margin-bottom: 10px; }
+.d-title { font-family: var(--font-d); font-weight: 800; font-size: clamp(1.8rem,4vw,2.6rem); letter-spacing: -0.02em; color: var(--ink); line-height: 1.05; margin-bottom: 18px; }
+.d-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 32px; }
+.d-media {
+  width: 100%; aspect-ratio: 16/9;
+  background: var(--cream-2); border: 1.5px solid var(--rule);
+  border-radius: var(--r-lg); overflow: hidden; margin-bottom: 36px;
+}
+.d-media video { width: 100%; height: 100%; object-fit: contain; background: #1a1814; display: block; }
+.d-section { margin-bottom: 28px; }
+.d-section h3 {
+  font-family: var(--font-d); font-weight: 700; font-size: 0.9rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+}
+.d-p { font-size: 1rem; line-height: 1.8; color: var(--ink-2); }
+.d-ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.d-ul li { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; padding-left: 18px; position: relative; }
+.d-ul li::before { content: '–'; position: absolute; left: 0; color: var(--sage); font-weight: 600; }
+
+/* toast removed */
+
+/* ═══════════════════════════
+   RESPONSIVE
+═══════════════════════════ */
+@media (max-width: 1080px) {
+  .hero-layout { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: row; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--rule); padding-top: 32px; }
+  .stat-box { padding: 0 40px 0 0; border-bottom: none; border-right: 1px solid var(--rule); }
+  .stat-box:first-child { border-top: none; }
+  .stat-box:last-child { border-right: none; }
+  .about-grid { grid-template-columns: 1fr; gap: 56px; }
+  .contact-layout { grid-template-columns: 1fr; gap: 56px; }
+  .bento { grid-template-columns: repeat(6, 1fr); }
+  .s6 { grid-column: span 6; }
+  .s4 { grid-column: span 3; }
+  .s3 { grid-column: span 3; }
+  .r2 { grid-row: span 1; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-pills, .nav-icons { display: none; }
+  .mob-btn { display: block; }
+  .wrap { padding: 0 24px; }
+  .sec { padding: 80px 0; }
+  .game-grid { grid-template-columns: 1fr; }
+  .game-grid .gcard:first-child { grid-template-columns: 1fr; }
+  .game-grid .gcard:first-child .gcard-media { min-height: unset; aspect-ratio: 16/9; }
+  .bento { grid-template-columns: repeat(2, 1fr); }
+  .s2,.s3,.s4,.s6,.s7,.s8,.s12 { grid-column: span 2; }
+  footer { padding: 28px 24px; flex-direction: column; align-items: flex-start; }
+  .drawer { padding: 36px 28px 60px; }
+  .hero-scroll-hint { left: 24px; }
+  .games-header { flex-direction: column; align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 10ms !important; transition-duration: 10ms !important; }
+}
+</style>
 </head>
 
 <body>
+<!-- CURSOR -->
+<div id="cursor"><div id="c-ring"></div><div id="c-dot"></div></div>
 
-<div class="cursor-outer" id="cursorOuter">
-  <span></span><span></span><span></span><span></span>
-</div>
-<div class="cursor-inner" id="cursorInner"></div>
-
-<div class="konami-flash" id="konamiFlash"></div>
-<div class="achievement" id="achievement">
-  <div class="trophy">★</div>
-  <div class="ach-text">
-    <div class="ach-tag">[ Achievement Unlocked ]</div>
-    <div class="ach-title">You found the secret.</div>
+<!-- ═══ NAV ═══ -->
+<nav id="nav">
+  <a href="#home" class="nav-logo">Prakhar<span class="dot">·</span></a>
+  <div class="nav-pills">
+    <button class="nav-pill on" data-s="home">Home</button>
+    <button class="nav-pill" data-s="games">Games</button>
+    <button class="nav-pill" data-s="about">About</button>
+    <button class="nav-pill" data-s="contact">Contact</button>
   </div>
-</div>
-
-<nav>
-  <a href="#home" class="nav-logo glitch glitch-short" data-text="P.B" id="navLogo">P<span class="dot">.</span>B</a>
-
-  <div class="nav-center">
-    <button class="nav-link active" data-section="home">Home</button>
-    <button class="nav-link" data-section="games">Games</button>
-    <button class="nav-link" data-section="about">About</button>
-    <button class="nav-link" data-section="contact">Contact</button>
-    <span class="nav-indicator" id="navIndicator"></span>
-  </div>
-
   <div class="nav-right">
-    <a class="nav-resume" href="resume.pdf" target="_blank" download>↓ Resume</a>
-    <div class="nav-socials">
+    <div class="nav-icons">
       <a href="https://github.com/Dullestdear" target="_blank" rel="noopener" title="GitHub">
         <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
       </a>
       <a href="https://dullestdear.itch.io/" target="_blank" rel="noopener" title="Itch.io">
-        <img src="https://static.itch.io/images/itchio-textless-black.svg" alt="Itch.io">
+        <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/itchdotio.svg" alt="Itch.io">
       </a>
       <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" rel="noopener" title="LinkedIn">
         <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
       </a>
     </div>
-    <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Menu">☰</button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    <a href="resume.pdf" download class="nav-cv">Download CV</a>
+    <button class="mob-btn" id="mobBtn">☰</button>
   </div>
 </nav>
 
-<div class="nav-mobile-menu" id="navMobileMenu">
-  <button data-section="home" class="active">Home</button>
-  <button data-section="games">Games</button>
-  <button data-section="about">About</button>
-  <button data-section="contact">Contact</button>
+<div class="mob-menu" id="mobMenu">
+  <button data-s="home" class="on">Home</button>
+  <button data-s="games">Games</button>
+  <button data-s="about">About</button>
+  <button data-s="contact">Contact</button>
 </div>
 
+<!-- ═══ HERO ═══ -->
 <section id="home">
-  <canvas id="particle-canvas"></canvas>
-  <div class="hud-corners">
-    <span></span><span></span><span></span><span></span>
-  </div>
+  <div class="wrap hero-inner">
+    <div class="hero-layout">
+      <div>
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          Unity Dev Intern · Abhiwan Technologies
+        </div>
 
-  <div class="hero-wrap">
-    <div class="hero-content">
-      <div class="hero-tag" data-reveal>SYSTEM ONLINE / READY TO BUILD</div>
+        <h1 class="hero-name">
+          <span class="name-first">Prakhar</span>
+          <span class="name-last">Bhatnagar</span>
+        </h1>
 
-      <h1 class="hero-title" data-reveal>
-        <span class="row glitch" data-text="PRAKHAR" id="heroLine1">PRAKHAR</span>
-        <span class="row last glitch" data-text="BHATNAGAR" id="heroLine2">BHATNAGAR</span>
-      </h1>
+        <div class="hero-subline">
+          <span class="prompt">→</span>
+          <span id="typed"></span><span class="tcur"></span>
+        </div>
 
-      <div class="hero-subtitle" data-reveal>
-        <span class="prefix">&gt;</span>
-        <span class="typed" id="typedText"></span><span class="type-cursor"></span>
-      </div>
+        <p class="hero-bio">
+          I build games — start to finish. <strong>Unity, C#, Python.</strong>
+          Tight controls. Readable systems. The kind of feedback loop
+          that makes you want to play one more run.<br><br>
+          Five games shipped. Currently interning as a <strong>Unity Developer at Abhiwan Technologies</strong>, Noida.
+        </p>
 
-      <p class="hero-bio" data-reveal>
-        21-year-old game developer building <strong>complete, playable games</strong> focused
-        on tight gameplay systems, UI polish, and player experience.
-        Specialising in <strong>Unity / C#</strong> — currently seeking my first industry internship.
-      </p>
-
-      <div class="hero-cta" data-reveal>
-        <button class="btn btn-primary" data-scroll="games">
-          ▸ View My Games
-        </button>
-        <a class="btn btn-ghost" href="https://dullestdear.itch.io/" target="_blank" rel="noopener">
-          Itch.io Profile
-        </a>
-      </div>
-    </div>
-
-    <div class="hero-stats" data-reveal id="heroStats">
-      <div class="hex" data-stat="4">
-        <div class="hex-shell"></div>
-        <div class="hex-face">
-          <div class="hex-num"><span class="num">0</span></div>
-          <div class="hex-label">Games Shipped</div>
+        <div class="hero-ctas">
+          <button class="btn btn-ink" data-scroll="games">See My Work →</button>
+          <a href="https://dullestdear.itch.io/" target="_blank" rel="noopener" class="btn btn-outline">Itch.io Profile ↗</a>
         </div>
       </div>
-      <div class="hex" data-stat="2" data-suffix="+">
-        <div class="hex-shell"></div>
-        <div class="hex-face">
-          <div class="hex-num"><span class="num">0</span><span class="suffix"></span></div>
-          <div class="hex-label">Years Building</div>
+
+      <div class="hero-stats">
+        <div class="stat-box">
+          <div class="stat-num" data-count="5"><span class="n">0</span></div>
+          <div class="stat-lbl">Games Shipped</div>
         </div>
-      </div>
-      <div class="hex" data-stat="2">
-        <div class="hex-shell"></div>
-        <div class="hex-face">
-          <div class="hex-num"><span class="num">0</span></div>
-          <div class="hex-label">Engines Used</div>
+        <div class="stat-box">
+          <div class="stat-num" data-count="2"><span class="n">0</span><span class="sup">+</span></div>
+          <div class="stat-lbl">Years Building</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" data-count="2"><span class="n">0</span></div>
+          <div class="stat-lbl">Engines Used</div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <span class="bar"></span>
+  <div class="hero-scroll-hint">
+    <div class="scroll-tick"></div>
+    Scroll
   </div>
 </section>
 
-<section id="games" class="section">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <div class="section-num">01</div>
-      <div class="section-eyebrow">// Portfolio</div>
-      <h2 class="section-title">Games</h2>
+<!-- ═══ GAMES ═══ -->
+<section id="games" class="sec alt">
+  <div class="wrap">
+    <div class="games-header rv">
+      <div>
+        <div class="sec-label">01 — Work</div>
+        <h2 class="sec-h2">The Games</h2>
+      </div>
+      <div class="chips">
+        <button class="chip on" data-f="all">All</button>
+        <button class="chip" data-f="unity">Unity</button>
+        <button class="chip" data-f="python">Python</button>
+        <button class="chip" data-f="experimental">Experimental</button>
+      </div>
     </div>
 
-    <div class="games-grid">
+    <div class="game-grid">
 
-      <div class="game-card tilt" data-project="ghostly" data-reveal data-delay="0">
-        <span class="game-card-corner">[ 01 ]</span>
-        <div class="game-media">
-          <video class="game-video" muted loop playsinline preload="metadata">
+      <!-- 01 Featured -->
+      <div class="gcard rv" data-cat="unity" data-proj="ghostly" style="transition-delay:0ms">
+        <div class="gcard-media">
+          <video class="gv" muted loop playsinline preload="metadata">
             <source src="videos/ghostly-rides.mp4" type="video/mp4">
           </video>
-          <div class="scan-glow"></div>
+          <span class="pub-chip">Live on Itch.io</span>
         </div>
-        <div class="game-body">
-          <div class="game-meta">Unity · C# · 3D · Passion Project</div>
-          <div class="game-title">
-            Ghostly Rides
-            <span class="game-open">[ OPEN ]</span>
+        <div class="gcard-body">
+          <div class="gcard-cat">Unity · C# · 3D · Arcade</div>
+          <div class="gcard-title">Ghostly Rides</div>
+          <p class="gcard-desc">You're a ghost possessing moving cars to stay alive. Swap before each one's destroyed — miss the window and it's game over. Lane traffic, escalating pressure, two power-ups that actually change how the loop plays.</p>
+          <div class="gcard-tags">
+            <span class="gtag">Unity</span><span class="gtag">C#</span>
+            <span class="gtag">3D</span><span class="gtag">Published</span>
           </div>
-          <p class="game-desc">Arcade survival traffic-dodging game with a car possession mechanic, power-ups, and polished UI. Published on Itch.io.</p>
-          <div class="tag-row">
-            <span class="tag">Unity</span>
-            <span class="tag">C#</span>
-            <span class="tag">3D</span>
-            <span class="tag">Arcade</span>
-          </div>
+          <span class="gcard-link">Open Case Study <span class="arrow">→</span></span>
         </div>
       </div>
 
-      <div class="game-card tilt" data-project="astro" data-reveal data-delay="150">
-        <span class="game-card-corner">[ 02 ]</span>
-        <div class="game-media">
-          <video class="game-video" muted loop playsinline preload="metadata">
+      <!-- 02 LinkedOut — GameDevTV 2026 Jam -->
+      <div class="gcard rv" data-cat="unity" data-proj="linkedout" style="transition-delay:80ms">
+        <div class="gcard-media">
+          <video class="gv" muted loop playsinline preload="metadata">
+            <source src="videos/linkedout.mp4" type="video/mp4">
+          </video>
+          <span class="jam-chip">GameDevTV Jam 2026</span>
+        </div>
+        <div class="gcard-body">
+          <div class="gcard-cat">Unity 6 · C# · WebGL · Satire</div>
+          <div class="gcard-title">LinkedOut</div>
+          <p class="gcard-desc">Satirical time-management game mocking corporate hustle culture. You're Bob Sharma — an "Aspiring Thought Leader" — farming office insights, matching hashtags, and generating unhinged LinkedIn posts before the two-minute timer runs out.</p>
+          <div class="gcard-tags">
+            <span class="gtag">Unity 6</span><span class="gtag">C#</span>
+            <span class="gtag">WebGL</span><span class="gtag">Game Jam</span><span class="gtag">593 / 833</span>
+          </div>
+          <span class="gcard-link">Open Case Study <span class="arrow">→</span></span>
+        </div>
+      </div>
+
+      <!-- 03 Astro Blitz -->
+      <div class="gcard rv" data-cat="python" data-proj="astro" style="transition-delay:160ms">
+        <div class="gcard-media">
+          <video class="gv" muted loop playsinline preload="metadata">
             <source src="videos/astro-blitz.mp4" type="video/mp4">
           </video>
-          <div class="scan-glow"></div>
         </div>
-        <div class="game-body">
-          <div class="game-meta">Python · Pygame · 2D</div>
-          <div class="game-title">
-            Astro Blitz
-            <span class="game-open">[ OPEN ]</span>
+        <div class="gcard-body">
+          <div class="gcard-cat">Python · Pygame · 2D</div>
+          <div class="gcard-title">Astro Blitz</div>
+          <p class="gcard-desc">2D space shooter built in Python. Custom enemy bullet patterns, a combo multiplier that rewards aggression, and arcade difficulty scaling. My first complete game.</p>
+          <div class="gcard-tags">
+            <span class="gtag">Python</span><span class="gtag">Pygame</span><span class="gtag">2D</span>
           </div>
-          <p class="game-desc">2D side-scrolling space shooter with custom enemy bullet patterns, a combo system, and arcade-style difficulty scaling.</p>
-          <div class="tag-row">
-            <span class="tag">Python</span>
-            <span class="tag">Pygame</span>
-            <span class="tag">2D</span>
-          </div>
+          <span class="gcard-link">Open Case Study <span class="arrow">→</span></span>
         </div>
       </div>
 
-      <div class="game-card tilt" data-project="snow" data-reveal data-delay="300">
-        <span class="game-card-corner">[ 03 ]</span>
-        <div class="game-media">
-          <video class="game-video" muted loop playsinline preload="metadata">
+      <!-- 04 Snow Surfer -->
+      <div class="gcard rv" data-cat="unity" data-proj="snow" style="transition-delay:240ms">
+        <div class="gcard-media">
+          <video class="gv" muted loop playsinline preload="metadata">
             <source src="videos/snow-surfer.mp4" type="video/mp4">
           </video>
-          <div class="scan-glow"></div>
         </div>
-        <div class="game-body">
-          <div class="game-meta">Unity · C# · 2D · Course Work</div>
-          <div class="game-title">
-            Snow Surfer
-            <span class="game-open">[ OPEN ]</span>
+        <div class="gcard-body">
+          <div class="gcard-cat">Unity · C# · 2D</div>
+          <div class="gcard-title">Snow Surfer</div>
+          <p class="gcard-desc">Downhill snowboarding prototype with slope physics, Cinemachine tracking, multi-character selection, and crash particle FX. Built with Sprite Shape for organic terrain.</p>
+          <div class="gcard-tags">
+            <span class="gtag">Unity</span><span class="gtag">Cinemachine</span><span class="gtag">Sprite Shape</span>
           </div>
-          <p class="game-desc">Fast-paced downhill snowboarding prototype with slope physics, multiple playable characters, and particle-driven crash FX.</p>
-          <div class="tag-row">
-            <span class="tag">Unity</span>
-            <span class="tag">C#</span>
-            <span class="tag">Cinemachine</span>
-          </div>
+          <span class="gcard-link">Open Case Study <span class="arrow">→</span></span>
         </div>
       </div>
 
-
-      <div class="game-card tilt" data-project="ar-stealth" data-reveal data-delay="450">
-        <span class="game-card-corner">[ 04 ]</span>
-        <div class="game-media">
-          <video class="game-video" muted loop playsinline preload="metadata">
+      <!-- 05 AR Stealth -->
+      <div class="gcard rv" data-cat="experimental" data-proj="ar-stealth" style="transition-delay:320ms">
+        <div class="gcard-media">
+          <video class="gv" muted loop playsinline preload="metadata">
             <source src="videos/ar-stealth.mp4" type="video/mp4">
           </video>
-          <div class="scan-glow"></div>
         </div>
-        <div class="game-body">
-          <div class="game-meta">Unity · Python · MediaPipe · UDP</div>
-          <div class="game-title">
-            Hand-Tracked Stealth FPS
-            <span class="game-open">[ OPEN ]</span>
+        <div class="gcard-body">
+          <div class="gcard-cat">Unity · Python · Computer Vision</div>
+          <div class="gcard-title">Hand-Tracked Stealth FPS</div>
+          <p class="gcard-desc">No keyboard. No mouse. Real-time gesture tracking via MediaPipe, bridged into Unity over UDP. Pinch to shoot, open palm to reload. NavMesh-driven enemy drones with sound detection.</p>
+          <div class="gcard-tags">
+            <span class="gtag">MediaPipe</span><span class="gtag">UDP</span><span class="gtag">NavMesh</span>
           </div>
-          <p class="game-desc">A real-time AR shooter controlled entirely by physical hand gestures, featuring a custom UDP network bridge and an autonomous hunting AI.</p>
-          <div class="tag-row">
-            <span class="tag">Unity</span>
-            <span class="tag">Computer Vision</span>
-            <span class="tag">Python</span>
-            <span class="tag">AI</span>
-            <span class="tag">UDP</span>
-          </div>
+          <span class="gcard-link">Open Case Study <span class="arrow">→</span></span>
         </div>
       </div>
 
@@ -1767,178 +1266,120 @@
   </div>
 </section>
 
-<section id="about" class="section">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <div class="section-num">02</div>
-      <div class="section-eyebrow">// Profile</div>
-      <h2 class="section-title">About Me</h2>
+<!-- ═══ ABOUT ═══ -->
+<section id="about" class="sec">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:64px">
+      <div class="sec-label">02 — Profile</div>
+      <h2 class="sec-h2">About Me</h2>
     </div>
 
     <div class="about-grid">
-      <div>
-        <div class="about-text" data-reveal>
-          <p>I'm a <strong>21-year-old game developer</strong> studying B.Tech Computer Science (AI specialisation) at the Institute of Advanced Research. I've been building games for over two years — starting with Python and Pygame, then moving to Unity and C#.</p>
-          <p>My focus is on <strong>gameplay feel</strong>: tight controls, readable systems, and polished feedback loops. Every project I ship starts with a core mechanic and builds outward from there.</p>
-          <p>I'm currently looking for my <strong>first game development internship</strong> where I can contribute to a real production pipeline, learn from senior developers, and grow as a game designer.</p>
+      <div class="rv-l">
+        <div class="about-intro">
+          Building games.<br>
+          Breaking things.<br>
+          <em>Shipping anyway.</em>
         </div>
+        <p class="about-p">
+          I'm a <strong>21-year-old game developer</strong> doing B.Tech
+          Computer Science with an AI specialisation at the Institute of
+          Advanced Research. Two years in, four games done.
+        </p>
+        <p class="about-p">
+          My focus is always <strong>gameplay feel</strong> — the thing that
+          makes a control feel responsive, a hit feel satisfying, a run
+          worth retrying. Every project starts with one mechanic and
+          builds until it's something I'd actually want to play.
+        </p>
+        <p class="about-p">
+          Looking for my <strong>first internship</strong> — somewhere
+          I can work in a real pipeline and grow fast.
+        </p>
 
-        <div class="panel edu-card" data-reveal>
+        <div class="edu-card rv">
           <h3>B.Tech Computer Science — AI Specialisation</h3>
-          <p>Institute Of Advanced Research <span>·</span> 2023 – Present<br>
-          Relevant: Game Design <span>·</span> Game Programming <span>·</span> Level Design <span>·</span> CS Fundamentals</p>
+          <p>Institute of Advanced Research &nbsp;·&nbsp; 2023 – Present<br>
+          Game Design · Game Programming · Level Design · CS Fundamentals</p>
         </div>
 
-        <div class="cert-list" data-reveal>
-          <div class="cert-item">
-            <div class="cert-bracket">[+]</div>
-            <div>
-              <div class="cert-name">Complete Guide to Game Design</div>
-              <div class="cert-issuer">HP Gaming Garage · EDX</div>
-            </div>
-          </div>
-          <div class="cert-item">
-            <div class="cert-bracket">[+]</div>
-            <div>
-              <div class="cert-name">Complete C# Unity 2D Game Development</div>
-              <div class="cert-issuer">GameDev.tv · Udemy</div>
-            </div>
+        <div class="internship-card rv">
+          <div class="work-chip">Currently Active</div>
+          <div class="ic-role">Unity Developer Intern</div>
+          <div class="ic-meta">
+            <strong>Abhiwan Technologies</strong> · Noida, India<br>
+            3-Month Contract · 2025<br>
+            Android Game UI · Unity 6 · Safe Area Handling · Canvas Scaler
           </div>
         </div>
 
-        <a class="btn btn-ghost" href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing"
-           target="_blank" rel="noopener" style="margin-top: 36px;">
+        <div class="cert-list rv">
+          <div class="cert-item">
+            <div class="cert-num">01</div>
+            <div>
+              <div class="cert-n">Complete Guide to Game Design</div>
+              <div class="cert-s">HP Gaming Garage · EDX</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-num">02</div>
+            <div>
+              <div class="cert-n">Complete C# Unity 2D Game Development</div>
+              <div class="cert-s">GameDev.tv · Udemy</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://drive.google.com/drive/folders/1NscLViXcOvy532O5r_WwToKjQgupCpG8?usp=sharing"
+           target="_blank" rel="noopener"
+           class="btn btn-outline btn-sm rv" style="margin-top:28px">
           View Certificates ↗
         </a>
       </div>
 
-      <div class="skills-stack">
-        <div data-reveal>
-          <div class="skill-group-title">Game Dev</div>
-          <div class="skill-grid">
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="">
-                <div class="label">Unity</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="">
-                <div class="label">C#</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">PYG</div>
-                <div class="label">Pygame</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="">
-                <div class="label">Python</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">CINE</div>
-                <div class="label">Cinemachine</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">UI</div>
-                <div class="label">UI Toolkit</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">VFX</div>
-                <div class="label">Particle Sys</div>
-              </div>
+      <div class="rv-r">
+        <div class="tline-head">Journey</div>
+        <div class="tline">
+          <div class="tl-item">
+            <div class="tl-yr">2021</div>
+            <div class="tl-body">
+              <div class="tl-title">First Python Script</div>
+              <div class="tl-text">Immediately made it <strong>shoot things</strong>. That was enough.</div>
             </div>
           </div>
-        </div>
-
-        <div data-reveal>
-          <div class="skill-group-title">Design &amp; Art</div>
-          <div class="skill-grid">
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">LBS</div>
-                <div class="label">LibreSprite</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">LVL</div>
-                <div class="label">Level Design</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">FEEL</div>
-                <div class="label">Game Feel</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">PXL</div>
-                <div class="label">Pixel Art</div>
-              </div>
+          <div class="tl-item">
+            <div class="tl-yr">2022</div>
+            <div class="tl-body">
+              <div class="tl-title">Astro Blitz</div>
+              <div class="tl-text">First finished game. Custom enemy AI, combo system, <strong>all Python from scratch</strong>.</div>
             </div>
           </div>
-        </div>
-
-        <div data-reveal>
-          <div class="skill-group-title">Tools</div>
-          <div class="skill-grid">
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="">
-                <div class="label">Git</div>
-              </div>
+          <div class="tl-item">
+            <div class="tl-yr">2023</div>
+            <div class="tl-body">
+              <div class="tl-title">Picked Up Unity + C#</div>
+              <div class="tl-text">Started B.Tech. Shipped <strong>Snow Surfer</strong> as coursework. Learned Cinemachine.</div>
             </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="">
-                <div class="label">GitHub</div>
-              </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-yr">2024</div>
+            <div class="tl-body">
+              <div class="tl-title">Two Projects, One Published</div>
+              <div class="tl-text"><strong>Ghostly Rides</strong> went live on Itch.io. Hand-Tracked FPS built Python → C# over UDP.</div>
             </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="">
-                <div class="label">VS Code</div>
-              </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-yr">2025</div>
+            <div class="tl-body">
+              <div class="tl-title">First Industry Role</div>
+              <div class="tl-text">Joined <strong>Abhiwan Technologies</strong> as a Unity Developer Intern. First real production pipeline — Android UI, safe area handling, Canvas Scaler.</div>
             </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/notion/notion-original.svg" alt="">
-                <div class="label">Notion</div>
-              </div>
-            </div>
-            <div class="skill-hex" data-skill>
-              <div class="shell"></div>
-              <div class="face">
-                <div class="abbr">ITCH</div>
-                <div class="label">Itch.io</div>
-              </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-yr">2026</div>
+            <div class="tl-body">
+              <div class="tl-title">LinkedOut — Game Jam</div>
+              <div class="tl-text">Built and shipped <strong>LinkedOut</strong> for the GameDevTV 2026 Jam. Placed 593/833. Written, built, debugged, and deployed in 72 hours — while surviving uni exam season.</div>
             </div>
           </div>
         </div>
@@ -1947,95 +1388,234 @@
   </div>
 </section>
 
-<section id="contact" class="section">
-  <div class="container">
-    <div class="section-head" data-reveal>
-      <div class="section-num">03</div>
-      <div class="section-eyebrow">// Establish Connection</div>
-      <h2 class="section-title">Contact</h2>
+<!-- ═══ SKILLS BENTO ═══ -->
+<section class="sec alt">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:56px">
+      <div class="sec-label">02b — Stack</div>
+      <h2 class="sec-h2">Skills & Tools</h2>
     </div>
 
-    <div class="contact-layout">
-      <div data-reveal>
-        <div class="terminal">
-          <div class="terminal-bar">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot g"></span>
-            <span class="title">~/contact $ ./send-message</span>
+    <div class="bento" id="bentoGrid">
+
+      <!-- UNITY — feature cell, r2 only, no dead space -->
+      <div class="bc s6 r2 rv sage-bg" style="transition-delay:0ms">
+        <div>
+          <div class="bc-emoji">🎮</div>
+          <div class="bc-label" style="font-size:1.15rem">Unity &amp; C#</div>
+          <div class="bc-sub">Primary Engine</div>
+          <div class="bc-desc" style="margin-top:10px">Physics, UI Toolkit, Cinemachine, Particle System, NavMesh — all used in shipped projects.</div>
+        </div>
+        <div class="skill-rows" style="margin-top:16px">
+          <div class="skill-row-item">
+            <div class="skill-row-top">Unity <span>85%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="--w:85%"></div></div>
           </div>
-          <div class="terminal-body">
-            <form action="https://formspree.io/f/mvzbnagp" method="POST">
-              <input type="hidden" name="_next" value="https://dullestdear.github.io/Portfolio/#contact">
-              <input type="hidden" name="_captcha" value="false">
-
-              <div class="term-field">
-                <label class="term-line"><span class="arrow">&gt;</span>name:</label>
-                <input type="text" name="name" class="term-input" placeholder="enter your name..." required autocomplete="off">
-              </div>
-
-              <div class="term-field">
-                <label class="term-line"><span class="arrow">&gt;</span>email:</label>
-                <input type="email" name="email" class="term-input" placeholder="your@email.com" required autocomplete="off">
-              </div>
-
-              <div class="term-field">
-                <label class="term-line"><span class="arrow">&gt;</span>message:</label>
-                <textarea name="message" class="term-textarea" placeholder="what's on your mind?" required></textarea>
-              </div>
-
-              <button type="submit" class="term-submit">[ Send Message &gt;&gt; ]</button>
-            </form>
+          <div class="skill-row-item">
+            <div class="skill-row-top">C# <span>78%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="--w:78%"></div></div>
+          </div>
+          <div class="skill-row-item">
+            <div class="skill-row-top">Cinemachine <span>70%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="--w:70%"></div></div>
           </div>
         </div>
       </div>
 
-      <div data-reveal>
-        <div class="contact-list">
-          <a class="contact-row" href="mailto:Prakharbhatnagar619@gmail.com">
-            <div class="icon-wrap">
+      <!-- STAT: Games Shipped — s3, single row, no gap -->
+      <div class="bc s3 rv ink-bg" style="transition-delay:50ms">
+        <div class="bc-big" style="color:var(--cream); font-size:3.6rem">
+          <span class="c-num" data-to="5">0</span>
+        </div>
+        <div class="bc-label" style="color:rgba(247,243,236,0.9); font-size:0.95rem; margin-top:8px">Games Shipped</div>
+        <div class="bc-sub" style="color:rgba(247,243,236,0.35); margin-top:4px">Published &amp; playable</div>
+      </div>
+
+      <!-- STAT: Years Building — s3, single row -->
+      <div class="bc s3 rv" style="transition-delay:100ms">
+        <div class="bc-big">
+          <span class="c-num" data-to="2">0</span><sub style="color:var(--ink-4); font-size:1.3rem">+</sub>
+        </div>
+        <div class="bc-label" style="font-size:0.95rem; margin-top:8px">Years Building</div>
+        <div class="bc-sub" style="margin-top:4px">Python → Unity → Shipped</div>
+      </div>
+
+      <!-- PYTHON — fills right 6 cols in row 2 -->
+      <div class="bc s6 rv" style="transition-delay:80ms">
+        <div>
+          <div class="bc-emoji">🐍</div>
+          <div class="bc-label">Python</div>
+          <div class="bc-sub">First Language</div>
+        </div>
+        <div class="skill-rows" style="margin-top:16px">
+          <div class="skill-row-item">
+            <div class="skill-row-top">Python <span>75%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="--w:75%"></div></div>
+          </div>
+          <div class="skill-row-item">
+            <div class="skill-row-top">Pygame <span>70%</span></div>
+            <div class="skill-track"><div class="skill-fill" style="--w:70%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLS — s6, row 3 left -->
+      <div class="bc s6 rv" style="transition-delay:120ms">
+        <div class="bc-label" style="margin-bottom:18px">Daily Tools</div>
+        <div class="tool-grid">
+          <div class="tool-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="">
+            <span>Unity</span>
+          </div>
+          <div class="tool-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="">
+            <span>Git</span>
+          </div>
+          <div class="tool-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" alt="">
+            <span>VS Code</span>
+          </div>
+          <div class="tool-item">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="">
+            <span>GitHub</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME FEEL — s6, row 3 right (was cramped at s4, now properly wide) -->
+      <div class="bc s6 rv" style="transition-delay:160ms">
+        <div class="bc-emoji">✨</div>
+        <div class="bc-label">Game Feel</div>
+        <div class="bc-desc" style="margin-top:8px">Tight controls, readable feedback, satisfying hit reactions. Not a checkbox — a thing you either care about or you don't.</div>
+      </div>
+
+      <!-- COMPUTER VISION — s4, row 4 -->
+      <div class="bc s4 rv" style="transition-delay:180ms">
+        <div class="bc-emoji">👁️</div>
+        <div class="bc-label">Computer Vision</div>
+        <div class="bc-sub" style="margin-top:4px">MediaPipe · UDP · AI</div>
+      </div>
+
+      <!-- PIXEL ART — s4, row 4 -->
+      <div class="bc s4 rv" style="transition-delay:200ms">
+        <div class="bc-emoji">🎨</div>
+        <div class="bc-label">Pixel Art</div>
+        <div class="bc-sub" style="margin-top:4px">LibreSprite</div>
+      </div>
+
+      <!-- LEVEL DESIGN — s4, row 4 -->
+      <div class="bc s4 rv" style="transition-delay:220ms">
+        <div class="bc-emoji">🗺️</div>
+        <div class="bc-label">Level Design</div>
+        <div class="bc-sub" style="margin-top:4px">Sprite Shape · Unity</div>
+      </div>
+
+      <!-- NAVMESH AI — s6, row 5 -->
+      <div class="bc s6 rv" style="transition-delay:240ms">
+        <div class="bc-emoji">🤖</div>
+        <div class="bc-label">NavMesh AI</div>
+        <div class="bc-sub" style="margin-top:4px">Pathfinding · State Machines</div>
+        <div class="bc-desc" style="margin-top:10px">Used in the Hand-Tracked Stealth FPS — enemy drones that chase, detect sound, and switch attack states in real time.</div>
+      </div>
+
+      <!-- NEXT PROJECT — s6, row 5 -->
+      <div class="bc s6 rv dashed" style="transition-delay:260ms">
+        <div class="bc-emoji" style="opacity:0.45">⬡</div>
+        <div class="bc-label" style="color:var(--ink-4)">Next Project</div>
+        <div class="bc-sub" style="margin-top:4px">In development — check back soon</div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="sec">
+  <div class="wrap">
+    <div class="rv" style="margin-bottom:64px">
+      <div class="sec-label">03 — Contact</div>
+      <h2 class="sec-h2">Let's Talk</h2>
+    </div>
+
+    <div class="contact-layout">
+      <div class="rv-l">
+        <div class="contact-heading">
+          Got a role<br><em>worth building for?</em>
+        </div>
+        <p class="contact-blurb">
+          I'm open to internships, part-time roles, and game-jam
+          collabs. Send something real and I'll reply the same way —
+          usually within 24 hours.
+        </p>
+
+        <div class="contact-cards">
+          <a class="ccard" href="mailto:Prakharbhatnagar619@gmail.com">
+            <div class="ccard-icon">
               <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/gmail.svg" alt="">
             </div>
             <div>
-              <div class="meta-label">Email</div>
-              <div class="meta-value">Prakharbhatnagar619@gmail.com</div>
+              <div class="ccard-lbl">Email</div>
+              <div class="ccard-val">Prakharbhatnagar619@gmail.com</div>
             </div>
           </a>
-
-          <a class="contact-row" href="https://dullestdear.itch.io/" target="_blank" rel="noopener">
-            <div class="icon-wrap">
+          <a class="ccard" href="https://dullestdear.itch.io/" target="_blank" rel="noopener">
+            <div class="ccard-icon">
               <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/itchdotio.svg" alt="">
             </div>
             <div>
-              <div class="meta-label">Itch.io</div>
-              <div class="meta-value">dullestdear.itch.io</div>
+              <div class="ccard-lbl">Itch.io</div>
+              <div class="ccard-val">dullestdear.itch.io</div>
             </div>
           </a>
-
-          <a class="contact-row" href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" rel="noopener">
-            <div class="icon-wrap">
+          <a class="ccard" href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/" target="_blank" rel="noopener">
+            <div class="ccard-icon">
               <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="">
             </div>
             <div>
-              <div class="meta-label">LinkedIn</div>
-              <div class="meta-value">prakhar-bhatnagar</div>
+              <div class="ccard-lbl">LinkedIn</div>
+              <div class="ccard-val">prakhar-bhatnagar</div>
             </div>
           </a>
-
-          <a class="contact-row" href="https://github.com/Dullestdear" target="_blank" rel="noopener">
-            <div class="icon-wrap">
+          <a class="ccard" href="https://github.com/Dullestdear" target="_blank" rel="noopener">
+            <div class="ccard-icon">
               <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/github.svg" alt="">
             </div>
             <div>
-              <div class="meta-label">GitHub</div>
-              <div class="meta-value">Dullestdear</div>
+              <div class="ccard-lbl">GitHub</div>
+              <div class="ccard-val">Dullestdear</div>
             </div>
           </a>
         </div>
 
-        <div class="contact-note">
-          <span class="green">$</span> status: <span class="green">open to internships</span><br>
-          <span class="green">$</span> response_time: ~24h
+        <div class="contact-status">
+          <span class="ok">●</span> Status: open to internships<br>
+          <span class="ok">●</span> Response time: ~24 hours<br>
+          <span class="ok">●</span> Location: India · Remote OK
+        </div>
+      </div>
+
+      <div class="rv-r">
+        <div class="contact-form-wrap">
+          <div class="form-title">Send a message</div>
+          <div class="form-sub">No spam, no fluff. Just a real note.</div>
+          <form action="https://formspree.io/f/mvzbnagp" method="POST">
+            <input type="hidden" name="_next" value="https://dullestdear.github.io/Portfolio/#contact">
+            <input type="hidden" name="_captcha" value="false">
+            <div class="f-row">
+              <label class="f-lbl">Your Name</label>
+              <input type="text" name="name" class="f-inp" placeholder="What should I call you?" required autocomplete="off">
+            </div>
+            <div class="f-row">
+              <label class="f-lbl">Email</label>
+              <input type="email" name="email" class="f-inp" placeholder="Where should I reply?" required autocomplete="off">
+            </div>
+            <div class="f-row">
+              <label class="f-lbl">Message</label>
+              <textarea name="message" class="f-ta" placeholder="What's on your mind? Role, collab, jam — anything." required></textarea>
+            </div>
+            <button type="submit" class="f-submit">Send Message →</button>
+          </form>
         </div>
       </div>
     </div>
@@ -2043,756 +1623,290 @@
 </section>
 
 <footer>
-  <div>© 2025 / Prakhar Bhatnagar / All systems nominal</div>
-  <div class="credit">Built &amp; designed in Unity time. ▮</div>
+  <div>© 2025 <strong>Prakhar Bhatnagar</strong> — built from scratch, no templates.</div>
+  <div>
+    <a href="https://github.com/Dullestdear">GitHub</a> &nbsp;·&nbsp;
+    <a href="https://dullestdear.itch.io/">Itch.io</a> &nbsp;·&nbsp;
+    <a href="https://www.linkedin.com/in/prakhar-bhatnagar-348a68284/">LinkedIn</a>
+  </div>
 </footer>
 
-<div id="detail-ghostly" class="detail-screen">
-  <div class="detail-wrap">
-    <button class="back-btn" data-back>← Back to Games</button>
-
-    <div class="detail-subtitle">// Unity · C# · 3D · Arcade · Passion Project</div>
-    <h1 class="detail-title">Ghostly Rides</h1>
-
-    <div class="detail-tags">
-      <span class="tag">Unity</span>
-      <span class="tag">C#</span>
-      <span class="tag">3D</span>
-      <span class="tag">Arcade</span>
-      <span class="tag">Itch.io</span>
+<!-- ═══ DETAIL DRAWER ═══ -->
+<div class="overlay" id="overlay">
+  <div class="drawer" id="drawer">
+    <div class="drawer-top">
+      <div></div>
+      <button class="drawer-close" id="dClose">✕</button>
     </div>
-
-    <div class="detail-media">
-      <video class="detail-video" controls muted loop playsinline preload="auto">
-        <source src="videos/ghostly-rides.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Introduction</div>
-      <p class="detail-text">Ghostly Rides is an arcade survival traffic-dodging game built in Unity & C#. The player controls a ghost that must possess oncoming cars to keep moving — switching vehicles before each one is destroyed. The game blends fast-paced reaction gameplay with a unique possession mechanic, power-ups, and a polished UI flow from main menu to game-over screen.</p>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Gameplay Features</div>
-      <ul class="detail-list">
-        <li>Possession-based vehicle swapping with cooldown timing</li>
-        <li>Lane-based traffic spawning with escalating difficulty</li>
-        <li>Power-up pickups (shield, slow-mo) integrated into the loop</li>
-        <li>Score &amp; survival timer tracking with persistent high score</li>
-        <li>Polished menu &amp; game-over flow</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Technical Highlights</div>
-      <ul class="detail-list">
-        <li>Built with Unity &amp; C#</li>
-        <li>Modular vehicle prefab system for clean possession swapping</li>
-        <li>Physics-safe spawning via lane occupancy checks</li>
-        <li>Persistent data using PlayerPrefs</li>
-        <li>UI built with Unity's UI Toolkit</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">What I Learned</div>
-      <ul class="detail-list">
-        <li>Designing scalable arcade systems with clean separation of concerns</li>
-        <li>Managing prefab hierarchies for dynamic vehicle swapping</li>
-        <li>Preventing runtime physics edge cases during possession transitions</li>
-        <li>Shipping a complete build to Itch.io with a game-over flow</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Platform</div>
-      <p class="detail-text">PC (Windows) — Distributed via Itch.io</p>
-    </div>
-
-    <a href="https://dullestdear.itch.io/ghostly-rides" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 16px;">
-      ▶ Play on Itch.io
-    </a>
+    <div id="dContent"></div>
   </div>
 </div>
 
-<div id="detail-astro" class="detail-screen">
-  <div class="detail-wrap">
-    <button class="back-btn" data-back>← Back to Games</button>
-
-    <div class="detail-subtitle">// Python · Pygame · 2D Shooter · Passion Project</div>
-    <h1 class="detail-title">Astro Blitz</h1>
-
-    <div class="detail-tags">
-      <span class="tag">Python</span>
-      <span class="tag">Pygame</span>
-      <span class="tag">2D</span>
-      <span class="tag">Arcade</span>
-    </div>
-
-    <div class="detail-media">
-      <video class="detail-video" controls muted loop playsinline preload="auto">
-        <source src="videos/astro-blitz.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Introduction</div>
-      <p class="detail-text">Astro Blitz is a fast-paced 2D side-scrolling space shooter built with Python and Pygame. Players battle waves of enemies, dodge projectiles, and chase high scores in a classic arcade-style experience. The game focuses on tight controls, readable enemy bullet patterns, and satisfying score feedback.</p>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Gameplay Features</div>
-      <ul class="detail-list">
-        <li>Wave-based enemy encounters with escalating difficulty</li>
-        <li>Custom enemy bullet patterns per enemy type</li>
-        <li>Score &amp; combo system rewarding aggressive play</li>
-        <li>Tight player shooting &amp; movement mechanics</li>
-        <li>Arcade-inspired difficulty scaling over time</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Technical Highlights</div>
-      <ul class="detail-list">
-        <li>Object-oriented enemy system with modular behaviour</li>
-        <li>Custom collision detection and hitbox logic</li>
-        <li>Game loop &amp; state machine management</li>
-        <li>Custom sprite handling and sheet parsing</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">What I Learned</div>
-      <ul class="detail-list">
-        <li>Structuring larger Python game projects with OOP principles</li>
-        <li>Designing enemy AI behaviours and attack patterns</li>
-        <li>Optimising sprite rendering for consistent frame-rate</li>
-        <li>Balancing arcade difficulty curves to keep players engaged</li>
-        <li>Creating pixel art with LibreSprite</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Platform</div>
-      <p class="detail-text">PC (Windows) — Built with Python (Pygame)</p>
-    </div>
-  </div>
-</div>
-
-<div id="detail-snow" class="detail-screen">
-  <div class="detail-wrap">
-    <button class="back-btn" data-back>← Back to Games</button>
-
-    <div class="detail-subtitle">// Unity · C# · 2D · Course Work</div>
-    <h1 class="detail-title">Snow Surfer</h1>
-
-    <div class="detail-tags">
-      <span class="tag">Unity</span>
-      <span class="tag">C#</span>
-      <span class="tag">2D</span>
-      <span class="tag">Side Scroller</span>
-      <span class="tag">Course Work</span>
-    </div>
-
-    <div class="detail-media">
-      <video class="detail-video" controls muted loop playsinline preload="auto">
-        <source src="videos/snow-surfer.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Introduction</div>
-      <p class="detail-text">Snow Surfer is a fast-paced downhill snowboarding prototype created as part of the GameDev.tv Complete C# Unity Developer course. Players speed down icy mountain slopes performing tricks, collecting power-ups, and chasing high scores while avoiding obstacles.</p>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Gameplay Features</div>
-      <ul class="detail-list">
-        <li>Smooth hill-based movement with slope physics</li>
-        <li>Multiple playable characters with a character selection screen</li>
-        <li>Crash detection mechanics with particle FX</li>
-        <li>Speed boost &amp; scoring system</li>
-        <li>Arcade-style high score tracking</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Technical Highlights</div>
-      <ul class="detail-list">
-        <li>Built with Unity &amp; C#</li>
-        <li>Level construction using Sprite Shape for organic terrain</li>
-        <li>Camera control via Cinemachine</li>
-        <li>Particle effects using Unity's Particle System</li>
-        <li>Data management with Scriptable Objects</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">What I Learned</div>
-      <ul class="detail-list">
-        <li>Unity Particle System for environmental and crash FX</li>
-        <li>Building a character selection flow with UI persistence</li>
-        <li>Smooth slope physics with a player controller</li>
-        <li>Terrain creation through Unity's Sprite Shape</li>
-        <li>Cinemachine for dynamic, responsive camera behaviour</li>
-        <li>Scriptable Objects for clean data management</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Platform</div>
-      <p class="detail-text">PC (Windows)</p>
-    </div>
-  </div>
-</div>
-
-<div id="detail-ar-stealth" class="detail-screen">
-  <div class="detail-wrap">
-    <button class="back-btn" data-back>← Back to Games</button>
-
-    <div class="detail-subtitle">// Unity · Python · MediaPipe · UDP</div>
-    <h1 class="detail-title">Hand-Tracked Stealth FPS</h1>
-
-    <div class="detail-tags">
-      <span class="tag">Unity</span>
-      <span class="tag">Computer Vision</span>
-      <span class="tag">Python</span>
-      <span class="tag">AI</span>
-      <span class="tag">UDP</span>
-    </div>
-
-    <div class="detail-media">
-      <video class="detail-video" controls muted loop playsinline preload="auto">
-        <source src="videos/ar-stealth.mp4" type="video/mp4">
-      </video>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Introduction</div>
-      <p class="detail-text">A fully functional, AR-controlled stealth game built from scratch. No keyboard, no mouse—just real-time hand gestures tracked via webcam to control a Unity FPS character.</p>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Gameplay Features</div>
-      <ul class="detail-list">
-        <li>Physical hand gesture controls — Pinch to shoot, Open palm to reload, Peace sign ✌️ to swap weapons</li>
-        <li>Autonomous enemy drones that actively hunt the player</li>
-        <li>Auditory detection spheres — enemies hear your gunshots and investigate</li>
-        <li>Dynamic line-of-sight raycasting for combat state triggering</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">Technical Highlights</div>
-      <ul class="detail-list">
-        <li>Python &amp; Google MediaPipe for 21-point 3D hand landmark tracking</li>
-        <li>Custom, zero-lag UDP socket networking to bridge Python and C#</li>
-        <li>Unity NavMesh for dynamic enemy pathfinding around obstacles</li>
-        <li>Packaged into standalone executables using PyInstaller</li>
-      </ul>
-    </div>
-
-    <div class="detail-block">
-      <div class="detail-block-title">What I Learned</div>
-      <p class="detail-text">Bridging two completely different programming languages/environments in real-time, working with AI computer vision models, and designing autonomous state-machine enemy behaviors.</p>
-    </div>
-  </div>
-</div>
+<!-- PROJECT DATA -->
+<script>
+const PROJ = {
+  linkedout: {
+    kicker: 'Unity 6 · C# · WebGL · GameDevTV Game Jam 2026',
+    title: 'LinkedOut',
+    tags: ['Unity 6','C#','WebGL','Game Jam','Satire','593 of 833'],
+    video: 'videos/linkedout.mp4',
+    what: "Fast-paced satirical time-management game mocking corporate hustle culture. You play as Bob Sharma, an \"Aspiring Thought Leader\", placed in a 16-bit office with a two-minute daily timer. Farm insights from mundane office objects, match them to a random Daily Trend hashtag, and generate unhinged LinkedIn posts before time runs out. Built for the GameDevTV 2026 Game Jam — placed 593 out of 833 entries.",
+    gameplay: [
+      'Two-minute pressure loop — every second counts',
+      'Interact with office objects (water cooler, mirror, plant) to farm insight tags',
+      'Match collected tags to a randomly generated Daily Trend hashtag',
+      'Generate satirical LinkedIn posts from tag combinations',
+      'Maximize meaningless digital Connections before the timer expires',
+      'Notebook UI pauses time so you can check your inventory without panic'
+    ],
+    tech: [
+      'Unity 6 / C# — developed and deployed in 72 hours',
+      'Dynamic post generation using a C# Dictionary keyed on exact tag combinations',
+      'Singleton pattern with DontDestroyOnLoad for GameManager and AudioManager',
+      'Custom \"Baton Pass\" architecture — fresh Canvas UI references passed to the surviving GameManager across scene reloads, preventing Null Reference Exceptions',
+      'Dual-display timer: digital text + rotating analog clock hand via Time.deltaTime',
+      'Time.timeScale manipulation to freeze game state when the notebook is open',
+      'WebGL build via Unity 6 Build Profiles — Gzip compression + decompression fallbacks to prevent black-screen errors on itch.io'
+    ],
+    learned: [
+      'Safe UI destruction and rebuild across scene transitions while keeping backend logic alive',
+      'Data sanitization — stripping # symbols via .Replace() for reliable Dictionary key matching',
+      'Unity 6 WebGL deployment: Gzip texture compression and decompression fallback handling',
+      'Scoping and shipping a polished game loop under a hard deadline while simultaneously surviving university engineering vivas',
+      'Ambient audio persistence across scene reloads without restarting tracks'
+    ],
+    platform: 'Web Browser (HTML5 / WebGL) — playable directly on Itch.io',
+    link: 'https://dullestdear.itch.io/', linkLabel: 'Play on Itch.io →'
+  },
+  ghostly: {
+    kicker: 'Unity · C# · 3D · Arcade · Live on Itch.io',
+    title: 'Ghostly Rides',
+    tags: ['Unity','C#','3D','Arcade','Published'],
+    video: 'videos/ghostly-rides.mp4',
+    what: "You're a ghost. You possess moving cars to survive — swap vehicles before each one is destroyed. Miss the timing window and it ends. Lane-based traffic, escalating difficulty, two power-ups (shield and slow-mo) that genuinely change the loop. Designed, built, and published on Itch.io.",
+    gameplay: ['Possession-based vehicle swapping with cooldown timing','Lane-based traffic escalating in density and speed','Power-ups that integrate into the loop meaningfully','Score + survival timer with persistent high score','Full main menu → game → game-over screen flow'],
+    tech: ['Modular vehicle prefab system for clean possession swapping','Physics-safe spawn system using lane occupancy checks','PlayerPrefs for persistent score data','UI built entirely in Unity UI Toolkit'],
+    learned: ['Designing scalable arcade systems with clear separation of concerns','Managing prefab hierarchies for real-time vehicle swapping','Preventing physics edge cases during possession transitions','Shipping a complete build to Itch.io from start to finish'],
+    platform: 'PC (Windows) — Live on Itch.io',
+    link: 'https://dullestdear.itch.io/ghostly-rides', linkLabel: 'Play on Itch.io →'
+  },
+  astro: {
+    kicker: 'Python · Pygame · 2D Shooter',
+    title: 'Astro Blitz',
+    tags: ['Python','Pygame','2D','Arcade'],
+    video: 'videos/astro-blitz.mp4',
+    what: "2D side-scrolling space shooter built entirely in Python and Pygame. Wave-based enemies, custom bullet patterns per enemy type, a combo multiplier that rewards aggression, and difficulty scaling that doesn't feel cheap. My first fully shipped game.",
+    gameplay: ['Wave-based encounters with escalating difficulty','Unique bullet patterns per enemy type','Combo multiplier — keep the chain to keep the score','Tight player shooting and movement'],
+    tech: ['Object-oriented enemy system with modular behaviour classes','Custom collision detection and hitbox logic','Game loop and state machine built from scratch','Custom sprite sheet parsing and frame handling'],
+    learned: ['Structuring a larger Python project with OOP','Designing enemy AI with readable attack patterns','Optimising sprite rendering for a stable frame rate','Pixel art fundamentals in LibreSprite'],
+    platform: 'PC (Windows) — Python / Pygame'
+  },
+  snow: {
+    kicker: 'Unity · C# · 2D · Coursework',
+    title: 'Snow Surfer',
+    tags: ['Unity','C#','2D','Side Scroller'],
+    video: 'videos/snow-surfer.mp4',
+    what: "Downhill snowboarding prototype — fast movement, slope physics, multi-character selection, and particle-driven crash FX. Built as part of the GameDev.tv Unity course. The course gave the structure. I focused on making it feel right.",
+    gameplay: ['Slope-based movement with hill physics','Multiple playable characters with selection screen','Particle-driven crash detection and FX','Speed boost system and high-score tracking'],
+    tech: ['Sprite Shape for smooth, organic terrain generation','Cinemachine for dynamic camera tracking','Unity Particle System for crash and environmental FX','Scriptable Objects for clean character data management'],
+    learned: ['Cinemachine for high-speed tracking without jitter','Custom player controller for slope physics','Character selection flow with persistent UI state','Scriptable Objects as a clean alternative to hard-coded data'],
+    platform: 'PC (Windows)'
+  },
+  'ar-stealth': {
+    kicker: 'Unity · Python · MediaPipe · UDP · Computer Vision',
+    title: 'Hand-Tracked Stealth FPS',
+    tags: ['Unity','Python','MediaPipe','UDP','AI'],
+    video: 'videos/ar-stealth.mp4',
+    what: "No keyboard. No mouse. Just your hands. Real-time webcam gesture tracking via Google MediaPipe, bridged into a Unity FPS through a custom UDP socket. Pinch to shoot. Open palm to reload. Peace sign to swap weapons. The most technically demanding thing I've built.",
+    gameplay: ['Pinch gesture → shoot','Open palm → reload','Peace sign ✌️ → swap weapons','Hand position maps to aim direction in real time','Autonomous enemy drones that actively hunt the player','Sound detection — enemies investigate gunshots','Line-of-sight raycasting for combat state transitions'],
+    tech: ['Google MediaPipe for 21-point 3D hand landmark tracking','Custom UDP socket bridge — Python to C# at near-zero latency','Unity NavMesh for dynamic enemy pathfinding','PyInstaller to package the Python tracker as a standalone exe'],
+    learned: ['Bridging two runtimes in real time is harder than it looks','MediaPipe gesture reliability needs significant threshold tuning','Enemy AI state machines must be forgiving or they feel broken','This project pushed every technical limit I had'],
+    platform: 'PC (Windows) — Requires webcam'
+  }
+};
+</script>
 
 <script>
 (() => {
-  'use strict';
+'use strict';
+const fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+const noMo = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
-  const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* ───────── CUSTOM CURSOR ───────── */
-  const cursorOuter = document.getElementById('cursorOuter');
-  const cursorInner = document.getElementById('cursorInner');
-
-  if (isFinePointer) {
-    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
-    let ix = mx, iy = my;
-
-    document.addEventListener('mousemove', (e) => {
-      mx = e.clientX; my = e.clientY;
-      cursorOuter.style.transform = `translate(${mx}px, ${my}px)`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-      cursorOuter.classList.add('hidden');
-      cursorInner.classList.add('hidden');
-    });
-    document.addEventListener('mouseenter', () => {
-      cursorOuter.classList.remove('hidden');
-      cursorInner.classList.remove('hidden');
-    });
-
-    function tick() {
-      ix += (mx - ix) * 0.15;
-      iy += (my - iy) * 0.15;
-      cursorInner.style.transform = `translate(${ix}px, ${iy}px)`;
-      requestAnimationFrame(tick);
-    }
-    tick();
-
-    // Hover state on interactive elements
-    const hoverSelector = 'a, button, input, textarea, [data-project], .skill-hex, .nav-link, .game-card';
-    document.addEventListener('mouseover', (e) => {
-      if (e.target.closest(hoverSelector)) cursorInner.classList.add('hover');
-    });
-    document.addEventListener('mouseout', (e) => {
-      if (e.target.closest(hoverSelector)) cursorInner.classList.remove('hover');
-    });
-  } else {
-    cursorOuter.style.display = 'none';
-    cursorInner.style.display = 'none';
-  }
-
-  /* ───────── PARTICLE CANVAS ───────── */
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  const heroEl = document.getElementById('home');
-  let particles = [];
-  const mouse = { x: -9999, y: -9999 };
-  let canvasActive = true;
-  let dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  function resizeCanvas() {
-    const rect = heroEl.getBoundingClientRect();
-    const w = rect.width, h = rect.height;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function initParticles() {
-    const count = window.innerWidth < 600 ? 60 : 120;
-    const w = canvas.width / dpr, h = canvas.height / dpr;
-    particles = [];
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6
-      });
-    }
-  }
-
-  function drawParticles() {
-    if (!canvasActive) { requestAnimationFrame(drawParticles); return; }
-    const w = canvas.width / dpr, h = canvas.height / dpr;
-    ctx.clearRect(0, 0, w, h);
-
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-
-      // Mouse repulsion
-      const dx = p.x - mouse.x;
-      const dy = p.y - mouse.y;
-      const d2 = dx * dx + dy * dy;
-      if (d2 < 22500) { // 150 * 150
-        const d = Math.sqrt(d2) || 0.01;
-        const force = (150 - d) / 150 * 1.5;
-        p.x += (dx / d) * force;
-        p.y += (dy / d) * force;
-      }
-
-      // Movement
-      p.x += p.vx;
-      p.y += p.vy;
-
-      // Wrap
-      if (p.x < 0) p.x = w;
-      else if (p.x > w) p.x = 0;
-      if (p.y < 0) p.y = h;
-      else if (p.y > h) p.y = 0;
-
-      // Draw dot
-      ctx.fillStyle = 'rgba(0, 255, 157, 0.30)';
-      ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
-    }
-
-    // Connections
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const p1 = particles[i], p2 = particles[j];
-        const dx = p1.x - p2.x;
-        const dy = p1.y - p2.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < 14400) { // 120 * 120
-          const alpha = (1 - Math.sqrt(d2) / 120) * 0.25;
-          ctx.strokeStyle = `rgba(0, 255, 157,${alpha})`;
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(drawParticles);
-  }
-
-  if (!reduceMotion) {
-    resizeCanvas();
-    initParticles();
-    drawParticles();
-
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        resizeCanvas();
-        initParticles();
-      }, 200);
-    });
-
-    heroEl.addEventListener('mousemove', (e) => {
-      const rect = heroEl.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    });
-    heroEl.addEventListener('mouseleave', () => {
-      mouse.x = -9999; mouse.y = -9999;
-    });
-
-    // Pause when hero off-screen
-    const heroIO = new IntersectionObserver((entries) => {
-      entries.forEach(e => { canvasActive = e.isIntersecting; });
-    }, { threshold: 0.05 });
-    heroIO.observe(heroEl);
-  } else {
-    canvas.style.display = 'none';
-  }
-
-  /* ───────── GLITCH (page load + hover) ───────── */
-  function fireGlitch(el, delay = 0) {
-    setTimeout(() => {
-      el.classList.add('glitch-on');
-      setTimeout(() => el.classList.remove('glitch-on'),
-                 el.classList.contains('glitch-short') ? 400 : 800);
-    }, delay);
-  }
-  document.querySelectorAll('.glitch').forEach((el, idx) => {
-    fireGlitch(el, 100 + idx * 120);
-    el.addEventListener('mouseenter', () => {
-      if (!el.classList.contains('glitch-on')) fireGlitch(el);
-    });
+/* ── CUSTOM CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('c-ring');
+const dot  = document.getElementById('c-dot');
+if (fine && cur) {
+  let mx=0,my=0,rx=0,ry=0;
+  const hSel = 'a,button,[data-proj],.chip,.gcard,.ccard,.bc,.f-submit,.f-inp,.f-ta';
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
   });
+  (function tick(){
+    rx += (mx-rx)*0.1; ry += (my-ry)*0.1;
+    ring.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseover', e => { if(e.target.closest(hSel)) document.body.classList.add('chover'); });
+  document.addEventListener('mouseout',  e => { if(e.target.closest(hSel)) document.body.classList.remove('chover'); });
+} else if (cur) { cur.style.display='none'; }
 
-  /* ───────── TYPEWRITER ───────── */
-  const typedEl = document.getElementById('typedText');
-  const words = ['Game Designer', 'Unity Developer', 'C# Engineer', 'Systems Builder' , 'Pixel Artist'];
-  let wIdx = 0, cIdx = 0, deleting = false;
-  function typewriter() {
-    const word = words[wIdx];
-    if (!deleting) {
-      cIdx++;
-      typedEl.textContent = word.slice(0, cIdx);
-      if (cIdx === word.length) {
-        deleting = true;
-        return setTimeout(typewriter, 1800);
-      }
-      setTimeout(typewriter, 60);
-    } else {
-      cIdx--;
-      typedEl.textContent = word.slice(0, cIdx);
-      if (cIdx === 0) {
-        deleting = false;
-        wIdx = (wIdx + 1) % words.length;
-        return setTimeout(typewriter, 300);
-      }
-      setTimeout(typewriter, 40);
-    }
-  }
-  setTimeout(typewriter, 800);
+/* ── TYPEWRITER ── */
+const typEl = document.getElementById('typed');
+const words = ['Game Designer','Unity Developer','C# Engineer','Systems Builder','Pixel Artist'];
+let wi=0, ci=0, del=false;
+function tw(){
+  const w=words[wi];
+  if(!del){ ci++; typEl.textContent=w.slice(0,ci); if(ci===w.length){del=true;return setTimeout(tw,2000);} setTimeout(tw,70); }
+  else{ ci--; typEl.textContent=w.slice(0,ci); if(ci===0){del=false;wi=(wi+1)%words.length;return setTimeout(tw,350);} setTimeout(tw,40); }
+}
+setTimeout(tw, 900);
 
-  /* ───────── REVEAL ON SCROLL ───────── */
-  const revealIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const delay = parseInt(e.target.dataset.delay || '0', 10);
-        if (delay) {
-          setTimeout(() => e.target.classList.add('in'), delay);
-        } else {
-          e.target.classList.add('in');
-        }
-        revealIO.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+/* ── STAT COUNTER ── */
+function countUp(el, to, dur=1200){
+  const s=performance.now();
+  (function f(now){ const t=Math.min(1,(now-s)/dur); el.textContent=Math.round(to*(1-Math.pow(1-t,3))); if(t<1)requestAnimationFrame(f); else el.textContent=to; })(s);
+}
+const cIO = new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting){countUp(en.target,+en.target.dataset.to);cIO.unobserve(en.target);}});},{threshold:0.5});
+document.querySelectorAll('.c-num').forEach(el=>cIO.observe(el));
 
-  document.querySelectorAll('[data-reveal]').forEach(el => revealIO.observe(el));
+// hero stat counters (data-count on wrapper, .n is the span)
+document.querySelectorAll('[data-count]').forEach(wrap=>{
+  const nEl=wrap.querySelector('.n'), to=+wrap.dataset.count;
+  const io=new IntersectionObserver(e=>{if(e[0].isIntersecting){countUp(nEl,to);io.unobserve(wrap);}},{threshold:0.4});
+  io.observe(wrap);
+});
 
-  // Hero reveals fire immediately
-  setTimeout(() => {
-    document.querySelectorAll('#home [data-reveal]').forEach(el => el.classList.add('in'));
-  }, 80);
-
-  /* ───────── STAT COUNTERS ───────── */
-  function animateCount(el, target, duration = 1400) {
-    const numEl = el.querySelector('.num');
-    const suffix = el.dataset.suffix || '';
-    const suffixEl = el.querySelector('.suffix');
-    const labelEl = el.querySelector('.hex-label');
-    const start = performance.now();
-
-    function step(now) {
-      const t = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - t, 3);
-      numEl.textContent = Math.round(target * eased);
-      if (t < 1) {
-        requestAnimationFrame(step);
-      } else {
-        numEl.textContent = target;
-        if (suffixEl && suffix) suffixEl.textContent = suffix;
-        setTimeout(() => labelEl.classList.add('in'), 300);
-      }
-    }
-    requestAnimationFrame(step);
-  }
-
-  const statIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const target = parseInt(e.target.dataset.stat, 10);
-        animateCount(e.target, target);
-        statIO.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('[data-stat]').forEach(el => statIO.observe(el));
-
-  /* ───────── 3D TILT GAME CARDS ───────── */
-  if (isFinePointer && !reduceMotion) {
-    document.querySelectorAll('.tilt').forEach(card => {
-      let raf = null;
-      const max = 12;
-
-      function onMove(e) {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const cx = rect.width / 2;
-        const cy = rect.height / 2;
-        const rotY = ((x - cx) / cx) * max;
-        const rotX = -((y - cy) / cy) * max;
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => {
-          card.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(8px)`;
-          card.style.transition = 'box-shadow var(--t-fast), border-color var(--t-fast)';
-        });
-      }
-      function onLeave() {
-        if (raf) cancelAnimationFrame(raf);
-        card.style.transition = 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow var(--t-fast), border-color var(--t-fast)';
-        card.style.transform = '';
-      }
-
-      card.addEventListener('mousemove', onMove);
-      card.addEventListener('mouseleave', onLeave);
-    });
-  }
-
-  /* ───────── GAME VIDEO HOVER PLAY ───────── */
-  document.querySelectorAll('.game-card').forEach(card => {
-    const v = card.querySelector('.game-video');
-    if (!v) return;
-    card.addEventListener('mouseenter', () => {
-      v.currentTime = 0;
-      v.play().catch(() => {});
-    });
-    card.addEventListener('mouseleave', () => {
-      v.pause();
-      v.currentTime = 0;
-    });
-  });
-
-  /* ───────── SKILL HEX STAGGERED REVEAL ───────── */
-  const skillIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const hexes = e.target.querySelectorAll('.skill-hex');
-        hexes.forEach((hex, i) => {
-          setTimeout(() => hex.classList.add('in'), i * 60);
-        });
-        skillIO.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.2 });
-  document.querySelectorAll('.skills-stack > div').forEach(el => skillIO.observe(el));
-
-  /* ───────── NAV — SMOOTH SCROLL + ACTIVE INDICATOR ───────── */
-  const navLinks = document.querySelectorAll('.nav-link');
-  const indicator = document.getElementById('navIndicator');
-  const sections = ['home', 'games', 'about', 'contact']
-    .map(id => document.getElementById(id))
-    .filter(Boolean);
-
-  function moveIndicator(link) {
-    if (!link) return;
-    const linkRect = link.getBoundingClientRect();
-    const parentRect = link.parentElement.getBoundingClientRect();
-    indicator.style.width = (linkRect.width - 24) + 'px';
-    indicator.style.transform = `translateX(${linkRect.left - parentRect.left + 12}px)`;
-  }
-
-  function setActive(sectionId) {
-    let activated = null;
-    navLinks.forEach(l => {
-      if (l.dataset.section === sectionId) {
-        l.classList.add('active');
-        activated = l;
-      } else {
-        l.classList.remove('active');
-      }
-    });
-    document.querySelectorAll('#navMobileMenu button').forEach(b => {
-      b.classList.toggle('active', b.dataset.section === sectionId);
-    });
-    if (activated) moveIndicator(activated);
-  }
-
-  // Initial position
-  setTimeout(() => setActive('home'), 300);
-  window.addEventListener('resize', () => {
-    const cur = document.querySelector('.nav-link.active');
-    if (cur) moveIndicator(cur);
-  });
-
-  // Click → smooth scroll
-  function scrollToSection(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.pageYOffset - (id === 'home' ? 0 : 30);
-    window.scrollTo({ top, behavior: 'smooth' });
-  }
-  navLinks.forEach(l => {
-    l.addEventListener('click', () => {
-      scrollToSection(l.dataset.section);
-      setActive(l.dataset.section);
-    });
-  });
-  document.querySelectorAll('[data-scroll]').forEach(b => {
-    b.addEventListener('click', () => scrollToSection(b.dataset.scroll));
-  });
-  document.querySelectorAll('#navMobileMenu button').forEach(b => {
-    b.addEventListener('click', () => {
-      scrollToSection(b.dataset.section);
-      setActive(b.dataset.section);
-      document.getElementById('navMobileMenu').classList.remove('open');
-    });
-  });
-
-  // Section visibility tracking
-  const sectionIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) setActive(e.target.id);
-    });
-  }, { threshold: [0.4, 0.6], rootMargin: '-80px 0px -40% 0px' });
-  sections.forEach(s => sectionIO.observe(s));
-
-  /* ───────── MOBILE NAV ───────── */
-  const mobileToggle = document.getElementById('navMobileToggle');
-  const mobileMenu = document.getElementById('navMobileMenu');
-  if (mobileToggle) {
-    mobileToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-  }
-
-  /* ───────── PROJECT DETAIL OVERLAYS ───────── */
-  const detailScreens = document.querySelectorAll('.detail-screen');
-
-  function openProject(id) {
-    const screen = document.getElementById('detail-' + id);
-    if (!screen) return;
-    document.body.style.overflow = 'hidden';
-    screen.classList.add('show');
-    screen.scrollTop = 0;
-    const v = screen.querySelector('.detail-video');
-    if (v) { v.currentTime = 0; v.play().catch(() => {}); }
-  }
-  function closeProject() {
-    detailScreens.forEach(s => {
-      s.classList.remove('show');
-      const v = s.querySelector('.detail-video');
-      if (v) v.pause();
-    });
-    document.body.style.overflow = '';
-  }
-
-  document.querySelectorAll('[data-project]').forEach(card => {
-    card.addEventListener('click', (e) => {
-      // Ignore clicks inside the card that are on links (none expected, but safe)
-      if (e.target.closest('a')) return;
-      openProject(card.dataset.project);
-    });
-  });
-  document.querySelectorAll('[data-back]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      closeProject();
-      setTimeout(() => scrollToSection('games'), 100);
-    });
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeProject();
-  });
-
-  // Detail video expand-to-fullscreen on click
-  document.addEventListener('click', (e) => {
-    const v = e.target.closest('.detail-video');
-    if (v) {
-      const media = v.closest('.detail-media');
-      const expanded = media.classList.toggle('expanded');
-      document.body.classList.toggle('expanded-video', expanded);
-      if (expanded) v.play().catch(() => {});
-      e.stopPropagation();
-    } else {
-      const open = document.querySelector('.detail-media.expanded');
-      if (open && !e.target.closest('.detail-media')) {
-        open.classList.remove('expanded');
-        document.body.classList.remove('expanded-video');
-      }
+/* ── SCROLL REVEAL ── */
+const rvIO = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      const d = parseFloat(en.target.style.transitionDelay)||0;
+      setTimeout(()=>en.target.classList.add('show'), d);
+      rvIO.unobserve(en.target);
     }
   });
+},{threshold:0.1, rootMargin:'0px 0px -36px 0px'});
+document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>rvIO.observe(el));
 
-  /* ───────── KONAMI CODE ───────── */
-  const konami = [
-    'ArrowUp','ArrowUp','ArrowDown','ArrowDown',
-    'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight',
-    'KeyB','KeyA'
-  ];
-  let kIdx = 0;
-  const flashEl = document.getElementById('konamiFlash');
-  const achievement = document.getElementById('achievement');
-
-  function triggerAchievement() {
-    flashEl.classList.add('flash');
-    setTimeout(() => flashEl.classList.remove('flash'), 100);
-    setTimeout(() => {
-      achievement.classList.add('show');
-      setTimeout(() => achievement.classList.remove('show'), 4000);
-    }, 200);
-  }
-
-  document.addEventListener('keydown', (e) => {
-    if (e.code === konami[kIdx]) {
-      kIdx++;
-      if (kIdx === konami.length) {
-        triggerAchievement();
-        kIdx = 0;
-      }
-    } else {
-      kIdx = (e.code === konami[0]) ? 1 : 0;
+/* ── BENTO SHOWN ── */
+const bcIO = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      const d = parseFloat(en.target.style.transitionDelay)||0;
+      setTimeout(()=>en.target.classList.add('shown'), d+200);
+      bcIO.unobserve(en.target);
     }
   });
+},{threshold:0.15});
+document.querySelectorAll('.bc').forEach(el=>bcIO.observe(el));
+
+/* ── NAV ACTIVE ── */
+const navPills = document.querySelectorAll('.nav-pill');
+const mobItems = document.querySelectorAll('.mob-menu button');
+function setNav(id){
+  navPills.forEach(p=>p.classList.toggle('on',p.dataset.s===id));
+  mobItems.forEach(b=>b.classList.toggle('on',b.dataset.s===id));
+}
+const spyIO = new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)setNav(en.target.id);});},{threshold:0.3,rootMargin:'-64px 0px -40% 0px'});
+['home','games','about','contact'].forEach(id=>{const el=document.getElementById(id);if(el)spyIO.observe(el);});
+
+function scrollTo(id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  window.scrollTo({top:el.getBoundingClientRect().top+pageYOffset-(id==='home'?0:20),behavior:'smooth'});
+}
+navPills.forEach(p=>p.addEventListener('click',()=>scrollTo(p.dataset.s)));
+mobItems.forEach(b=>b.addEventListener('click',()=>{scrollTo(b.dataset.s);document.getElementById('mobMenu').classList.remove('open');}));
+document.querySelectorAll('[data-scroll]').forEach(b=>b.addEventListener('click',()=>scrollTo(b.dataset.scroll)));
+
+/* ── MOBILE NAV ── */
+const mobBtn=document.getElementById('mobBtn');
+const mobMenu=document.getElementById('mobMenu');
+if(mobBtn) mobBtn.addEventListener('click',()=>mobMenu.classList.toggle('open'));
+
+/* ── VIDEO HOVER ── */
+document.querySelectorAll('.gcard').forEach(card=>{
+  const v=card.querySelector('.gv');if(!v)return;
+  card.addEventListener('mouseenter',()=>{v.currentTime=0;v.play().catch(()=>{});});
+  card.addEventListener('mouseleave',()=>{v.pause();v.currentTime=0;});
+});
+
+/* ── FILTER ── */
+document.querySelectorAll('.chip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    const f=chip.dataset.f;
+    document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    document.querySelectorAll('.gcard').forEach(c=>{
+      c.classList.toggle('hidden',f!=='all'&&c.dataset.cat!==f);
+    });
+  });
+});
+
+/* ── PROJECT DRAWER ── */
+const overlay=document.getElementById('overlay');
+const dContent=document.getElementById('dContent');
+const dClose=document.getElementById('dClose');
+
+function li(arr){return arr.map(i=>`<li>${i}</li>`).join('');}
+function openProj(id){
+  const p=PROJ[id];if(!p)return;
+  const tags=p.tags.map(t=>`<span class="gtag">${t}</span>`).join('');
+  dContent.innerHTML=`
+    <div class="d-kicker">${p.kicker}</div>
+    <div class="d-title">${p.title}</div>
+    <div class="d-tags">${tags}</div>
+    <div class="d-media">
+      <video id="dvid" controls muted loop playsinline preload="auto">
+        <source src="${p.video}" type="video/mp4">
+      </video>
+    </div>
+    <div class="d-section"><h3>What It Is</h3><p class="d-p">${p.what}</p></div>
+    ${p.gameplay?`<div class="d-section"><h3>Gameplay</h3><ul class="d-ul">${li(p.gameplay)}</ul></div>`:''}
+    ${p.tech?`<div class="d-section"><h3>Technical Highlights</h3><ul class="d-ul">${li(p.tech)}</ul></div>`:''}
+    ${p.learned?`<div class="d-section"><h3>What I Learned</h3><ul class="d-ul">${li(p.learned)}</ul></div>`:''}
+    <div class="d-section"><h3>Platform</h3><p class="d-p">${p.platform}</p></div>
+    ${p.link?`<a href="${p.link}" target="_blank" rel="noopener" class="btn btn-sage" style="margin-top:8px">${p.linkLabel||'Play →'}</a>`:''}
+  `;
+  overlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  document.getElementById('drawer').scrollTop=0;
+  setTimeout(()=>{const v=document.getElementById('dvid');if(v)v.play().catch(()=>{});},520);
+}
+function closeProj(){
+  overlay.classList.remove('open');
+  document.body.style.overflow='';
+  const v=document.getElementById('dvid');if(v)v.pause();
+}
+document.querySelectorAll('[data-proj]').forEach(c=>c.addEventListener('click',()=>openProj(c.dataset.proj)));
+dClose.addEventListener('click',closeProj);
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeProj();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProj();});
+
+
 
 })();
-</script>
 
+/* ── DARK MODE TOGGLE ── */
+(() => {
+  const btn = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const stored = localStorage.getItem('theme') || 'light';
+  root.setAttribute('data-theme', stored);
+  btn.textContent = stored === 'dark' ? '☀️' : '🌙';
+
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    btn.style.transform = 'rotate(360deg)';
+    btn.style.transition = 'transform 500ms cubic-bezier(0.34,1.56,0.64,1)';
+    setTimeout(() => { btn.style.transform = ''; btn.style.transition = ''; }, 520);
+  });
+})();
+</script>
 </body>
 </html>
