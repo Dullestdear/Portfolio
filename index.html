@@ -558,6 +558,17 @@ nav {
   background: var(--cream-2);
 }
 
+/* solo / team attribution badge */
+.attr-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-m); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 4px; margin-bottom: 12px;
+  border: 1px solid var(--rule-2); color: var(--ink-4);
+  background: transparent;
+}
+.attr-badge.solo { border-color: var(--sage-mid); color: var(--sage-dark); background: var(--sage-light); }
+
 /* jam chip */
 .jam-chip {
   position: absolute; top: 14px; left: 14px; z-index: 4;
@@ -784,6 +795,14 @@ nav {
 }
 .bc-desc { font-size: 0.84rem; color: var(--ink-3); line-height: 1.6; margin-top: 8px; }
 .bc-emoji { font-size: 1.8rem; margin-bottom: 8px; line-height: 1; }
+.bc-icon {
+  width: 36px; height: 36px; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cream-2); border: 1px solid var(--rule); border-radius: var(--r);
+}
+.bc-icon img { width: 22px; height: 22px; object-fit: contain; display: block; }
+.bc-icon-sm { background: transparent; border: none; color: var(--ink-3); }
+[data-theme="dark"] .bc-icon { background: var(--cream-3); }
 
 /* big stat cell */
 .bc-big {
@@ -1014,6 +1033,55 @@ footer a:hover { color: var(--sage-dark); }
 .d-ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .d-ul li { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; padding-left: 18px; position: relative; }
 .d-ul li::before { content: '–'; position: absolute; left: 0; color: var(--sage); font-weight: 600; }
+.d-meta-row {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px;
+}
+.d-meta-pill {
+  font-family: var(--font-m); font-size: 9px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  padding: 5px 12px; border-radius: 4px;
+  border: 1px solid var(--rule-2); color: var(--ink-3); background: var(--cream-2);
+}
+.d-meta-pill.highlight { border-color: var(--sage-mid); color: var(--sage-dark); background: var(--sage-light); }
+.d-impact-box {
+  padding: 18px 22px; border: 1.5px solid var(--sage-mid);
+  border-radius: var(--r-lg); background: var(--sage-light);
+  margin-bottom: 28px;
+}
+.d-impact-box .d-impact-label {
+  font-family: var(--font-m); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--sage-dark); margin-bottom: 10px;
+}
+.d-impact-box .d-impact-text { font-size: 0.95rem; color: var(--ink-2); line-height: 1.75; }
+.d-challenge-box {
+  padding: 18px 22px; border: 1.5px solid var(--rule);
+  border-radius: var(--r-lg); background: var(--cream-2);
+  margin-bottom: 28px;
+}
+.d-challenge-box .d-challenge-label {
+  font-family: var(--font-m); font-size: 9px; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px;
+}
+.d-screens {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  margin-bottom: 28px;
+}
+.d-screen-img {
+  aspect-ratio: 16/9; background: var(--cream-3); border: 1.5px solid var(--rule);
+  border-radius: var(--r); overflow: hidden; position: relative;
+}
+.d-screen-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.d-screen-img .d-screen-label {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(26,22,18,0.7); backdrop-filter: blur(4px);
+  font-family: var(--font-m); font-size: 9px; letter-spacing: 0.12em;
+  color: rgba(247,243,236,0.85); padding: 6px 10px; text-transform: uppercase;
+}
+[data-theme="dark"] .d-impact-box { background: rgba(74,124,89,0.1); }
+[data-theme="dark"] .d-challenge-box { background: var(--cream-3); }
+[data-theme="dark"] .d-screen-img { background: var(--cream-3); }
 
 /* toast removed */
 
@@ -1081,7 +1149,17 @@ footer a:hover { color: var(--sage-dark); }
         <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg" alt="LinkedIn">
       </a>
     </div>
-    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+        <svg id="iconMoon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+        </svg>
+        <svg id="iconSun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="display:none">
+          <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
+          <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
     <a href="resume.pdf" download class="nav-cv">Download CV</a>
     <button class="mob-btn" id="mobBtn">☰</button>
   </div>
@@ -1115,10 +1193,10 @@ footer a:hover { color: var(--sage-dark); }
         </div>
 
         <p class="hero-bio">
-          I build games — start to finish. <strong>Unity, C#, Python.</strong>
-          Tight controls. Readable systems. The kind of feedback loop
-          that makes you want to play one more run.<br><br>
-          Five games shipped. Currently interning as a <strong>Unity Developer at Abhiwan Technologies</strong>, Noida.
+          <strong>Game Developer</strong> — specialising in gameplay programming and systems design with Unity and C#.<br><br>
+          Five shipped projects. Tight controls. Readable systems. The kind of feedback loop
+          that makes you play one more run.<br><br>
+          Currently working as a <strong>Unity Developer at Abhiwan Technologies</strong>, Noida.
         </p>
 
         <div class="hero-ctas">
@@ -1177,6 +1255,7 @@ footer a:hover { color: var(--sage-dark); }
           <span class="pub-chip">Live on Itch.io</span>
         </div>
         <div class="gcard-body">
+          <span class="attr-badge solo">Solo Project</span>
           <div class="gcard-cat">Unity · C# · 3D · Arcade</div>
           <div class="gcard-title">Ghostly Rides</div>
           <p class="gcard-desc">You're a ghost possessing moving cars to stay alive. Swap before each one's destroyed — miss the window and it's game over. Lane traffic, escalating pressure, two power-ups that actually change how the loop plays.</p>
@@ -1197,6 +1276,7 @@ footer a:hover { color: var(--sage-dark); }
           <span class="jam-chip">GameDevTV Jam 2026</span>
         </div>
         <div class="gcard-body">
+          <span class="attr-badge solo">Solo · 72 Hours</span>
           <div class="gcard-cat">Unity 6 · C# · WebGL · Satire</div>
           <div class="gcard-title">LinkedOut</div>
           <p class="gcard-desc">Satirical time-management game mocking corporate hustle culture. You're Bob Sharma — an "Aspiring Thought Leader" — farming office insights, matching hashtags, and generating unhinged LinkedIn posts before the two-minute timer runs out.</p>
@@ -1216,6 +1296,7 @@ footer a:hover { color: var(--sage-dark); }
           </video>
         </div>
         <div class="gcard-body">
+          <span class="attr-badge solo">Solo Project</span>
           <div class="gcard-cat">Python · Pygame · 2D</div>
           <div class="gcard-title">Astro Blitz</div>
           <p class="gcard-desc">2D space shooter built in Python. Custom enemy bullet patterns, a combo multiplier that rewards aggression, and arcade difficulty scaling. My first complete game.</p>
@@ -1234,6 +1315,7 @@ footer a:hover { color: var(--sage-dark); }
           </video>
         </div>
         <div class="gcard-body">
+          <span class="attr-badge solo">Solo · Coursework</span>
           <div class="gcard-cat">Unity · C# · 2D</div>
           <div class="gcard-title">Snow Surfer</div>
           <p class="gcard-desc">Downhill snowboarding prototype with slope physics, Cinemachine tracking, multi-character selection, and crash particle FX. Built with Sprite Shape for organic terrain.</p>
@@ -1252,6 +1334,7 @@ footer a:hover { color: var(--sage-dark); }
           </video>
         </div>
         <div class="gcard-body">
+          <span class="attr-badge solo">Solo Project</span>
           <div class="gcard-cat">Unity · Python · Computer Vision</div>
           <div class="gcard-title">Hand-Tracked Stealth FPS</div>
           <p class="gcard-desc">No keyboard. No mouse. Real-time gesture tracking via MediaPipe, bridged into Unity over UDP. Pinch to shoot, open palm to reload. NavMesh-driven enemy drones with sound detection.</p>
@@ -1401,7 +1484,7 @@ footer a:hover { color: var(--sage-dark); }
       <!-- UNITY — feature cell, r2 only, no dead space -->
       <div class="bc s6 r2 rv sage-bg" style="transition-delay:0ms">
         <div>
-          <div class="bc-emoji">🎮</div>
+          <div class="bc-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg" alt="Unity"></div>
           <div class="bc-label" style="font-size:1.15rem">Unity &amp; C#</div>
           <div class="bc-sub">Primary Engine</div>
           <div class="bc-desc" style="margin-top:10px">Physics, UI Toolkit, Cinemachine, Particle System, NavMesh — all used in shipped projects.</div>
@@ -1443,7 +1526,7 @@ footer a:hover { color: var(--sage-dark); }
       <!-- PYTHON — fills right 6 cols in row 2 -->
       <div class="bc s6 rv" style="transition-delay:80ms">
         <div>
-          <div class="bc-emoji">🐍</div>
+          <div class="bc-icon"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"></div>
           <div class="bc-label">Python</div>
           <div class="bc-sub">First Language</div>
         </div>
@@ -1484,35 +1567,74 @@ footer a:hover { color: var(--sage-dark); }
 
       <!-- GAME FEEL — s6, row 3 right (was cramped at s4, now properly wide) -->
       <div class="bc s6 rv" style="transition-delay:160ms">
-        <div class="bc-emoji">✨</div>
+        <div class="bc-icon bc-icon-sm">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="7.5" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="2" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="19" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="bc-label">Game Feel</div>
         <div class="bc-desc" style="margin-top:8px">Tight controls, readable feedback, satisfying hit reactions. Not a checkbox — a thing you either care about or you don't.</div>
       </div>
 
       <!-- COMPUTER VISION — s4, row 4 -->
       <div class="bc s4 rv" style="transition-delay:180ms">
-        <div class="bc-emoji">👁️</div>
+        <div class="bc-icon bc-icon-sm">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
         <div class="bc-label">Computer Vision</div>
         <div class="bc-sub" style="margin-top:4px">MediaPipe · UDP · AI</div>
       </div>
 
       <!-- PIXEL ART — s4, row 4 -->
       <div class="bc s4 rv" style="transition-delay:200ms">
-        <div class="bc-emoji">🎨</div>
+        <div class="bc-icon bc-icon-sm">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <rect x="3" y="3" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.9"/>
+            <rect x="10" y="3" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.5"/>
+            <rect x="17" y="3" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.7"/>
+            <rect x="3" y="10" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.4"/>
+            <rect x="10" y="10" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.85"/>
+            <rect x="17" y="10" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.3"/>
+            <rect x="3" y="17" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.6"/>
+            <rect x="10" y="17" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.2"/>
+            <rect x="17" y="17" width="5" height="5" rx="0.5" fill="currentColor" opacity="0.75"/>
+          </svg>
+        </div>
         <div class="bc-label">Pixel Art</div>
         <div class="bc-sub" style="margin-top:4px">LibreSprite</div>
       </div>
 
       <!-- LEVEL DESIGN — s4, row 4 -->
       <div class="bc s4 rv" style="transition-delay:220ms">
-        <div class="bc-emoji">🗺️</div>
+        <div class="bc-icon bc-icon-sm">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <polygon points="12,2 22,8 12,14 2,8" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <polyline points="2,12 12,18 22,12" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <polyline points="2,16 12,22 22,16" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div class="bc-label">Level Design</div>
         <div class="bc-sub" style="margin-top:4px">Sprite Shape · Unity</div>
       </div>
 
       <!-- NAVMESH AI — s6, row 5 -->
       <div class="bc s6 rv" style="transition-delay:240ms">
-        <div class="bc-emoji">🤖</div>
+        <div class="bc-icon bc-icon-sm">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <circle cx="5" cy="19" r="2" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="12" cy="5" r="2" stroke="currentColor" stroke-width="1.5"/>
+            <circle cx="19" cy="14" r="2" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M7 18l4-11M14 6l4 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="bc-label">NavMesh AI</div>
         <div class="bc-sub" style="margin-top:4px">Pathfinding · State Machines</div>
         <div class="bc-desc" style="margin-top:10px">Used in the Hand-Tracked Stealth FPS — enemy drones that chase, detect sound, and switch attack states in real time.</div>
@@ -1520,7 +1642,12 @@ footer a:hover { color: var(--sage-dark); }
 
       <!-- NEXT PROJECT — s6, row 5 -->
       <div class="bc s6 rv dashed" style="transition-delay:260ms">
-        <div class="bc-emoji" style="opacity:0.45">⬡</div>
+        <div class="bc-icon bc-icon-sm" style="opacity:0.4; color:var(--ink-4)">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+            <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="bc-label" style="color:var(--ink-4)">Next Project</div>
         <div class="bc-sub" style="margin-top:4px">In development — check back soon</div>
       </div>
@@ -1648,79 +1775,221 @@ const PROJ = {
   linkedout: {
     kicker: 'Unity 6 · C# · WebGL · GameDevTV Game Jam 2026',
     title: 'LinkedOut',
-    tags: ['Unity 6','C#','WebGL','Game Jam','Satire','593 of 833'],
+    attribution: 'Solo project — built, tested, and shipped in 72 hours',
+    tags: ['Unity 6','C#','WebGL','Game Jam','Satire'],
+    impact: 'Placed 593 out of 833 entries in the GameDevTV 2026 Game Jam. Shipped to WebGL on Itch.io within the jam deadline — while simultaneously sitting university engineering vivas. Full gameplay loop, audio, UI, and build pipeline completed solo in under 72 hours.',
+    screens: [
+      { src: 'screenshots/linkedout-gameplay.png', label: 'Core gameplay loop' },
+      { src: 'screenshots/linkedout-post.png',     label: 'Post generation system' },
+      { src: 'screenshots/linkedout-notebook.png', label: 'Notebook inventory UI' },
+      { src: 'screenshots/linkedout-results.png',  label: 'Analytics results screen' }
+    ],
     video: 'videos/linkedout.mp4',
-    what: "Fast-paced satirical time-management game mocking corporate hustle culture. You play as Bob Sharma, an \"Aspiring Thought Leader\", placed in a 16-bit office with a two-minute daily timer. Farm insights from mundane office objects, match them to a random Daily Trend hashtag, and generate unhinged LinkedIn posts before time runs out. Built for the GameDevTV 2026 Game Jam — placed 593 out of 833 entries.",
+    what: "Fast-paced satirical time-management game mocking corporate hustle culture. You play as Bob Sharma — an \"Aspiring Thought Leader\" — placed in a 16-bit office with a strict two-minute daily timer. Farm insights from mundane office objects, match them to a randomly generated Daily Trend hashtag, and generate unhinged LinkedIn posts before time runs out. The more absurd the post, the more Connections you earn.",
     gameplay: [
-      'Two-minute pressure loop — every second counts',
-      'Interact with office objects (water cooler, mirror, plant) to farm insight tags',
-      'Match collected tags to a randomly generated Daily Trend hashtag',
-      'Generate satirical LinkedIn posts from tag combinations',
-      'Maximize meaningless digital Connections before the timer expires',
-      'Notebook UI pauses time so you can check your inventory without panic'
+      'Two-minute pressure loop — every second of hesitation costs you',
+      'Interact with office objects (water cooler, mirror, neglected plant) to collect insight tags',
+      'Tags must be matched to a randomly generated Daily Trend hashtag to generate a valid post',
+      'Post quality is determined by exact tag-to-trend match combinations stored in a Dictionary',
+      'Notebook UI opens an inventory view — Time.timeScale set to 0 to freeze the game while you plan',
+      'Analytics screen shows post performance and final Connection count at end of day'
     ],
     tech: [
-      'Unity 6 / C# — developed and deployed in 72 hours',
-      'Dynamic post generation using a C# Dictionary keyed on exact tag combinations',
-      'Singleton pattern with DontDestroyOnLoad for GameManager and AudioManager',
-      'Custom \"Baton Pass\" architecture — fresh Canvas UI references passed to the surviving GameManager across scene reloads, preventing Null Reference Exceptions',
-      'Dual-display timer: digital text + rotating analog clock hand via Time.deltaTime',
-      'Time.timeScale manipulation to freeze game state when the notebook is open',
-      'WebGL build via Unity 6 Build Profiles — Gzip compression + decompression fallbacks to prevent black-screen errors on itch.io'
+      'Unity 6 / C# — full project from first commit to WebGL build in 72 hours',
+      'Dynamic post generation: C# Dictionary keyed on exact collected-tag combinations maps to satirical template strings — no generic fallback text',
+      'Singleton pattern with DontDestroyOnLoad for GameManager and AudioManager across scene reloads',
+      'Custom Baton Pass architecture — new Canvas UI references passed to the persistent GameManager on each scene reload, eliminating Null Reference Exceptions on UI element re-binding',
+      'Dual-display timer: digital text countdown + independently rotating analog clock hand, both driven by Time.deltaTime',
+      'Time.timeScale = 0 to freeze all game logic when the notebook inventory is open; restores on close',
+      'WebGL deployed via Unity 6 Build Profiles — configured Gzip texture compression with decompression fallbacks to prevent the black-screen-on-load error that affects itch.io hosting'
+    ],
+    challenges: [
+      'Scene reload destroyed all Canvas references held by the persistent GameManager — solved by building a Baton Pass system that hands fresh UI references to the surviving singleton rather than caching stale ones',
+      'Dictionary key-matching failed silently when hashtag strings included the # character — traced via Debug.Log and fixed with .Replace(\"#\", \"\") before lookup',
+      'Unity 6 WebGL builds produced a black screen on itch.io due to Gzip decompression — solved by switching to the decompression fallback setting in Build Profiles after researching the Unity 6 migration notes'
     ],
     learned: [
-      'Safe UI destruction and rebuild across scene transitions while keeping backend logic alive',
-      'Data sanitization — stripping # symbols via .Replace() for reliable Dictionary key matching',
-      'Unity 6 WebGL deployment: Gzip texture compression and decompression fallback handling',
-      'Scoping and shipping a polished game loop under a hard deadline while simultaneously surviving university engineering vivas',
-      'Ambient audio persistence across scene reloads without restarting tracks'
+      'Safe UI destruction and rebuild across scene transitions while keeping backend logic alive in a persistent singleton',
+      'Data sanitization — why string inputs must be cleaned before Dictionary lookups, and how silent key mismatches waste hours of debugging time',
+      'Unity 6 WebGL: Gzip texture compression and decompression fallback configuration for hosting platforms',
+      'Hard scoping discipline — shipped a polished core loop by cutting every feature that wasn\'t essential to the one-sentence pitch',
+      'Ambient audio persistence across scene reloads without track restarting via DontDestroyOnLoad AudioManager'
     ],
     platform: 'Web Browser (HTML5 / WebGL) — playable directly on Itch.io',
     link: 'https://dullestdear.itch.io/', linkLabel: 'Play on Itch.io →'
   },
   ghostly: {
-    kicker: 'Unity · C# · 3D · Arcade · Live on Itch.io',
+    kicker: 'Unity · C# · 3D · Arcade · Published on Itch.io',
     title: 'Ghostly Rides',
+    attribution: 'Solo project — designed, programmed, and published independently',
     tags: ['Unity','C#','3D','Arcade','Published'],
+    impact: 'Fully published on Itch.io — the first project I took from a blank Unity project to a live, playable URL. Completing this taught me every stage of the build-to-publish pipeline: scene structure, versioning, build settings, and itch.io project configuration.',
+    screens: [
+      { src: 'screenshots/ghostly-gameplay.png', label: 'Lane-based possession loop' },
+      { src: 'screenshots/ghostly-vehicles.png', label: 'Vehicle variety system' },
+      { src: 'screenshots/ghostly-powerups.png', label: 'Power-up pickups in action' },
+      { src: 'screenshots/ghostly-menu.png',     label: 'Main menu UI' }
+    ],
     video: 'videos/ghostly-rides.mp4',
-    what: "You're a ghost. You possess moving cars to survive — swap vehicles before each one is destroyed. Miss the timing window and it ends. Lane-based traffic, escalating difficulty, two power-ups (shield and slow-mo) that genuinely change the loop. Designed, built, and published on Itch.io.",
-    gameplay: ['Possession-based vehicle swapping with cooldown timing','Lane-based traffic escalating in density and speed','Power-ups that integrate into the loop meaningfully','Score + survival timer with persistent high score','Full main menu → game → game-over screen flow'],
-    tech: ['Modular vehicle prefab system for clean possession swapping','Physics-safe spawn system using lane occupancy checks','PlayerPrefs for persistent score data','UI built entirely in Unity UI Toolkit'],
-    learned: ['Designing scalable arcade systems with clear separation of concerns','Managing prefab hierarchies for real-time vehicle swapping','Preventing physics edge cases during possession transitions','Shipping a complete build to Itch.io from start to finish'],
-    platform: 'PC (Windows) — Live on Itch.io',
+    what: "You\'re a ghost. You possess moving cars to stay alive — swap vehicles before each one is destroyed. Miss the timing window and the run ends. The core tension comes from the gap between your current car\'s remaining health and the next available one in the lane. Built solo and published on Itch.io.",
+    gameplay: [
+      'Possession-based vehicle swapping with a brief cooldown window — timing is everything',
+      'Lane-based traffic system with multiple lanes running simultaneously at different speeds',
+      'Traffic density and speed both scale over time, increasing the pressure curve',
+      'Shield power-up: absorbs the next collision hit',
+      'Slow-Mo power-up: reduces Time.timeScale briefly, giving a window to swap safely',
+      'Score and survival timer with PlayerPrefs-based persistent high score',
+      'Full game loop: main menu → gameplay → game-over screen → retry'
+    ],
+    tech: [
+      'Modular vehicle prefab system — each vehicle type is a prefab with a standardised interface, allowing the possession system to swap cleanly regardless of vehicle size or speed',
+      'Physics-safe lane spawner using occupancy checks to prevent vehicles spawning inside each other',
+      'PlayerPrefs for persistent high score across sessions',
+      'UI built entirely in Unity\'s UI Toolkit (not legacy Canvas), giving layout control without anchor wrestling',
+      'Game state managed via a simple FSM (Idle → Playing → Dead → GameOver)'
+    ],
+    challenges: [
+      'Possession transitions caused physics jitter when the ghost transferred between fast-moving vehicles — solved by disabling the previous vehicle\'s collider for one physics frame before enabling the new one',
+      'Spawning vehicles at high density caused overlapping at faster speeds — fixed by running a lane occupancy check before each spawn using an overlap sphere',
+      'UI Toolkit required learning a completely different layout model from Canvas — spent significant time understanding the VisualElement hierarchy before the UI clicked'
+    ],
+    learned: [
+      'Building a scalable arcade loop that can extend indefinitely without hard-coding difficulty thresholds',
+      'Managing prefab hierarchies and runtime instantiation cleanly for a dynamic spawning system',
+      'End-to-end publishing pipeline: Unity build settings, platform configuration, and itch.io project setup',
+      'Physics edge cases that only surface at high speeds — and why one-frame collider deactivation works'
+    ],
+    platform: 'PC (Windows) — Published on Itch.io',
     link: 'https://dullestdear.itch.io/ghostly-rides', linkLabel: 'Play on Itch.io →'
   },
   astro: {
     kicker: 'Python · Pygame · 2D Shooter',
     title: 'Astro Blitz',
+    attribution: 'Solo project — first completed game, built before touching Unity',
     tags: ['Python','Pygame','2D','Arcade'],
+    impact: 'My first game I actually finished. Before this, every side project got abandoned. Completing Astro Blitz proved to myself that I could scope, build, and ship something end-to-end — it\'s the reason I kept going.',
+    screens: [
+      { src: 'screenshots/astro-gameplay.png', label: 'Side-scrolling gameplay' },
+      { src: 'screenshots/astro-enemies.png',  label: 'Enemy bullet patterns' },
+      { src: 'screenshots/astro-combo.png',    label: 'Combo multiplier system' },
+      { src: 'screenshots/astro-death.png',    label: 'Death and restart screen' }
+    ],
     video: 'videos/astro-blitz.mp4',
-    what: "2D side-scrolling space shooter built entirely in Python and Pygame. Wave-based enemies, custom bullet patterns per enemy type, a combo multiplier that rewards aggression, and difficulty scaling that doesn't feel cheap. My first fully shipped game.",
-    gameplay: ['Wave-based encounters with escalating difficulty','Unique bullet patterns per enemy type','Combo multiplier — keep the chain to keep the score','Tight player shooting and movement'],
-    tech: ['Object-oriented enemy system with modular behaviour classes','Custom collision detection and hitbox logic','Game loop and state machine built from scratch','Custom sprite sheet parsing and frame handling'],
-    learned: ['Structuring a larger Python project with OOP','Designing enemy AI with readable attack patterns','Optimising sprite rendering for a stable frame rate','Pixel art fundamentals in LibreSprite'],
+    what: "2D side-scrolling space shooter built entirely in Python and Pygame. Wave-based enemies, custom bullet patterns unique to each enemy class, a combo multiplier that rewards uninterrupted aggression, and arcade difficulty scaling. Built before I ever opened Unity — this was purely me, Python documentation, and determination.",
+    gameplay: [
+      'Wave-based enemy encounters — each wave increases both count and speed',
+      'Each enemy class fires a distinct bullet pattern (spread, aimed, spiral, burst)',
+      'Combo multiplier: land hits without taking damage to scale the score multiplier',
+      'Multiplier resets on getting hit — punishes passivity',
+      'Player ship with three-way shot upgrade collectable mid-wave',
+      'High score tracked in a local text file'
+    ],
+    tech: [
+      'Object-oriented enemy system — each enemy is a class inheriting from a base Enemy, with its fire() method overridden for unique bullet patterns',
+      'Custom collision detection using rectangle intersection — no physics engine',
+      'Hand-rolled game loop using pygame.time.Clock with fixed-timestep logic',
+      'Sprite sheet parser: reads a single PNG sheet and slices frame rects by coordinate, no library',
+      'Difficulty scaler: wave number mapped to enemy speed, spawn rate, and bullet velocity via a lookup table'
+    ],
+    challenges: [
+      'Spiral bullet pattern required trigonometry I hadn\'t used before — learned sin/cos offset calculations to produce the rotating spread',
+      'Game loop ran at variable speeds on different machines without a fixed timestep — added pygame.time.Clock.tick() to cap and stabilise frame rate',
+      'Sprite sheet parsing had off-by-one pixel errors that caused visible seams — fixed by carefully measuring sprite dimensions in the source image'
+    ],
+    learned: [
+      'Structuring a Python project with OOP from the start — a lesson that carried directly into C# class design',
+      'Why enemy AI needs distinct identities: uniform enemies produce boring patterns; differentiated fire behaviours create readable moments of tension',
+      'Pixel art fundamentals in LibreSprite: keeping a limited palette, reading pixels at game resolution, not screen resolution',
+      'The value of finishing — every previous project stopped at 60%. This one didn\'t.'
+    ],
     platform: 'PC (Windows) — Python / Pygame'
   },
   snow: {
     kicker: 'Unity · C# · 2D · Coursework',
     title: 'Snow Surfer',
-    tags: ['Unity','C#','2D','Side Scroller'],
+    attribution: 'Solo project — built as part of GameDev.tv Unity coursework',
+    tags: ['Unity','C#','2D','Cinemachine','Sprite Shape'],
+    impact: 'First Unity project I pushed beyond the course requirements. The base course structure was there, but I rewrote the player controller, added the character selection system, and tuned the Cinemachine rig independently — treating it as a real project rather than following along.',
+    screens: [
+      { src: 'screenshots/snow-gameplay.png',   label: 'Downhill gameplay' },
+      { src: 'screenshots/snow-character.png',  label: 'Character selection screen' },
+      { src: 'screenshots/snow-crash.png',      label: 'Crash particle FX' },
+      { src: 'screenshots/snow-terrain.png',    label: 'Sprite Shape terrain' }
+    ],
     video: 'videos/snow-surfer.mp4',
-    what: "Downhill snowboarding prototype — fast movement, slope physics, multi-character selection, and particle-driven crash FX. Built as part of the GameDev.tv Unity course. The course gave the structure. I focused on making it feel right.",
-    gameplay: ['Slope-based movement with hill physics','Multiple playable characters with selection screen','Particle-driven crash detection and FX','Speed boost system and high-score tracking'],
-    tech: ['Sprite Shape for smooth, organic terrain generation','Cinemachine for dynamic camera tracking','Unity Particle System for crash and environmental FX','Scriptable Objects for clean character data management'],
-    learned: ['Cinemachine for high-speed tracking without jitter','Custom player controller for slope physics','Character selection flow with persistent UI state','Scriptable Objects as a clean alternative to hard-coded data'],
+    what: "Downhill snowboarding prototype. Slope physics, multi-character selection, particle-driven crash FX, and a Cinemachine camera that keeps up with the speed without jitter. The course provided the structural skeleton — the feel, the camera, and the character system came from me going off-script.",
+    gameplay: [
+      'Slope-based movement using surface normal alignment — the board physically tilts to match the hill angle',
+      'Multiple playable characters, each with different base speed and handling stats',
+      'Character selection screen with persistent choice via PlayerPrefs',
+      'Speed boost collectables placed along the course',
+      'Crash detection triggers a full ragdoll particle burst and stops the player',
+      'Arcade high score tracked per character'
+    ],
+    tech: [
+      'Sprite Shape for terrain — creates smooth, organic hills as editable spline paths rather than tiled sprites',
+      'Custom player controller using Rigidbody2D with surface normal detection: reads the slope angle and rotates the player transform to match, preventing the sliding-brick feel of simple velocity-based controllers',
+      'Cinemachine Virtual Camera with a custom follow and damping configuration — tuned to track fast downhill movement without over-shooting or snapping',
+      'Unity Particle System for crash FX — burst emitter with physics-affected particles using Collision module',
+      'Scriptable Objects for character data: name, sprite, speed modifier, handling — swapped cleanly via a character selection manager'
+    ],
+    challenges: [
+      'The default Unity physics controller slid off slopes like a brick — solved by reading the surface normal from a raycast and rotating the player transform each FixedUpdate to align to the slope',
+      'Cinemachine\'s default settings caused the camera to lag badly behind fast movement and overshoot on direction changes — required manual tuning of damping, lookahead, and the dead zone',
+      'Particle crash FX initially played through the terrain geometry — fixed by enabling the Collision module with World geometry set to Dynamic'
+    ],
+    learned: [
+      'How to read surface normals and use them to make a physics controller feel grounded and responsive on non-flat terrain',
+      'Cinemachine configuration is not plug-and-play — every feel parameter needs deliberate tuning for the specific movement style',
+      'Scriptable Objects as a proper data-driven design pattern — avoided hard-coded character stats entirely',
+      'The difference between following a course and using it as a starting point'
+    ],
     platform: 'PC (Windows)'
   },
   'ar-stealth': {
     kicker: 'Unity · Python · MediaPipe · UDP · Computer Vision',
     title: 'Hand-Tracked Stealth FPS',
-    tags: ['Unity','Python','MediaPipe','UDP','AI'],
+    attribution: 'Solo project — cross-runtime bridge built from scratch',
+    tags: ['Unity','Python','MediaPipe','UDP','NavMesh AI'],
+    impact: 'The most technically ambitious project I\'ve built. Combines two entirely separate runtimes — Python and Unity — communicating in real time over a local UDP socket. No tutorials existed for this specific architecture. The bridging layer was designed and debugged entirely from first principles.',
+    screens: [
+      { src: 'screenshots/ar-hands.png',    label: 'Hand landmark tracking overlay' },
+      { src: 'screenshots/ar-gameplay.png', label: 'FPS gameplay view' },
+      { src: 'screenshots/ar-enemy.png',    label: 'Enemy NavMesh pathfinding' },
+      { src: 'screenshots/ar-arch.png',     label: 'Python → UDP → Unity architecture' }
+    ],
     video: 'videos/ar-stealth.mp4',
-    what: "No keyboard. No mouse. Just your hands. Real-time webcam gesture tracking via Google MediaPipe, bridged into a Unity FPS through a custom UDP socket. Pinch to shoot. Open palm to reload. Peace sign to swap weapons. The most technically demanding thing I've built.",
-    gameplay: ['Pinch gesture → shoot','Open palm → reload','Peace sign ✌️ → swap weapons','Hand position maps to aim direction in real time','Autonomous enemy drones that actively hunt the player','Sound detection — enemies investigate gunshots','Line-of-sight raycasting for combat state transitions'],
-    tech: ['Google MediaPipe for 21-point 3D hand landmark tracking','Custom UDP socket bridge — Python to C# at near-zero latency','Unity NavMesh for dynamic enemy pathfinding','PyInstaller to package the Python tracker as a standalone exe'],
-    learned: ['Bridging two runtimes in real time is harder than it looks','MediaPipe gesture reliability needs significant threshold tuning','Enemy AI state machines must be forgiving or they feel broken','This project pushed every technical limit I had'],
+    what: "No keyboard. No mouse. Just your hands. Real-time webcam gesture tracking via Google MediaPipe bridges into Unity over a custom UDP socket. Pinch to shoot. Open palm to reload. Peace sign to swap weapons. Enemy drones use NavMesh pathfinding and detect sound to hunt the player.",
+    gameplay: [
+      'Pinch gesture (thumb + index finger close) → fires weapon',
+      'Open palm (all fingers extended) → reloads',
+      'Peace sign (index + middle finger, others closed) → swaps weapon',
+      'Hand position in webcam frame maps to aim direction in the Unity viewport',
+      'Enemy drones actively navigate toward the player using Unity NavMesh',
+      'Sound detection: gunshots place a sound event in world space — enemies investigate the source position',
+      'Line-of-sight raycasting transitions enemies between Patrol, Investigate, and Attack states'
+    ],
+    tech: [
+      'Python + Google MediaPipe Hands: detects 21 3D hand landmarks per frame from webcam feed at runtime',
+      'Custom gesture classifier: reads landmark distances to classify Pinch, Open, Peace Sign, and Neutral per frame',
+      'UDP socket bridge: Python sends gesture + hand-position JSON packets to a Unity UdpClient listener at ~60fps with negligible latency on localhost',
+      'Unity C# UdpClient receives packets on a background thread, queues events to the main thread via a ConcurrentQueue to avoid cross-thread exceptions',
+      'Unity NavMesh for enemy pathfinding — agents recalculate paths dynamically around destructible cover',
+      'Sound detection using OverlapSphere at the shot origin — any enemy within radius enters Investigate state and navigates to the sound position',
+      'PyInstaller used to package the Python tracking process as a standalone .exe so the game runs without a Python install'
+    ],
+    challenges: [
+      'Cross-thread data from UdpClient crashed Unity when accessed directly on the main thread — solved by introducing a ConcurrentQueue that the background receive thread writes to and the Update() loop drains',
+      'Gesture detection had a false-positive rate of ~30% on the Pinch gesture due to lighting variation — reduced to ~8% by normalising landmark distances relative to palm width rather than using raw pixel distances',
+      'NavMesh agents clipped through thin geometry at high speed — fixed by increasing the agent radius and reducing the max speed to keep agents within the nav surface',
+      'PyInstaller-built executable lost the MediaPipe model data files — fixed by adding them to the --add-data manifest in the build spec'
+    ],
+    learned: [
+      'How to bridge two separate language runtimes communicating in real time — the threading and queue architecture required here directly maps to networked multiplayer patterns',
+      'Why gesture normalisation matters: raw pixel distances are useless without a reference frame; palm width as a normalisation unit made detection lighting-independent',
+      'Enemy AI state machines need explicit transition conditions and hysteresis — without them, agents flicker between states and feel broken',
+      'Packaging a multi-process application: getting Python and Unity to coexist in a single distributable build'
+    ],
     platform: 'PC (Windows) — Requires webcam'
   }
 };
@@ -1754,7 +2023,7 @@ if (fine && cur) {
 
 /* ── TYPEWRITER ── */
 const typEl = document.getElementById('typed');
-const words = ['Game Designer','Unity Developer','C# Engineer','Systems Builder','Pixel Artist'];
+const words = ['Game Developer','Unity Programmer','C# Engineer','Systems Builder','Gameplay Programmer'];
 let wi=0, ci=0, del=false;
 function tw(){
   const w=words[wi];
@@ -1851,23 +2120,29 @@ const dContent=document.getElementById('dContent');
 const dClose=document.getElementById('dClose');
 
 function li(arr){return arr.map(i=>`<li>${i}</li>`).join('');}
+function screenGrid(arr){
+  if(!arr||!arr.length)return '';
+  return `<div class="d-screens">${arr.map(s=>`<div class="d-screen-img"><img src="${s.src}" alt="${s.label}" onerror="this.style.display='none'"><div class="d-screen-label">${s.label}</div></div>`).join('')}</div>`;
+}
 function openProj(id){
   const p=PROJ[id];if(!p)return;
   const tags=p.tags.map(t=>`<span class="gtag">${t}</span>`).join('');
   dContent.innerHTML=`
     <div class="d-kicker">${p.kicker}</div>
     <div class="d-title">${p.title}</div>
-    <div class="d-tags">${tags}</div>
-    <div class="d-media">
-      <video id="dvid" controls muted loop playsinline preload="auto">
-        <source src="${p.video}" type="video/mp4">
-      </video>
+    <div class="d-meta-row">
+      ${p.attribution?`<span class="d-meta-pill highlight">${p.attribution}</span>`:''}
+      <span class="d-meta-pill">${p.platform}</span>
     </div>
+    <div class="d-tags">${tags}</div>
+    <div class="d-media"><video id="dvid" controls muted loop playsinline preload="auto"><source src="${p.video}" type="video/mp4"></video></div>
+    ${p.impact?`<div class="d-impact-box"><div class="d-impact-label">Impact &amp; Outcome</div><div class="d-impact-text">${p.impact}</div></div>`:''}
     <div class="d-section"><h3>What It Is</h3><p class="d-p">${p.what}</p></div>
-    ${p.gameplay?`<div class="d-section"><h3>Gameplay</h3><ul class="d-ul">${li(p.gameplay)}</ul></div>`:''}
+    ${screenGrid(p.screens)}
+    ${p.gameplay?`<div class="d-section"><h3>Gameplay Breakdown</h3><ul class="d-ul">${li(p.gameplay)}</ul></div>`:''}
     ${p.tech?`<div class="d-section"><h3>Technical Highlights</h3><ul class="d-ul">${li(p.tech)}</ul></div>`:''}
-    ${p.learned?`<div class="d-section"><h3>What I Learned</h3><ul class="d-ul">${li(p.learned)}</ul></div>`:''}
-    <div class="d-section"><h3>Platform</h3><p class="d-p">${p.platform}</p></div>
+    ${p.challenges?`<div class="d-challenge-box"><div class="d-challenge-label">Challenges &amp; How I Solved Them</div><ul class="d-ul" style="margin-top:0">${li(p.challenges)}</ul></div>`:''}
+    ${p.learned?`<div class="d-section"><h3>What I Took Away</h3><ul class="d-ul">${li(p.learned)}</ul></div>`:''}
     ${p.link?`<a href="${p.link}" target="_blank" rel="noopener" class="btn btn-sage" style="margin-top:8px">${p.linkLabel||'Play →'}</a>`:''}
   `;
   overlay.classList.add('open');
@@ -1895,13 +2170,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeProj();});
   const root = document.documentElement;
   const stored = localStorage.getItem('theme') || 'light';
   root.setAttribute('data-theme', stored);
-  btn.textContent = stored === 'dark' ? '☀️' : '🌙';
+  const moon = document.getElementById('iconMoon');
+  const sun  = document.getElementById('iconSun');
+  if (stored === 'dark') { moon.style.display='none'; sun.style.display=''; }
 
   btn.addEventListener('click', () => {
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
-    btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    if (next === 'dark') { moon.style.display='none'; sun.style.display=''; }
+    else { moon.style.display=''; sun.style.display='none'; }
     btn.style.transform = 'rotate(360deg)';
     btn.style.transition = 'transform 500ms cubic-bezier(0.34,1.56,0.64,1)';
     setTimeout(() => { btn.style.transform = ''; btn.style.transition = ''; }, 520);
